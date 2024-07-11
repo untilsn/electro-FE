@@ -93,16 +93,17 @@ function App() {
     async (config) => {
       const currentTime = new Date();
       const { decoded } = handleDecoded();
-      let storageRefreshToken = localStorage.getItem("refresh_token")
-      const refreshToken = JSON.parse(storageRefreshToken)
-      const decodedRefreshToken = jwtDecode(refreshToken)
+      let storageRefreshToken = localStorage.getItem("refresh_token");
+      const refreshToken = JSON.parse(storageRefreshToken);
+      console.log(refreshToken);
+      const decodedRefreshToken = jwtDecode(refreshToken);
       if (decoded.exp < currentTime.getTime() / 1000) {
         if (decodedRefreshToken?.exp > currentTime.getTime() / 1000) {
-          const data = await refreshToken(refreshToken)
-          config.headers['token'] = `Bearer ${data?.access_token}`
+          const data = await refreshToken(refreshToken);
+          config.headers["token"] = `Bearer ${data?.access_token}`;
         } else {
-          console.log('rererere?.exp')    
-          dispatch(resetUser())
+          console.log("rererere?.exp");
+          dispatch(resetUser());
         }
       }
       return config;
@@ -112,13 +113,13 @@ function App() {
     }
   );
 
-
-
   const handleGetDetailsUser = async (id, access_token) => {
-    let storageRefreshToken = localStorage.getItem('refresh_token')
-    const refreshToken = JSON.parse(storageRefreshToken)
+    let storageRefreshToken = localStorage.getItem("refresh_token");
+    const refreshToken = JSON.parse(storageRefreshToken);
     const res = await getDetailsUser(id, access_token);
-    dispatch(updateUser({ ...res?.data, access_token , refresh_token: refreshToken}));
+    dispatch(
+      updateUser({ ...res?.data, access_token, refresh_token: refreshToken })
+    );
   };
 
   return (

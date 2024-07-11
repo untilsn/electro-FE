@@ -6,7 +6,8 @@ const TopHeader = () => {
   const handleOpenModal = () => {
     dispatch(openModalAuth(true));
   };
-  const user = useSelector((state) => state.user);
+  const users = useSelector((state) => state.user);
+  console.log(users);
   // const [userName, setUserName] = useState(name);
   // useEffect(() => {
   //   setUserName(name);
@@ -33,9 +34,9 @@ const TopHeader = () => {
         <span className="text-sm text-textColor">Call: +0123 456 789</span>
       </div>
       {/* signin */}
-      {user ? (
+      {users?.access_token ? (
         <div>
-          welcomback <span className="text-gray">{user.name}</span>
+          welcomback <span className="text-gray">{users.name}</span>
         </div>
       ) : (
         <button

@@ -14,6 +14,7 @@ export const loginUser = async (data) => {
 };
 
 export const signupUser = async (data) => {
+  console.log(data);
   const res = await axios.post(
     `${import.meta.env.VITE_API_URL_BACKEND}/user/sign-up`,
     data
@@ -69,8 +70,8 @@ export const refreshToken = async (refreshToken) => {
       {},
       {
         headers: {
-          token:  `Bearer ${refreshToken}`
-        }
+          token: `Bearer ${refreshToken}`,
+        },
       }
     );
     return res.data;
