@@ -219,11 +219,12 @@ const CheckoutPage = () => {
                 </div>
               </div>
               {payment === "paypal" && sdkReady ? (
-                <PayPalButton
-                  amount={orderItems?.totalPrice}
-                  // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
-                  onSuccess={onSuccessPaypal}
-                />
+                // <PayPalButton
+                //   amount={orderItems?.totalPrice}
+                //   // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
+                //   onSuccess={onSuccessPaypal}
+                // />
+                ""
               ) : (
                 <ButtonForm onClick={handleAddOrder} classname="border-[2px]">
                   proceed to checkout
