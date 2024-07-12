@@ -12,7 +12,6 @@ import InputForm from "../components/input/InputForm";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { clearOrderProducts } from "../redux/slice/orderSlice";
-import { PayPalButton } from "react-paypal-button-v2";
 import { getConfig } from "../service/paymentService";
 
 const CheckoutPage = () => {
@@ -22,6 +21,7 @@ const CheckoutPage = () => {
   const [address, setAddress] = useState(users?.address || "");
   const orderItems = useSelector((state) => state.order);
   const [payment, setPayment] = useState("cash-on-delivery");
+  const [phoneUser, setPhoneUser] = useState("");
   const [sdkReady, setSdkReady] = useState(false);
   const navigate = useNavigate();
 
@@ -42,7 +42,7 @@ const CheckoutPage = () => {
           orderItems: orderItems?.orderItems,
           fullName: users?.name,
           address: users?.address || "",
-          phone: users?.phone,
+          phone: users.phone || Number(phoneUser),
           city: users?.city || "",
           paymentMethod: payment,
           itemsPrice: orderItems?.itemsPrice,
@@ -71,66 +71,67 @@ const CheckoutPage = () => {
   };
 
   const mutationAddOrder = useMutationHook((data) => {
+    console.log(data);
     const { token, ...rest } = data;
     const res = createOrder(token, { ...rest });
     return res;
   });
 
-  const addPaypalScript = async () => {
-    const { data } = await getConfig();
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = `https://www.paypal.com/sdk/js?client-id=${data}`;
-    script.async = true;
-    script.onload = () => {
-      setSdkReady(true);
-    };
-    document.body.appendChild(script);
-  };
+  // const addPaypalScript = async () => {
+  //   const { data } = await getConfig();
+  //   const script = document.createElement("script");
+  //   script.type = "text/javascript";
+  //   script.src = `https://www.paypal.com/sdk/js?client-id=${data}`;
+  //   script.async = true;
+  //   script.onload = () => {
+  //     setSdkReady(true);
+  //   };
+  //   document.body.appendChild(script);
+  // };
 
-  useEffect(() => {
-    if (!window.paypal) {
-      addPaypalScript();
-    } else {
-      setSdkReady(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!window.paypal) {
+  //     addPaypalScript();
+  //   } else {
+  //     setSdkReady(true);
+  //   }
+  // }, []);
 
-  const onSuccessPaypal = (details, data) => {
-    mutationAddOrder.mutate(
-      {
-        token: users?.access_token,
-        orderItems: orderItems?.orderItems,
-        fullName: users?.name,
-        address: users?.address || "",
-        phone: users?.phone,
-        city: users?.city || "",
-        paymentMethod: payment,
-        itemsPrice: orderItems?.itemsPrice,
-        shippingPrice: orderItems?.shippingPrice,
-        totalPrice: orderItems?.totalPrice,
-        user: users?.id,
-        city: city,
-        address: address,
-        isPaid: true,
-        paidAt: details.update_time,
-        email: users?.email,
-      },
-      {
-        onSuccess: () => {
-          toast.success("order success");
-          dispatch(clearOrderProducts());
-          localStorage.removeItem("orderItems");
-          navigate("/user-order", {
-            state: {
-              id: users?.id,
-              token: users?.access_token,
-            },
-          });
-        },
-      }
-    );
-  };
+  // const onSuccessPaypal = (details, data) => {
+  //   mutationAddOrder.mutate(
+  //     {
+  //       token: users?.access_token,
+  //       orderItems: orderItems?.orderItems,
+  //       fullName: users?.name,
+  //       address: users?.address || "",
+  //       phone: users?.phone,
+  //       city: users?.city || "",
+  //       paymentMethod: payment,
+  //       itemsPrice: orderItems?.itemsPrice,
+  //       shippingPrice: orderItems?.shippingPrice,
+  //       totalPrice: orderItems?.totalPrice,
+  //       user: users?.id,
+  //       city: city,
+  //       address: address,
+  //       isPaid: true,
+  //       paidAt: details.update_time,
+  //       email: users?.email,
+  //     },
+  //     {
+  //       onSuccess: () => {
+  //         toast.success("order success");
+  //         dispatch(clearOrderProducts());
+  //         localStorage.removeItem("orderItems");
+  //         navigate("/user-order", {
+  //           state: {
+  //             id: users?.id,
+  //             token: users?.access_token,
+  //           },
+  //         });
+  //       },
+  //     }
+  //   );
+  // };
 
   return (
     <div>
@@ -176,6 +177,13 @@ const CheckoutPage = () => {
                 control={control}
                 placeholder="town/city"
               ></InputForm>
+              <InputForm
+                value={phoneUser}
+                onChange={(e) => setPhoneUser(e.target.value)}
+                name="phone"
+                control={control}
+                placeholder="your contact"
+              ></InputForm>
             </div>
           </div>
           {/* card order */}
@@ -218,7 +226,7 @@ const CheckoutPage = () => {
                   <span>${orderItems?.totalPrice}</span>
                 </div>
               </div>
-              {payment === "paypal" && sdkReady ? (
+              {payment === "paypal" ? (
                 // <PayPalButton
                 //   amount={orderItems?.totalPrice}
                 //   // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"

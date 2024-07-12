@@ -27,7 +27,11 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { isJsonString } from "./utils/utils";
 import storeSlice from "./redux/slice/storeSlice";
-import { axiosJWT, getDetailsUser, refreshToken } from "./service/useService";
+import {
+  axiosJWT,
+  getDetailsUser,
+  refreshTokenUser,
+} from "./service/useService";
 import { updateUser } from "./redux/slice/userSlice";
 import ProfilePage from "./pages/profileuser/ProfilePage";
 import CheckoutPage from "./pages/CheckoutPage";
@@ -99,7 +103,7 @@ function App() {
       const decodedRefreshToken = jwtDecode(refreshToken);
       if (decoded.exp < currentTime.getTime() / 1000) {
         if (decodedRefreshToken?.exp > currentTime.getTime() / 1000) {
-          const data = await refreshToken(refreshToken);
+          const data = await refreshTokenUser(refreshToken);
           config.headers["token"] = `Bearer ${data?.access_token}`;
         } else {
           console.log("rererere?.exp");

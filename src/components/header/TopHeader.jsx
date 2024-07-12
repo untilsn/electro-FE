@@ -7,7 +7,6 @@ const TopHeader = () => {
     dispatch(openModalAuth(true));
   };
   const users = useSelector((state) => state.user);
-  console.log(users);
   // const [userName, setUserName] = useState(name);
   // useEffect(() => {
   //   setUserName(name);

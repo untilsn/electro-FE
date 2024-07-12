@@ -100,6 +100,7 @@ const Login = () => {
       );
       if (data?.access_token) {
         const decoded = jwtDecode(data?.access_token);
+        console.log(decoded);
         if (decoded?.id) {
           handleGetDetailsUser(decoded?.id, data?.access_token);
         }

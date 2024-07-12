@@ -42,7 +42,7 @@ const OrderUserPage = () => {
     enabled: !!state?.id && !!state?.token,
   });
   const { isLoading, data: orderItem, isError } = queryOrder;
-
+  console.log(orderItem);
   const mutation = useMutationHook(async (data) => {
     const { id, token, orderItems } = data;
     const res = await cancelOrder(id, token, orderItems);
