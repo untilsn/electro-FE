@@ -90,6 +90,7 @@ const Login = () => {
     });
   };
   const { data, isSuccess, isError } = mutation;
+  console.log(data);
   useEffect(() => {
     if (isSuccess) {
       // navigate("/");
@@ -114,10 +115,11 @@ const Login = () => {
     const storage = localStorage.getItem("refresh_token");
     const refreshToken = JSON.parse(storage);
     const res = await getDetailsUser(id, access_token);
+    console.log(res?.data);
     dispatch(
       updateUser({
         ...res?.data,
-        access_token: token,
+        access_token: access_token,
         refresh_token: refreshToken,
       })
     );
