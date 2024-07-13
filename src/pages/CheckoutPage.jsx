@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ShopBanner from "../modules/shop/ShopBanner";
 import Breadcrumb from "../components/breadcrumb/Breadcrumb";
 import { useMutationHook } from "../hooks/useMutation";
@@ -12,7 +12,6 @@ import InputForm from "../components/input/InputForm";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { clearOrderProducts } from "../redux/slice/orderSlice";
-import { getConfig } from "../service/paymentService";
 
 const CheckoutPage = () => {
   const dispatch = useDispatch();

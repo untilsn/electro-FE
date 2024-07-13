@@ -1,13 +1,9 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FaCartPlus, FaHeart, FaRegHeart } from "react-icons/fa6";
 import { FooterIconContact } from "../../components/icon/IconContact";
-import { ReviewIcon } from "../../components/card/CardItem";
 import { v4 } from "uuid";
-import QuantityItem from "../../components/quantity/QuantityItem";
 import parse from "html-react-parser";
 import { useCheckFavorite } from "../../hooks/useCheckFavorite";
-import { useMutationHook } from "../../hooks/useMutation";
-import { getDetailsProduct } from "../../service/productService";
 import { Rating } from "@material-tailwind/react";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import LikeButton from "../../components/button/LikeButton";

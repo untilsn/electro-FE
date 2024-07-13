@@ -3,7 +3,6 @@ import axios from "axios";
 export const axiosJWT = axios.create();
 
 export const loginUser = async (data) => {
-  console.log(data);
   const res = await axios.post(
     `${import.meta.env.VITE_API_URL_BACKEND}/user/sign-in`,
     data,

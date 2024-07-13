@@ -90,7 +90,7 @@ const Login = () => {
     });
   };
   const { data, isSuccess, isError } = mutation;
-  console.log(data);
+
   useEffect(() => {
     if (isSuccess) {
       // navigate("/");
@@ -101,7 +101,6 @@ const Login = () => {
       );
       if (data?.access_token) {
         const decoded = jwtDecode(data?.access_token);
-        console.log(decoded);
         if (decoded?.id) {
           handleGetDetailsUser(decoded?.id, data?.access_token);
         }
@@ -109,13 +108,12 @@ const Login = () => {
     } else if (isError) {
       toast.error("login error");
     }
-  }, []);
+  }, [isSuccess]);
 
   const handleGetDetailsUser = async (id, access_token) => {
     const storage = localStorage.getItem("refresh_token");
     const refreshToken = JSON.parse(storage);
     const res = await getDetailsUser(id, access_token);
-    console.log(res?.data);
     dispatch(
       updateUser({
         ...res?.data,

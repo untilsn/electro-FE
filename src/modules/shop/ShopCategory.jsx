@@ -4,9 +4,8 @@ import {
   AccordionHeader,
 } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { v4 } from "uuid";
-import { IoIosArrowDown, IoMdArrowDropup } from "react-icons/io";
+import { IoMdArrowDropup } from "react-icons/io";
 import { getAllType, getProductType } from "../../service/productService";
 
 function Icon({ id, open }) {

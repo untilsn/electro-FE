@@ -39,11 +39,11 @@ import OrderUserPage from "./pages/OrderUserPage";
 
 function App() {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
-  useDataUser(user);
-  useDataFetcher();
-  useFetchingWishlists(user);
-  useFetchingProducts(user);
+  // const { user } = useSelector((state) => state.auth);
+  // useDataUser(user);
+  // useDataFetcher();
+  // useFetchingWishlists(user);
+  // useFetchingProducts(user);
   // useEffect(() => {
   //   fetchApi();
   // }, []);
@@ -59,6 +59,7 @@ function App() {
 
   useEffect(() => {
     const { storageData, decoded } = handleDecoded();
+
     if (decoded?.id) {
       handleGetDetailsUser(decoded?.id, storageData);
     }
@@ -99,7 +100,6 @@ function App() {
       const { decoded } = handleDecoded();
       let storageRefreshToken = localStorage.getItem("refresh_token");
       const refreshToken = JSON.parse(storageRefreshToken);
-      console.log(refreshToken);
       const decodedRefreshToken = jwtDecode(refreshToken);
       if (decoded.exp < currentTime.getTime() / 1000) {
         if (decodedRefreshToken?.exp > currentTime.getTime() / 1000) {
@@ -122,7 +122,11 @@ function App() {
     const refreshToken = JSON.parse(storageRefreshToken);
     const res = await getDetailsUser(id, access_token);
     dispatch(
-      updateUser({ ...res?.data, access_token, refresh_token: refreshToken })
+      updateUser({
+        ...res?.data,
+        access_token: access_token,
+        refresh_token: refreshToken,
+      })
     );
   };
 
