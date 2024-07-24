@@ -42,7 +42,7 @@ const ShopDisplay = () => {
   //     setTotalPages(data.totalPage);
   //   };
 
-  //   getProducts();
+  //   getProducts();c
   // }, [currentPage]);
 
   // const handlePageChange = (page) => {

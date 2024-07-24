@@ -1,169 +1,245 @@
-import React, { Fragment, useState } from "react";
-import DashboardHeading from "../../modules/dashboard/DashboardHeading";
-import ActionView from "../../components/action/ActionView";
-import ActionEdit from "../../components/action/ActionEdit";
-import ActionDelete from "../../components/action/ActionDelete";
-import { Chip, Typography, Card } from "@material-tailwind/react";
-import { useSelector } from "react-redux";
-import Pagination from "../../components/pagination/Pagination";
+import React, { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAllProduct } from "../../service/productService";
-import { useMutationHook } from "../../hooks/useMutation";
-import { useQuery } from "@tanstack/react-query";
+import { CiGlass } from "react-icons/ci";
+import { FaPen } from "react-icons/fa";
+import { IoAdd } from "react-icons/io5";
+import { MdDeleteForever } from "react-icons/md";
+import { GrView } from "react-icons/gr";
+
+import {
+  Card,
+  CardHeader,
+  Input,
+  Typography,
+  Button,
+  CardBody,
+  Avatar,
+  IconButton,
+  Tooltip,
+  CardFooter,
+} from "@material-tailwind/react";
+import TitlePath from "../../components/title/TitlePath";
+
 const TABLE_HEAD = [
-  "id",
-  "product",
-  "categore/stock",
-  "user",
-  "status",
-  "action",
+  "Sản phẩm",
+  "Hãng",
+  "Danh mục",
+  "Giá",
+  "Tồn kho",
+  "Ngày",
+  "Thao tác",
+];
+
+const TABLE_ROWS = [
+  {
+    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
+    product: "Điện thoại A",
+    brand: "Samsung",
+    category: "Điện thoại",
+    price: "10,000,000 VND",
+    stock: 50,
+    date: "23/04/18",
+    action: "Chỉnh sửa",
+  },
+  {
+    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
+    product: "Điện thoại B",
+    brand: "Apple",
+    category: "Điện thoại",
+    price: "20,000,000 VND",
+    stock: 30,
+    date: "23/04/18",
+    action: "Chỉnh sửa",
+  },
+  {
+    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
+    product: "Điện thoại C",
+    brand: "Xiaomi",
+    category: "Điện thoại",
+    price: "7,000,000 VND",
+    stock: 20,
+    date: "19/09/17",
+    action: "Chỉnh sửa",
+  },
+  {
+    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
+    product: "Điện thoại D",
+    brand: "Oppo",
+    category: "Điện thoại",
+    price: "5,000,000 VND",
+    stock: 15,
+    date: "24/12/08",
+    action: "Chỉnh sửa",
+  },
+  {
+    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
+    product: "Điện thoại E",
+    brand: "Vivo",
+    category: "Điện thoại",
+    price: "12,000,000 VND",
+    stock: 25,
+    date: "04/10/21",
+    action: "Chỉnh sửa",
+  },
 ];
 
 const DashboardProduct = () => {
   const navigate = useNavigate();
-  const getAllProducts = async () => {
-    const res = await getAllProduct();
-    return res.data;
-  };
 
-  const { isloading: isLoadingProduct, data: product } = useQuery({
-    queryKey: ["products"],
-    queryFn: getAllProducts,
-  });
   return (
     <Fragment>
-      <div className="flex items-center justify-between">
-        <DashboardHeading>Manage Product</DashboardHeading>
+      <div className="flex items-center justify-between mb-10">
+        <TitlePath>Manage Product</TitlePath>
       </div>
-      <Card shadow={false} className="w-full mt-10">
-        <table className="w-full text-left min-w-max">
-          <thead className="">
-            <tr>
-              {TABLE_HEAD.map((head) => (
-                <th key={head} className="py-4 border-b border-gray-100">
-                  <Typography
-                    variant="small"
-                    color="gray"
-                    className={
-                      head === "product"
-                        ? "text-sm  leading-none text-left  font-medium capitalize text-dark "
-                        : "text-sm  leading-none text-center font-medium capitalize text-dark "
-                    }
+      <Card className="w-full h-full">
+        <CardHeader floated={false} shadow={false} className="rounded-none">
+          <div className="flex items-center justify-between gap-8 mb-8"></div>
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+            <div className="flex flex-col gap-2 shrink-0 sm:flex-row">
+              <Button variant="outlined" size="sm">
+                Export Excel
+              </Button>
+              <Button
+                className="flex items-center gap-3 text-darkPrimary"
+                size="sm"
+              >
+                <IoAdd className="w-4 h-4" /> Add product
+              </Button>
+            </div>
+            <div className="w-full md:w-72">
+              <Input label="Search" icon={<CiGlass className="w-5 h-5" />} />
+            </div>
+          </div>
+        </CardHeader>
+        <CardBody className="px-0 overflow-scroll">
+          <table className="w-full mt-4 text-left table-auto min-w-max">
+            <thead>
+              <tr>
+                {TABLE_HEAD.map((head) => (
+                  <th
+                    key={head}
+                    className="p-4 border-y border-blue-gray-100 bg-blue-gray-50/50"
                   >
-                    {head}
-                  </Typography>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {product?.map((item, index) => {
-              return (
-                <tr
-                  key={item._id}
-                  className="text-center hover:bg-bgColor hover:bg-opacity-60"
-                >
-                  <td className="p-4">
                     <Typography
                       variant="small"
-                      color="gray"
-                      className="text-sm font-normal"
-                      title={item?._id}
+                      color="blue-gray"
+                      className="font-normal leading-none opacity-70"
                     >
-                      {item?._id.slice(0, 5) + "..."}
+                      {head}
                     </Typography>
-                  </td>
-                  <td className="py-4 w-[500px]">
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="text-sm font-normal w-[500px]"
-                    >
-                      <span className="flex items-center justify-start gap-3 max-w-[500px]">
-                        <span className="max-w-[150px] w-full  h-[100px]">
-                          <img
-                            className="object-contain w-full h-full rounded"
-                            src={item?.image[0]}
-                            alt={item?.type}
-                          />
-                        </span>
-                        <span className="flex flex-col justify-start gap-1">
-                          <span
-                            className="font-medium overflow-hidden overflow-ellipsis h-[40px] max-w-[300px]"
-                            style={
-                              {
-                                // textOverflow: "ellipsis",
-                                // whiteSpace: "nowrap",
-                              }
-                            }
-                            title={item?.name}
-                          >
-                            {item?.name}
-                          </span>
-                          <span>Date: {item?.createAt}</span>
-                        </span>
-                      </span>
-                    </Typography>
-                  </td>
-                  <td>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="text-sm font-normal text-center"
-                    >
-                      <span className="flex flex-col gap-1">
-                        <span>{item?.type}</span>
-                        <span>{item?.countInStock}</span>
-                      </span>
-                    </Typography>
-                  </td>
-                  <td>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="text-sm font-normal"
-                    >
-                      <span>John Michael</span>
-                    </Typography>
-                  </td>
-                  <td className="p-4">
-                    <div className="mx-auto text- w-max">
-                      <Chip
-                        size="lg"
-                        variant="ghost"
-                        value="APPROVED"
-                        color={
-                          status === ""
-                            ? "green"
-                            : status === "pending"
-                            ? "amber"
-                            : "red"
-                        }
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="text-sm font-normal"
-                    >
-                      <span className="flex items-center justify-center gap-3">
-                        <ActionView></ActionView>
-                        <ActionEdit
-                          onClick={() =>
-                            navigate(`/manage/products/update?id=${item._id}`)
-                          }
-                        ></ActionEdit>
-                        <ActionDelete></ActionDelete>
-                      </span>
-                    </Typography>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {TABLE_ROWS.map(
+                (
+                  { img, product, brand, category, price, stock, date, action },
+                  index
+                ) => {
+                  const isLast = index === TABLE_ROWS.length - 1;
+                  const classes = isLast
+                    ? "p-4"
+                    : "p-4 border-b border-blue-gray-50";
+
+                  return (
+                    <tr key={product}>
+                      <td className={classes}>
+                        <div className="flex items-center gap-3">
+                          <Avatar src={img} alt={product} size="sm" />
+                          <div className="flex flex-col">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {product}
+                            </Typography>
+                          </div>
+                        </div>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {brand}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {category}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {price}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {stock}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {date}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Tooltip content="View Product">
+                          <IconButton variant="text">
+                            <GrView className="w-4 h-4" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip content="Edit Product">
+                          <IconButton variant="text">
+                            <FaPen className="w-4 h-4" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip content="Delete Product">
+                          <IconButton variant="text">
+                            <MdDeleteForever className="w-4 h-4" />
+                          </IconButton>
+                        </Tooltip>
+                      </td>
+                    </tr>
+                  );
+                }
+              )}
+            </tbody>
+          </table>
+        </CardBody>
+        <CardFooter className="flex items-center justify-between p-4 border-t border-blue-gray-50">
+          <Typography variant="small" color="blue-gray" className="font-normal">
+            Page 1 of 10
+          </Typography>
+          <div className="flex gap-2">
+            <Button variant="outlined" size="sm">
+              Previous
+            </Button>
+            <Button variant="outlined" size="sm">
+              Next
+            </Button>
+          </div>
+        </CardFooter>
       </Card>
     </Fragment>
   );

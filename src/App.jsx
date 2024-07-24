@@ -162,11 +162,11 @@ function App() {
             element={<DashboardMainPage></DashboardMainPage>}
           ></Route>
           <Route
-            path="/manage/products"
+            path="/manage/product"
             element={<DashboardProduct></DashboardProduct>}
           ></Route>
           <Route
-            path="/manage/add-products"
+            path="/manage/add-product"
             element={<AddProducts></AddProducts>}
           ></Route>
           <Route

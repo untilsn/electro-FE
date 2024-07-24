@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useRef } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-const Description = ({ comment, setComment }) => {
+const Description = ({ value, onChange }) => {
+  const quillRef = useRef(null);
+
   const toolbarOptions = [
     ["bold", "italic", "underline", "strike"], // toggled buttons
     ["blockquote", "code-block"],
@@ -30,10 +32,11 @@ const Description = ({ comment, setComment }) => {
   return (
     <div>
       <ReactQuill
+        ref={quillRef}
+        value={value}
+        onChange={onChange}
         modules={modules}
-        onChange={setComment}
         theme="snow"
-        value={comment}
       />
     </div>
   );
