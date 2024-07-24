@@ -32,7 +32,10 @@ const DropdownSelect = ({ options, control, name, label }) => {
         <div className="w-64">
           <Menu>
             <MenuHandler>
-              <Button variant="outlined" className="w-full">
+              <Button
+                variant="outlined"
+                className="w-full border-gray border-opacity-60"
+              >
                 {field.value.length > 0
                   ? `${field.value.length} selected`
                   : `Select ${label}`}

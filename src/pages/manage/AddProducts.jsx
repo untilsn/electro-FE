@@ -14,6 +14,11 @@ import Description from "../../components/quill/Description";
 import { createProduct } from "../../service/productService";
 import { useMutationHook } from "../../hooks/useMutation";
 import DropdownSelect from "../../components/dropdown/DropdownSelect";
+import { useQuery } from "@tanstack/react-query";
+import { getAllCategory } from "../../service/categoryService";
+import { Option, Select } from "@material-tailwind/react";
+import DropdownOption from "../../components/dropdown/DropdownOption";
+import { getAllBrand } from "../../service/brandService";
 
 const productStatus = ["approved", "pedding", "reject"];
 const ramOptions = ["2GB", "4GB", "6GB", "8GB", "12GB", "16GB"];
@@ -39,7 +44,37 @@ const AddProducts = () => {
       productDesc: "",
     },
   });
+  //todo get category
+  const fetchAllCategory = async () => {
+    const res = await getAllCategory();
+    return res;
+  };
 
+  const {
+    data: categories,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchAllCategory,
+    retry: 3,
+    retryDelay: 1000,
+    keepPreviousData: true,
+  });
+
+  //todo get brand
+  const fetchAllBrand = async () => {
+    const res = await getAllBrand();
+    return res;
+  };
+
+  const { data: brands } = useQuery({
+    queryKey: ["brands"],
+    queryFn: fetchAllBrand,
+    retry: 3,
+    retryDelay: 1000,
+    keepPreviousData: true,
+  });
   //todo handle images
   const {
     progress,
@@ -93,6 +128,7 @@ const AddProducts = () => {
       mutation.mutate(
         {
           name: values.productName,
+          category: values.productCategory,
           brand: values.productBrand,
           image: combinedImages,
           price: Number(values.productPrice),
@@ -107,6 +143,7 @@ const AddProducts = () => {
             reset();
             setComment("");
             setUrl("");
+            setUrls("");
             setCombinedImages([]);
           },
         }
@@ -131,24 +168,35 @@ const AddProducts = () => {
           </InputContaint>
 
           <InputContaint>
-            <InputForm
+            <DropdownOption
+              itemlist={categories}
               control={control}
-              placeholder="Enter your type of product"
-              name="productBrand"
-            ></InputForm>
+              name="productCategory"
+              label="Category"
+            ></DropdownOption>
           </InputContaint>
-          <DropdownSelect
-            options={ramOptions}
-            control={control}
-            name="productRam"
-            label="RAM"
-          ></DropdownSelect>
-          <DropdownSelect
-            options={storageOptions}
-            control={control}
-            name="productStorage"
-            label="Storage"
-          ></DropdownSelect>
+          <InputContaint>
+            <DropdownOption
+              itemlist={brands}
+              control={control}
+              name="productBrand"
+              label="Brand"
+            ></DropdownOption>
+          </InputContaint>
+          <div className="flex items-start justify-between">
+            <DropdownSelect
+              options={ramOptions}
+              control={control}
+              name="productRam"
+              label="RAM"
+            ></DropdownSelect>
+            <DropdownSelect
+              options={storageOptions}
+              control={control}
+              name="productStorage"
+              label="Storage"
+            ></DropdownSelect>
+          </div>
           {/* //todo upload images */}
           <InputContaint>
             <ImageUpload

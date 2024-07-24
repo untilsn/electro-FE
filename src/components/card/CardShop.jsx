@@ -1,80 +1,131 @@
 import React, { useState } from "react";
-import { ReviewIcon } from "./CardItem";
 import { v4 } from "uuid";
-import { PiBinocularsBold } from "react-icons/pi";
-import { FaCartPlus } from "react-icons/fa";
-import { MdCompareArrows } from "react-icons/md";
-import { FaHeart, FaRegHeart } from "react-icons/fa6";
-import { NavLink } from "react-router-dom";
-import { useCheckFavorite } from "../../hooks/useCheckFavorite";
-import { useDispatch } from "react-redux";
+import { FaCartPlus, FaHeart, FaRegHeart } from "react-icons/fa";
 
-const CardShop = ({ item }) => {
-  if (!item) return;
-  const [isHovered, setIsHovered] = useState(false);
-  const isFavorite = useCheckFavorite(item);
+export const ReviewIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="w-[14px] h-[14px] text-yellowColor"
+    >
+      <path
+        fillRule="evenodd"
+        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+};
+
+const CardShop = ({ item, classes, size = "normal" }) => {
+  console.log(item);
+  const [isHover, setIsHover] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isCart, setIsCart] = useState(false);
+
+  const cardSizes = {
+    normal: "max-w-[275px] h-[420px]",
+    small: "max-w-[200px] h-[340px]",
+  };
+
+  const imageSizes = {
+    normal: "h-[275px]",
+    small: "h-[200px]",
+  };
+
+  const textSizes = {
+    normal: "text-base",
+    small: "text-sm",
+  };
+
+  const handleHoverImage = () => {
+    setIsHover(true);
+  };
+
+  const handleNotHoverImage = () => {
+    setIsHover(false);
+  };
 
   return (
     <div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="z-0 transition-all shadow-sm hover:shadow-itemShadow group"
+      className={`group hover:shadow-itemShadow transition duration-500 relative w-full border border-gray border-opacity-15 bg-white ${classes} ${cardSizes[size]}`}
     >
-      <div className="-z-10 max-w-[204px] w-full h-[210px] relative transition-all ">
-        <NavLink to={`/product?id=${item._id}`}>
-          <img
-            className={`${
-              item.category === "unknown" ? "" : "" //? NSFW feature
-            } object-contain w-full h-full transition-all`}
-            src={isHovered ? item?.image[1] : item?.image[0]}
-            alt="img-item"
-          />
-        </NavLink>
-        <div className="absolute flex flex-col gap-3 text-sm top-5 right-4 transition-all opacity-0  group-hover:opacity-90 -translate-x-[50%] group-hover:translate-x-[5%]">
-          <div
-            className={`${isFavorite} block p-2 bg-white rounded-full shadow hover:bg-yellowColor hover:text-white group text-yellowColor`}
-          >
-            {isFavorite ? <FaHeart /> : <FaRegHeart />}
-          </div>
-          <div className="block p-2 bg-white rounded-full shadow hover:bg-yellowColor hover:text-white text-yellowColor">
-            <PiBinocularsBold />
-          </div>
-          <div className="block p-2 bg-white rounded-full shadow hover:bg-yellowColor hover:text-white text-yellowColor">
-            <MdCompareArrows />
-          </div>
-        </div>
+      <div
+        onMouseEnter={handleHoverImage}
+        onMouseLeave={handleNotHoverImage}
+        className="relative w-full overflow-hidden"
+      >
+        {/* image */}
         <div
-          className="absolute bottom-0 left-0 right-0 transition-all  flex items-center justify-center gap-5 p-3 uppercase bg-white border-b border-gray border-opacity-20 text-yellowColor 
-         opacity-0 group-hover:opacity-100 translate-y-[50%] group-hover:translate-y-[0] 
-         hover:bg-yellowColor hover:text-white z-0 hover:border-b hover:border-yellowColor 
-         "
+          className={`relative w-full overflow-hidden p-2 ${imageSizes[size]}`}
         >
-          <span>
-            <FaCartPlus />
-          </span>
-          <span>add to carts</span>
+          <img
+            className={`absolute top-0 right-0 left-0 w-full h-full object-contain p-2 transition duration-500 
+              ${isHover ? "opacity-0 scale-105" : "opacity-100 scale-100"} ${
+              item?.type === "unknown" ? "blur-xl" : ""
+            }`}
+            src={item?.image[0]}
+            alt="img"
+          />
+          <img
+            className={`absolute top-0 right-0 left-0 w-full h-full object-contain p-2 transition duration-500 transform 
+              ${isHover ? "opacity-100 scale-105" : "opacity-0 scale-100"}`}
+            src={item?.image[1]}
+            alt=""
+          />
         </div>
+        {/* favorite */}
+        <div
+          className="absolute w-7 h-7 flex items-center justify-center rounded-full right-4 top-4 bg-darkPrimary transition duration-300 
+        opacity-0 group-hover:opacity-100 -translate-x-[50%] group-hover:translate-x-[5%] text-light text-sm "
+        >
+          {isFavorite ? <FaHeart /> : <FaRegHeart />}
+        </div>
+        {/* add cart */}
+        <button
+          className="absolute bottom-0 left-0 right-0  flex items-center opacity-20 hover:bg-yellowColor
+           justify-center gap-3 h-[40px] bg-darkPrimary text-light text-sm translate-y-[100%] group-hover:opacity-100
+           group-hover:visible group-hover:translate-y-0 transition duration-300"
+        >
+          <div>
+            <FaCartPlus
+              className={`${
+                isCart === true ? "text-yellowColor" : "text-white"
+              } hover:text-yellowColor text-sm`}
+            />
+          </div>
+          add to carts
+        </button>
+        {/* content */}
       </div>
-      <div className="flex flex-col items-center gap-2 p-5 capitalize">
-        <span className="text-sm font-light text-gray text-opacity-9 0">
-          {item?.type}
-        </span>
-        <h1 className="text-sm font-normal text-center overflow-hidden overflow-ellipsis max-h-[40px]">
-          {item.name}
+      <div className="flex flex-col gap-1 px-3 py-2 bg-white ">
+        <div
+          className={`capitalize text-gray text-opacity-80 font-light text-sm truncate`}
+        >
+          {item?.category}
+        </div>
+        <h1
+          className={`overflow-hidden text-darkPrimary  text-base overflow-ellipsis h-[50px] line-clamp-2`}
+        >
+          {item?.name}
         </h1>
-        <h2 className="text-base font-normal text-center text-yellowColor">
-          ${item?.price}
+        <h2 className={`text-yellowColor ${textSizes[size]}`}>
+          {(item?.price).toLocaleString("vi-VN")}đ
         </h2>
-        <div className="flex items-center gap-3 text-xs">
-          <div className="flex items-center ">
-            {Array(5)
+        <div className="flex items-center gap-3 text-nowrap overflow-ellipsis">
+          <div className="flex items-center gap-1">
+            {Array(item?.rating)
               .fill(0)
-              .map((item) => (
-                <ReviewIcon key={v4()}></ReviewIcon>
+              .map(() => (
+                <ReviewIcon className="text-xs" key={v4()} />
               ))}
           </div>
-          <span className="capitalize text-gray text-opacity-60">
-            ({item && item?.reviews ? item?.reviews?.length : 0} reviews)
+          <span
+            className={`capitalize text-gray text-opacity-60 text-sm truncate`}
+          >
+            {/* 2 {parse(`${item?.description}` || "reviews")} */}
           </span>
         </div>
       </div>

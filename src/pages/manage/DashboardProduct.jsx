@@ -17,6 +17,7 @@ import {
   IconButton,
   Tooltip,
   CardFooter,
+  Chip,
 } from "@material-tailwind/react";
 import TitlePath from "../../components/title/TitlePath";
 
@@ -164,7 +165,11 @@ const DashboardProduct = () => {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {brand}
+                          <Chip
+                            color="blue"
+                            className="text-center"
+                            value={brand}
+                          />
                         </Typography>
                       </td>
                       <td className={classes}>

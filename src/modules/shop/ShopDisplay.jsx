@@ -142,7 +142,7 @@ const ShopDisplay = () => {
           )} */}
           <div className="grid grid-cols-4 gap-6">
             {products?.data.map((item) => (
-              <CardShop key={item._id} item={item}></CardShop>
+              <CardShop key={item._id} item={item} size="small"></CardShop>
             ))}
           </div>
         </div>
