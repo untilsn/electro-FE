@@ -137,8 +137,8 @@ const CheckoutPage = () => {
       <ShopBanner title="shop" subtitle="checkout"></ShopBanner>
       <Breadcrumb children="checkout"></Breadcrumb>
       <div className="container">
-        <div className="grid grid-cols-[72%_28%] gap-5 mt-10 mb-40">
-          <div className="w-full h-auto p-5 border rounded-2xl border-yellowColor">
+        <div className="grid grid-cols-[70%_30%] gap-5 mt-10 mb-40">
+          <div className="w-full h-auto p-5 border rounded-2xl border-gray border-opacity-20">
             <TitlePath classname="mb-10 capitalize ">
               setting payment methob
             </TitlePath>

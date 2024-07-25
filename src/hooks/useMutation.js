@@ -7,7 +7,7 @@ export const useMutationHook = (fnCallback) => {
     onSuccess: (data) => {
       toast.success("success");
       // Xử lý thành công (ví dụ: lưu thông tin người dùng, chuyển hướng)
-      console.log(" successful:", data);
+      // console.log(" successful:", data);
       return data;
     },
     onError: (error) => {

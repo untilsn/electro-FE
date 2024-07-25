@@ -30,7 +30,6 @@ const ProductPage = () => {
   useEffect(() => {
     mutation.mutate(productId);
   }, [productId]);
-
   const handleOrderProduct = () => {
     if (!users.access_token) {
       toast.error("you must be login to add cart!");
@@ -40,6 +39,7 @@ const ProductPage = () => {
           orderItem: {
             name: detailProduct?.data?.name,
             amount: quantity,
+            brand: detailProduct?.data?.brand,
             image: detailProduct?.data?.image,
             price: detailProduct?.data?.price,
             productId: detailProduct?.data?._id,
@@ -49,7 +49,6 @@ const ProductPage = () => {
       );
     }
   };
-
   return (
     <div>
       <Breadcrumb children="product"></Breadcrumb>
@@ -59,8 +58,8 @@ const ProductPage = () => {
           item={detailProduct?.data}
           onQuantityChange={handleQuantityChange}
         ></ProductDetail>
-        <ProductDesc></ProductDesc>
-        <ShopRelative></ShopRelative>
+        <ProductDesc item={detailProduct?.data}></ProductDesc>
+        {/* <ShopRelative item={detailProduct?.data}></ShopRelative> */}
       </div>
     </div>
   );

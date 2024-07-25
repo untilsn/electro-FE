@@ -80,10 +80,10 @@ const ProductDetail = ({
         <h2 className="text-3xl font-normal text-yellowColor">
           {formatPrice(item?.price)}Đ
         </h2>
-        <div className="flex items-center gap-3 capitalize">
+        {/* <div className="flex items-center gap-3 capitalize">
           <span>ram: </span>
           {item?.ram?.map((item) => (
-            <div className="p-2 border rounded border-gray border-opacity-20 text-darkPrimary">
+            <div onClick={onClick} className="p-2 border rounded border-gray border-opacity-20 text-darkPrimary">
               {item}
             </div>
           ))}
@@ -95,7 +95,7 @@ const ProductDetail = ({
               {item}
             </div>
           ))}
-        </div>
+        </div> */}
         <div className="text-sm font-light text-gray text-opacity-80">
           {parse(item?.description)}
         </div>
@@ -171,7 +171,7 @@ const ProductDetail = ({
             {FooterIconContact.map((item) => (
               <span
                 key={item.id}
-                className="inline-flex items-center p-3 text-sm text-white bg-black border border-black rounded-full bg-opacity-85 hover:bg-white hover:text-black "
+                className="inline-flex items-center p-2 text-sm text-white transition duration-300 bg-black border border-black rounded-full bg-opacity-85 hover:bg-white hover:text-black "
               >
                 {item.icon}
               </span>

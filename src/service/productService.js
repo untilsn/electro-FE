@@ -79,6 +79,13 @@ export const getAllType = async () => {
   );
   return res.data;
 };
+export const getAllBrand = async (brand) => {
+  const res = await axios.get(
+    `${import.meta.env.VITE_API_URL_BACKEND}/product/get-all-brand`,
+    brand
+  );
+  return res.data;
+};
 
 export const getProductType = async (type) => {
   const res = await axios.get(

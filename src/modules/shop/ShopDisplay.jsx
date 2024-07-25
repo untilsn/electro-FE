@@ -118,7 +118,6 @@ const ShopDisplay = () => {
     retryDelay: 1000,
     keepPreviousData: true,
   });
-  console.log(products);
   return (
     <div>
       <div className="flex items-center justify-between py-10">
