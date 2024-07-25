@@ -14,12 +14,14 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
+import productSlice from "./slice/productSlice";
 
 const rootReducer = combineReducers({
   auth: authSlice,
   store: storeSlice,
   user: userSlice,
   order: orderSlice,
+  product: productSlice,
 });
 
 const persistConfig = {

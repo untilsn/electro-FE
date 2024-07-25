@@ -102,7 +102,7 @@ const ShopDisplay = () => {
   // );
   //* display grid
   //todo server product
-  const [limit, setLimit] = useState(2);
+  const [limit, setLimit] = useState(10);
   const fetchAllProduct = async (context) => {
     const limit = context?.queryKey[1];
     const search = context?.queryKey[2];

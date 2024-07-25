@@ -4,11 +4,14 @@ import ShopDisplay from "../modules/shop/ShopDisplay";
 import Breadcrumb from "../components/breadcrumb/Breadcrumb";
 import { useLocation } from "react-router-dom";
 import ShopFilter from "../modules/shop/ShopFilter";
+import { useSelector } from "react-redux";
 
 const ShopPage = () => {
   const location = useLocation();
   const urlParts = location.pathname.split("/");
   const shopName = urlParts[urlParts.length - 1];
+  const filter = useSelector((state) => state.product);
+  console.log(filter);
 
   return (
     <div>

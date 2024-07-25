@@ -8,6 +8,9 @@ import { Rating } from "@material-tailwind/react";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import LikeButton from "../../components/button/LikeButton";
 import { formatPrice, initFacebookSDK } from "../../utils/utils";
+import useAddToWishlist from "../../hooks/useActionWishList";
+import { useSelector } from "react-redux";
+import { use } from "../../../../server/src/routes/WishlistRouter";
 
 const ProductDetail = ({
   item,
@@ -16,7 +19,8 @@ const ProductDetail = ({
 }) => {
   if (!item) return;
   const [quantity, setQuantity] = useState(1);
-
+  const users = useSelector((state) => state.user);
+  console.log(users, item);
   useEffect(() => {
     setQuantity(1);
   }, [item]);
@@ -41,6 +45,16 @@ const ProductDetail = ({
     initFacebookSDK();
   }, [item]);
 
+  const {
+    mutate: addToWishlist,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useAddToWishlist();
+
+  const handleAddToWishlist = () => {
+    // addToWishlist({ users?., productId });
+  };
   return (
     <div className="grid grid-cols-2 mt-10 mb-20 gap-7">
       {/* show image */}
@@ -96,7 +110,7 @@ const ProductDetail = ({
             </div>
           ))}
         </div> */}
-        <div className="text-sm font-light text-gray text-opacity-80">
+        <div className="text-sm font-light text-gray text-opacity-80 h-[200px] overflow-hidden">
           {parse(item?.description)}
         </div>
         <div className="flex items-center gap-5 text-sm text-dark text-opacity-90">
@@ -152,6 +166,7 @@ const ProductDetail = ({
               {isFavorite ? <FaHeart /> : <FaRegHeart />}
             </span>
             <span
+              onClick={handleAddToWishlist}
               className={`${
                 isFavorite ? "text-yellowColor underline" : "text-black"
               }`}

@@ -1,10 +1,18 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   Accordion,
   AccordionBody,
   AccordionHeader,
 } from "@material-tailwind/react";
 import { IoMdArrowDropup } from "react-icons/io";
+import {
+  clearFilters,
+  setBrand,
+  setPrice,
+  setRam,
+} from "../../redux/slice/productSlice";
 
 export const COLORLIST = [
   "#343a40", // Dark Gray
@@ -38,30 +46,38 @@ function Icon({ id, open }) {
 }
 
 const ShopFilter = () => {
+  const dispatch = useDispatch();
+  const filter = useSelector((state) => state.product);
+
   const [openAcc1, setOpenAcc1] = useState(true);
   const [openAcc2, setOpenAcc2] = useState(true);
   const [openAcc3, setOpenAcc3] = useState(true);
-
-  const [selectedBrand, setSelectedBrand] = useState(null);
-  const [selectedRam, setSelectedRam] = useState(null);
-  const [selectedPrice, setSelectedPrice] = useState(null);
 
   const handleOpenAcc1 = () => setOpenAcc1((cur) => !cur);
   const handleOpenAcc2 = () => setOpenAcc2((cur) => !cur);
   const handleOpenAcc3 = () => setOpenAcc3((cur) => !cur);
 
+  const handleBrandSelect = (brand) => {
+    dispatch(setBrand(brand));
+  };
+
+  const handleRamSelect = (ram) => {
+    dispatch(setRam(ram));
+  };
+
+  const handlePriceSelect = (price) => {
+    dispatch(setPrice(price));
+  };
+
+  const handleClearFilters = () => {
+    dispatch(clearFilters());
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between py-10">
         <h1 className="font-light text-gray">Filters:</h1>
-        <button
-          className="text-yellowColor"
-          onClick={() => {
-            setSelectedBrand(null);
-            setSelectedRam(null);
-            setSelectedPrice(null);
-          }}
-        >
+        <button className="text-yellowColor" onClick={handleClearFilters}>
           Clean all
         </button>
       </div>
@@ -83,13 +99,13 @@ const ShopFilter = () => {
               <div
                 key={index}
                 className={`flex items-center justify-between px-2 py-2 transition duration-300 rounded group hover:bg-gray hover:bg-opacity-10 ${
-                  selectedBrand === brand ? "bg-yellowColor bg-opacity-20" : ""
+                  brand === filter?.brand ? "bg-yellowColor bg-opacity-20" : ""
                 }`}
-                onClick={() => setSelectedBrand(brand)}
+                onClick={() => handleBrandSelect(brand)}
               >
                 <span
                   className={`capitalize transition duration-300 text-darkPrimary group-hover:text-yellowColor ${
-                    selectedBrand === brand ? "text-yellowColor " : ""
+                    brand === filter?.brand ? "text-yellowColor " : ""
                   }`}
                 >
                   {brand}
@@ -116,13 +132,13 @@ const ShopFilter = () => {
                 <div
                   key={index}
                   className={`px-2 py-2 border rounded border-gray border-opacity-20 ${
-                    selectedRam === ram ? "bg-yellowColor bg-opacity-20" : ""
+                    ram === filter?.ram ? "bg-yellowColor bg-opacity-20" : ""
                   }`}
-                  onClick={() => setSelectedRam(ram)}
+                  onClick={() => handleRamSelect(ram)}
                 >
                   <span
                     className={`capitalize text-darkPrimary hover:text-yellowColor ${
-                      selectedRam === ram ? "text-yellowColor" : ""
+                      ram === filter?.ram ? "text-yellowColor" : ""
                     }`}
                   >
                     {ram}
@@ -149,13 +165,13 @@ const ShopFilter = () => {
               <div
                 key={index}
                 className={`flex items-center justify-between px-2 py-2 transition duration-300 rounded group hover:bg-gray hover:bg-opacity-10 ${
-                  selectedPrice === price ? "bg-yellowColor bg-opacity-20" : ""
+                  price === filter?.price ? "bg-yellowColor bg-opacity-20" : ""
                 }`}
-                onClick={() => setSelectedPrice(price)}
+                onClick={() => handlePriceSelect(price)}
               >
                 <span
                   className={`capitalize transition duration-300 text-darkPrimary group-hover:text-yellowColor ${
-                    selectedPrice === price ? "text-yellowColor" : ""
+                    price === filter?.price ? "text-yellowColor" : ""
                   }`}
                 >
                   {price}
