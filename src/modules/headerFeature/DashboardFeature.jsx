@@ -1,13 +1,9 @@
 import React, { useState } from "react";
-import { dashboardLink } from "./DashboardLink";
-import BrowserCategories from "./BrowserCategories";
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
-import MenuShop from "../menu/MenuShop";
-import { useSelector } from "react-redux";
+import { Link, NavLink } from "react-router-dom";
+import { NAVBARLIST } from "../../constant/HeaderNavbarList";
+import HeaderCategory from "./HeaderCategory";
 
 const DashboardFeature = () => {
-  const { categories } = useSelector((state) => state.store);
-  const location = useLocation();
   const [itemHover, setItemHover] = useState("");
   const handleMenuHover = (item) => {
     setItemHover(item.name);
@@ -16,25 +12,30 @@ const DashboardFeature = () => {
     setItemHover("");
   };
   return (
-    <div className="sticky -top-[1px] z-30 h-[53px]  bg-white shadow-primaryShadow">
-      <div className="container grid items-center justify-between grid-cols-4">
+    <div className="sticky -top-[1px] z-30 h-[53px]  bg-white shadow-primaryShadow sm:hidden lg:block">
+      <div className="container grid grid-cols-[275px_minmax(635px,_1fr)] items-center justify-between">
         {/* categories */}
-        <BrowserCategories category={categories}></BrowserCategories>
+        <HeaderCategory></HeaderCategory>
         {/* feature */}
-        <div className="flex items-center col-span-2  text-[13px] capitalize">
-          {dashboardLink.map((item) => (
+        <div className="flex items-center  text-[12px]  capitalize  border-x border-gray border-opacity-10 ">
+          {NAVBARLIST.map((item) => (
             <div
               onMouseEnter={() => handleMenuHover(item)}
               onMouseLeave={() => handleMenuClose(item)}
-              key={item?.name}
-              className="relative w-full mx-auto text-black group"
+              key={item?.title}
+              className={`${(isActive) =>
+                isActive
+                  ? "text-red-900"
+                  : ""}  relative w-full mx-auto text-black group `}
             >
               {location.pathname === item.url ? (
                 <NavLink
-                  to={item?.url}
+                  to={item.url}
                   className="flex items-center justify-center gap-2 px-3 py-[17px]"
                 >
-                  <span className="text-yellowColor">{item.name}</span>
+                  <span className="transition-all text-yellowColor">
+                    {item.name}
+                  </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -42,8 +43,8 @@ const DashboardFeature = () => {
                     strokeWidth={1}
                     stroke="currentColor"
                     className={`${
-                      !item?.menu ? "hidden" : ""
-                    } w-3 h-3 text-yellowColor`}
+                      !item?.menu ? "opacity-0 hidden" : "opacity-100"
+                    } w-3 h-3 text-yellowColor `}
                   >
                     <path
                       strokeLinecap="round"
@@ -55,10 +56,10 @@ const DashboardFeature = () => {
                 </NavLink>
               ) : (
                 <NavLink
-                  to={item?.url}
+                  to={item.url}
                   className="flex items-center justify-center gap-2 px-3 py-[17px]"
                 >
-                  <span className="group-hover:text-yellowColor">
+                  <span className="transition-all group-hover:text-yellowColor">
                     {item.name}
                   </span>
                   <svg
@@ -81,16 +82,17 @@ const DashboardFeature = () => {
                   <span className="absolute bottom-0 right-0 w-0 h-[1px] transition-all duration-300 group-hover:w-full bg-yellowColor"></span>
                 </NavLink>
               )}
-              {itemHover === item.name ? item.menu : ""}
-              {/* <Outlet></Outlet> */}
+              <div
+                className={`transition-opacity duration-300 ${
+                  itemHover === item.name
+                    ? "opacity-100"
+                    : "opacity-0 select-none invisible"
+                }`}
+              >
+                {item.menu}
+              </div>
             </div>
           ))}
-        </div>
-
-        {/* notion */}
-        <div className="text-sm text-end">
-          <span>Clearance</span>
-          <span className="font-semibold">&nbsp;Up to 30% Off</span>
         </div>
       </div>
     </div>

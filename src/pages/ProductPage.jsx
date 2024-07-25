@@ -22,8 +22,6 @@ const ProductPage = () => {
     setQuantity(newQuantity);
   };
 
-  // const [detailItem] = useQueryData(productId);
-
   const mutation = useMutationHook(async (id) => {
     const result = await getDetailsProduct(id);
     return result;

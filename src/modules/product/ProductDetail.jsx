@@ -7,7 +7,7 @@ import { useCheckFavorite } from "../../hooks/useCheckFavorite";
 import { Rating } from "@material-tailwind/react";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import LikeButton from "../../components/button/LikeButton";
-import { initFacebookSDK } from "../../utils/utils";
+import { formatPrice, initFacebookSDK } from "../../utils/utils";
 
 const ProductDetail = ({
   item,
@@ -70,14 +70,32 @@ const ProductDetail = ({
       <div className="flex flex-col gap-3">
         <h1 className="text-2xl text-darkPrimary">{item?.name}</h1>
         <div className="flex items-center gap-3">
-          <Rating value={item?.rating} />
+          <Rating value={item?.rating} readonly />
           <span className="capitalize text-gray text-opacity-60">
-            ( {item?.reviews?.length} reviews )
+            ( {item?.reviews?.length} reviews 2)
           </span>
         </div>
 
         <LikeButton href={window.location.href}></LikeButton>
-        <h2 className="text-3xl font-normal text-yellowColor">${item.price}</h2>
+        <h2 className="text-3xl font-normal text-yellowColor">
+          {formatPrice(item?.price)}Đ
+        </h2>
+        <div className="flex items-center gap-3 capitalize">
+          <span>ram: </span>
+          {item?.ram?.map((item) => (
+            <div className="p-2 border rounded border-gray border-opacity-20 text-darkPrimary">
+              {item}
+            </div>
+          ))}
+        </div>
+        <div className="flex items-center gap-3">
+          <span>storage: </span>
+          {item?.storage?.map((item) => (
+            <div className="p-2 border rounded border-gray border-opacity-20 text-darkPrimary">
+              {item}
+            </div>
+          ))}
+        </div>
         <div className="text-sm font-light text-gray text-opacity-80">
           {parse(item?.description)}
         </div>
@@ -143,8 +161,8 @@ const ProductDetail = ({
           </div>
         </div>
         {/* category */}
-        <div className="py-5 text-sm font-light border-t text-gray border-gray border-opacity-2">
-          category: {item?.type}
+        <div className="py-5 text-sm font-light capitalize border-t text-gray border-gray border-opacity-2">
+          Danh mục: {item?.category + " , " + item?.brand}
         </div>
         {/* share */}
         <div className="flex items-center gap-3 text-sm capitalize">

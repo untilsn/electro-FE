@@ -33,3 +33,10 @@ export const initFacebookSDK = () => {
     fjs.parentNode.insertBefore(js, fjs);
   })(document, "script", "facebook-jssdk");
 };
+
+//conver to vnd
+export function formatPrice(number) {
+  if (typeof number !== "number") return number;
+
+  return number.toLocaleString("vi-VN"); // Định dạng theo kiểu của Việt Nam
+}

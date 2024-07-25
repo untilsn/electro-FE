@@ -72,7 +72,7 @@ const CardShop = ({ item, classes, size = "normal" }) => {
           <img
             className={`absolute top-0 right-0 left-0 w-full h-full object-contain p-2 transition duration-500 transform 
               ${isHover ? "opacity-100 scale-105" : "opacity-0 scale-100"}`}
-            src={item?.image[1]}
+            src={item?.image[2]}
             alt=""
           />
         </div>

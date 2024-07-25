@@ -16,13 +16,10 @@ import { useMutationHook } from "../../hooks/useMutation";
 import DropdownSelect from "../../components/dropdown/DropdownSelect";
 import { useQuery } from "@tanstack/react-query";
 import { getAllCategory } from "../../service/categoryService";
-import { Option, Select } from "@material-tailwind/react";
-import DropdownOption from "../../components/dropdown/DropdownOption";
 import { getAllBrand } from "../../service/brandService";
+import DropdownOption from "../../components/dropdown/DropdownOption";
 
-const productStatus = ["approved", "pedding", "reject"];
 const ramOptions = ["2GB", "4GB", "6GB", "8GB", "12GB", "16GB"];
-
 const storageOptions = ["32GB", "64GB", "128GB", "256GB", "512GB", "1TB"];
 
 const AddProducts = () => {
@@ -44,7 +41,8 @@ const AddProducts = () => {
       productDesc: "",
     },
   });
-  //todo get category
+
+  // Fetch categories
   const fetchAllCategory = async () => {
     const res = await getAllCategory();
     return res;
@@ -62,7 +60,7 @@ const AddProducts = () => {
     keepPreviousData: true,
   });
 
-  //todo get brand
+  // Fetch brands
   const fetchAllBrand = async () => {
     const res = await getAllBrand();
     return res;
@@ -75,7 +73,8 @@ const AddProducts = () => {
     retryDelay: 1000,
     keepPreviousData: true,
   });
-  //todo handle images
+
+  // Handle images
   const {
     progress,
     image,
@@ -87,7 +86,7 @@ const AddProducts = () => {
     handleRemoveImage(url);
   };
   const handleAddUrl = () => {
-    if (urls.length > 5) return toast.error("only 5 images or less");
+    if (urls.length > 5) return toast.error("Only 5 images or less");
     if (urls.some((item) => item === url)) {
       setUrl("");
       return;
@@ -97,7 +96,7 @@ const AddProducts = () => {
       setUrl("");
     }
   };
-  const handleRemoveUrl = (urlItem, index) => {
+  const handleRemoveUrl = (urlItem) => {
     const newUrls = urls.filter((url) => url !== urlItem);
     setUrls(newUrls);
   };
@@ -110,9 +109,8 @@ const AddProducts = () => {
     setCombinedImages([...image, ...urls]);
   }, [image, urls]);
 
-  //todo add product
+  // Add product
   const mutation = useMutationHook((data) => {
-    console.log(data);
     const result = createProduct(data);
     return result;
   });
@@ -141,9 +139,8 @@ const AddProducts = () => {
         {
           onSuccess: () => {
             reset();
-            setComment("");
             setUrl("");
-            setUrls("");
+            setUrls([]);
             setCombinedImages([]);
           },
         }
@@ -156,24 +153,22 @@ const AddProducts = () => {
   return (
     <Fragment>
       <DashboardHeading>Create Products</DashboardHeading>
-
-      <form className="mt-10 " onSubmit={handleSubmit(handleAddProducts)}>
+      <form className="mt-10" onSubmit={handleSubmit(handleAddProducts)}>
         <div className="grid grid-cols-2 mb-10 gap-x-10 gap-y-16">
           <InputContaint>
             <InputForm
               control={control}
               placeholder="Enter your name"
               name="productName"
-            ></InputForm>
+            />
           </InputContaint>
-
           <InputContaint>
             <DropdownOption
               itemlist={categories}
               control={control}
               name="productCategory"
               label="Category"
-            ></DropdownOption>
+            />
           </InputContaint>
           <InputContaint>
             <DropdownOption
@@ -181,7 +176,7 @@ const AddProducts = () => {
               control={control}
               name="productBrand"
               label="Brand"
-            ></DropdownOption>
+            />
           </InputContaint>
           <div className="flex items-start justify-between">
             <DropdownSelect
@@ -189,23 +184,23 @@ const AddProducts = () => {
               control={control}
               name="productRam"
               label="RAM"
-            ></DropdownSelect>
+            />
             <DropdownSelect
               options={storageOptions}
               control={control}
               name="productStorage"
               label="Storage"
-            ></DropdownSelect>
+            />
           </div>
-          {/* //todo upload images */}
+          {/* Upload images */}
           <InputContaint>
             <ImageUpload
               image={combinedImages}
               onClick={handleDeleteImage}
               onchange={(e) => handleSelectImage(e)}
-            ></ImageUpload>
+            />
           </InputContaint>
-          {/* //todo upload urls */}
+          {/* Upload URLs */}
           <InputContaint>
             <InputForm
               type="url"
@@ -216,13 +211,9 @@ const AddProducts = () => {
               onChange={handleValueChange}
               placeholder="Paste the URL images"
               displayButton={true}
-            ></InputForm>
-            <ol
-              type="1"
-              start="1"
-              className="flex flex-col max-h-[550px] overflow-y-auto gap-3 p-5 bg-white border rounded-md border-dark border-opacity-20 "
-            >
-              {urls.map((url, index) => (
+            />
+            <ol className="flex flex-col max-h-[550px] overflow-y-auto gap-3 p-5 bg-white border rounded-md border-dark border-opacity-20">
+              {urls.map((url) => (
                 <li
                   title={url}
                   key={v4()}
@@ -230,7 +221,7 @@ const AddProducts = () => {
                 >
                   {url}
                   <span
-                    onClick={() => handleRemoveUrl(url, index)}
+                    onClick={() => handleRemoveUrl(url)}
                     className="flex items-center justify-center absolute bg-dark bg-opacity-10 right-3 to-50% invisible w-6 h-6 rounded-full select-none group-hover:visible group-hover:select-auto hover:bg-gray hover:bg-opacity-50"
                   >
                     <FiMinus />
@@ -239,14 +230,13 @@ const AddProducts = () => {
               ))}
             </ol>
           </InputContaint>
-
           <InputContaint>
             <InputForm
               name="productPrice"
               type="number"
               control={control}
               placeholder="Enter number of price"
-            ></InputForm>
+            />
           </InputContaint>
           <InputContaint>
             <InputForm
@@ -254,7 +244,7 @@ const AddProducts = () => {
               control={control}
               placeholder="Enter your stock"
               name="productStock"
-            ></InputForm>
+            />
           </InputContaint>
           <InputContaint>
             <InputForm
@@ -264,10 +254,10 @@ const AddProducts = () => {
               control={control}
               placeholder="Enter your rating (0-5)"
               name="productRating"
-            ></InputForm>
+            />
           </InputContaint>
         </div>
-        {/* description */}
+        {/* Description */}
         <Controller
           name="productDesc"
           control={control}
@@ -276,13 +266,7 @@ const AddProducts = () => {
           )}
         />
         <div className="flex items-center justify-center w-full mx-auto mt-20">
-          <Button
-            type="submit"
-            // $isloading={loading}
-            // disabled={loading}
-          >
-            Add Product
-          </Button>
+          <Button type="submit">Add Product</Button>
         </div>
       </form>
     </Fragment>
