@@ -1,11 +1,10 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CiGlass } from "react-icons/ci";
 import { FaPen } from "react-icons/fa";
 import { IoAdd } from "react-icons/io5";
 import { MdDeleteForever } from "react-icons/md";
 import { GrView } from "react-icons/gr";
-
 import {
   Card,
   CardHeader,
@@ -20,72 +19,37 @@ import {
   Chip,
 } from "@material-tailwind/react";
 import TitlePath from "../../components/title/TitlePath";
-
-const TABLE_HEAD = [
-  "Sản phẩm",
-  "Hãng",
-  "Danh mục",
-  "Giá",
-  "Tồn kho",
-  "Ngày",
-  "Thao tác",
-];
-
-const TABLE_ROWS = [
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-    product: "Điện thoại A",
-    brand: "Samsung",
-    category: "Điện thoại",
-    price: "10,000,000 VND",
-    stock: 50,
-    date: "23/04/18",
-    action: "Chỉnh sửa",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-    product: "Điện thoại B",
-    brand: "Apple",
-    category: "Điện thoại",
-    price: "20,000,000 VND",
-    stock: 30,
-    date: "23/04/18",
-    action: "Chỉnh sửa",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-    product: "Điện thoại C",
-    brand: "Xiaomi",
-    category: "Điện thoại",
-    price: "7,000,000 VND",
-    stock: 20,
-    date: "19/09/17",
-    action: "Chỉnh sửa",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-    product: "Điện thoại D",
-    brand: "Oppo",
-    category: "Điện thoại",
-    price: "5,000,000 VND",
-    stock: 15,
-    date: "24/12/08",
-    action: "Chỉnh sửa",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-    product: "Điện thoại E",
-    brand: "Vivo",
-    category: "Điện thoại",
-    price: "12,000,000 VND",
-    stock: 25,
-    date: "04/10/21",
-    action: "Chỉnh sửa",
-  },
-];
+import { getAllProduct } from "../../service/productService";
+import { useQuery } from "@tanstack/react-query";
+import { useDebounce } from "use-debounce";
+import { formatPrice } from "../../utils/utils";
 
 const DashboardProduct = () => {
-  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const [valueSearch] = useDebounce(search, 1000);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(4); // Number of items per page
+  const [currentSort, setCurrentSort] = useState("");
+
+  const fetchAllProduct = async ({ queryKey }) => {
+    const [_, limit, search, page, sort] = queryKey;
+    const res = await getAllProduct(search, limit, page, sort);
+    return res;
+  };
+
+  const { data: products, isLoading } = useQuery({
+    queryKey: ["products", limit, valueSearch, currentPage, currentSort],
+    queryFn: fetchAllProduct,
+    retry: 3,
+    retryDelay: 1000,
+    keepPreviousData: true,
+  });
+  console.log(products);
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <Fragment>
@@ -108,7 +72,12 @@ const DashboardProduct = () => {
               </Button>
             </div>
             <div className="w-full md:w-72">
-              <Input label="Search" icon={<CiGlass className="w-5 h-5" />} />
+              <Input
+                label="Search"
+                icon={<CiGlass className="w-5 h-5" />}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
           </div>
         </CardHeader>
@@ -116,7 +85,15 @@ const DashboardProduct = () => {
           <table className="w-full mt-4 text-left table-auto min-w-max">
             <thead>
               <tr>
-                {TABLE_HEAD.map((head) => (
+                {[
+                  "Sản phẩm",
+                  "Hãng",
+                  "Danh mục",
+                  "Giá",
+                  "Tồn kho",
+                  "Ngày",
+                  "Thao tác",
+                ].map((head) => (
                   <th
                     key={head}
                     className="p-4 border-y border-blue-gray-100 bg-blue-gray-50/50"
@@ -124,7 +101,7 @@ const DashboardProduct = () => {
                     <Typography
                       variant="small"
                       color="blue-gray"
-                      className="font-normal leading-none opacity-70"
+                      className="font-medium leading-none opacity-70"
                     >
                       {head}
                     </Typography>
@@ -133,28 +110,32 @@ const DashboardProduct = () => {
               </tr>
             </thead>
             <tbody>
-              {TABLE_ROWS.map(
-                (
-                  { img, product, brand, category, price, stock, date, action },
-                  index
-                ) => {
-                  const isLast = index === TABLE_ROWS.length - 1;
+              {products?.data?.length > 0 ? (
+                products.data.map((item, index) => {
+                  const isLast = index === products.data.length - 1;
                   const classes = isLast
                     ? "p-4"
                     : "p-4 border-b border-blue-gray-50";
 
                   return (
-                    <tr key={product}>
+                    <tr key={item?._id}>
                       <td className={classes}>
                         <div className="flex items-center gap-3">
-                          <Avatar src={img} alt={product} size="sm" />
+                          <div className="max-w-[80px] h-[80px]">
+                            <img
+                              src={item?.image[0]}
+                              alt={item?.brand}
+                              size="sm"
+                              className="object-cover w-full h-full rounded-sm"
+                            />
+                          </div>
                           <div className="flex flex-col">
                             <Typography
                               variant="small"
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {product}
+                              {item?.name}
                             </Typography>
                           </div>
                         </div>
@@ -168,7 +149,7 @@ const DashboardProduct = () => {
                           <Chip
                             color="blue"
                             className="text-center"
-                            value={brand}
+                            value={item?.brand}
                           />
                         </Typography>
                       </td>
@@ -178,7 +159,7 @@ const DashboardProduct = () => {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {category}
+                          {item?.category}
                         </Typography>
                       </td>
                       <td className={classes}>
@@ -187,7 +168,7 @@ const DashboardProduct = () => {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {price}
+                          {formatPrice(item?.price)}Đ
                         </Typography>
                       </td>
                       <td className={classes}>
@@ -196,7 +177,7 @@ const DashboardProduct = () => {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {stock}
+                          {item?.countInStock}
                         </Typography>
                       </td>
                       <td className={classes}>
@@ -205,7 +186,7 @@ const DashboardProduct = () => {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {date}
+                          {item?.updatedAt}
                         </Typography>
                       </td>
                       <td className={classes}>
@@ -227,20 +208,36 @@ const DashboardProduct = () => {
                       </td>
                     </tr>
                   );
-                }
+                })
+              ) : (
+                <tr>
+                  <td colSpan={7} className="p-4 text-center">
+                    No products found.
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
         </CardBody>
         <CardFooter className="flex items-center justify-between p-4 border-t border-blue-gray-50">
           <Typography variant="small" color="blue-gray" className="font-normal">
-            Page 1 of 10
+            Page {currentPage} of {Math.ceil(products?.total / limit)}
           </Typography>
           <div className="flex gap-2">
-            <Button variant="outlined" size="sm">
+            <Button
+              variant="outlined"
+              size="sm"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
               Previous
             </Button>
-            <Button variant="outlined" size="sm">
+            <Button
+              variant="outlined"
+              size="sm"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === Math.ceil(products?.total / limit)}
+            >
               Next
             </Button>
           </div>

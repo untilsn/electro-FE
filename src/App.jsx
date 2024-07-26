@@ -8,25 +8,17 @@ import WishlistPage from "./pages/WishlistPage";
 import ScrollTopButton from "./components/button/ScrollTopButton";
 import DashboardPage from "./pages/DashboardPage";
 import PageStyles from "./pages/PageStyles";
-import DashboardMainPage from "./pages/manage/DashboardMainPage";
 import DashboardProduct from "./pages/manage/DashboardProduct";
 import DashboardCategory from "./pages/manage/DashboardCategory";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import AddCategories from "./pages/manage/AddCategories";
 import AddProducts from "./pages/manage/AddProducts";
 import BlogPage from "./pages/BlogPage";
-import { useFetchingWishlists } from "./hooks/useFetchingWishlists";
-import { useFetchingProducts } from "./hooks/useFetchingProducts";
-import { useDataFetcher } from "./hooks/useFetchData";
-import { useDataUser } from "./hooks/useDataUser";
 import DashboardUser from "./pages/manage/DashboardUser";
 import DashboardUpdateProduct from "./pages/manage/DashboardUpdateProduct";
 import { useEffect } from "react";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
 import { isJsonString } from "./utils/utils";
-import storeSlice from "./redux/slice/storeSlice";
 import {
   axiosJWT,
   getDetailsUser,
@@ -36,6 +28,8 @@ import { updateUser } from "./redux/slice/userSlice";
 import ProfilePage from "./pages/profileuser/ProfilePage";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderUserPage from "./pages/OrderUserPage";
+import DashboardOrder from "./pages/manage/DashboardOrder";
+import DashboardManage from "./pages/manage/DashboardManage";
 
 function App() {
   const dispatch = useDispatch();
@@ -158,8 +152,8 @@ function App() {
         {/* dashboard */}
         <Route path="" element={<DashboardPage></DashboardPage>}>
           <Route
-            path="/manage"
-            element={<DashboardMainPage></DashboardMainPage>}
+            path="/manage/dashboard"
+            element={<DashboardManage></DashboardManage>}
           ></Route>
           <Route
             path="/manage/product"
@@ -180,6 +174,10 @@ function App() {
           <Route
             path="/manage/add-categories"
             element={<AddCategories></AddCategories>}
+          ></Route>
+          <Route
+            path="/manage/order"
+            element={<DashboardOrder></DashboardOrder>}
           ></Route>
           <Route
             path="/manage/user"

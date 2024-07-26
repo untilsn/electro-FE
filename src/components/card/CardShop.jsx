@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { v4 } from "uuid";
 import { FaCartPlus, FaHeart, FaRegHeart } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 
 export const ReviewIcon = () => {
   return (
@@ -58,24 +59,26 @@ const CardShop = ({ item, classes, size = "normal" }) => {
         className="relative w-full overflow-hidden"
       >
         {/* image */}
-        <div
-          className={`relative w-full overflow-hidden p-2 ${imageSizes[size]}`}
-        >
-          <img
-            className={`absolute top-0 right-0 left-0 w-full h-full object-contain p-2 transition duration-500 
+        <NavLink to={`/product?id=${item._id}`}>
+          <div
+            className={`relative w-full overflow-hidden p-2 ${imageSizes[size]}`}
+          >
+            <img
+              className={`absolute top-0 right-0 left-0 w-full h-full object-contain p-2 transition duration-500 
               ${isHover ? "opacity-0 scale-105" : "opacity-100 scale-100"} ${
-              item?.type === "unknown" ? "blur-xl" : ""
-            }`}
-            src={item?.image[0]}
-            alt="img"
-          />
-          <img
-            className={`absolute top-0 right-0 left-0 w-full h-full object-contain p-2 transition duration-500 transform 
+                item?.type === "unknown" ? "blur-xl" : ""
+              }`}
+              src={item?.image[0]}
+              alt="img"
+            />
+            <img
+              className={`absolute top-0 right-0 left-0 w-full h-full object-contain p-2 transition duration-500 transform 
               ${isHover ? "opacity-100 scale-105" : "opacity-0 scale-100"}`}
-            src={item?.image[2]}
-            alt=""
-          />
-        </div>
+              src={item?.image[2]}
+              alt=""
+            />
+          </div>
+        </NavLink>
         {/* favorite */}
         <div
           className="absolute w-7 h-7 flex items-center justify-center rounded-full right-4 top-4 bg-darkPrimary transition duration-300 
@@ -106,11 +109,12 @@ const CardShop = ({ item, classes, size = "normal" }) => {
         >
           {item?.category}
         </div>
-        <h1
+        <NavLink
+          to={`/product?id=${item._id}`}
           className={`overflow-hidden text-darkPrimary  text-base overflow-ellipsis h-[50px] line-clamp-2`}
         >
           {item?.name}
-        </h1>
+        </NavLink>
         <h2 className={`text-yellowColor ${textSizes[size]}`}>
           {(item?.price).toLocaleString("vi-VN")}đ
         </h2>

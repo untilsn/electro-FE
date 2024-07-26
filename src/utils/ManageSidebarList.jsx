@@ -3,12 +3,14 @@ import { FaTwitter } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa";
 import { FaPinterest } from "react-icons/fa";
+import { IoBagCheck } from "react-icons/io5";
+
 // CSS để thiết lập kích thước chung cho tất cả các icon
 const iconStyle = {
   width: "24px",
   height: "24px",
 };
-        
+
 export const MANAGELIST = [
   // {
   //   title: "Home",
@@ -116,6 +118,13 @@ export const MANAGELIST = [
   //     </svg>
   //   ),
   // },
+  {
+    title: "Order",
+    accuUrl: "/manage/order",
+    accTitle1: "Users order",
+    url: "/manage/order",
+    accIcon1: <IoBagCheck />,
+  },
   {
     title: "User",
     accuUrl: "/manage/user",

@@ -4,33 +4,40 @@ import { Card, Chip, Typography } from "@material-tailwind/react";
 import ActionView from "../../components/action/ActionView";
 import ActionEdit from "../../components/action/ActionEdit";
 import ActionDelete from "../../components/action/ActionDelete";
-import { getAllUser } from "../../service/useService";
 import { useQuery } from "@tanstack/react-query";
+import { getAllOrder } from "../../service/orderService";
+import { formatPrice } from "../../utils/utils";
 
-const TABLE_HEAD = ["id", "displayname", "email", "status", "action"];
+const TABLE_HEAD = [
+  "id",
+  "order date",
+  "total amount",
+  "payment status",
+  "action",
+];
 
-const DashboardUser = () => {
+const DashboardOrder = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const fetchAllUser = async () => {
-    const res = await getAllUser();
+  const fetchAllOrders = async () => {
+    const res = await getAllOrder(); // Fetch orders instead of users
     return res;
   };
 
-  const { data: users, isLoading } = useQuery({
-    queryKey: ["users"],
-    queryFn: fetchAllUser,
+  const { data: orders, isLoading } = useQuery({
+    queryKey: ["orders"],
+    queryFn: fetchAllOrders,
     retry: 3,
     retryDelay: 1000,
     keepPreviousData: true,
   });
-
-  // Filter users based on the search term
-  const filteredUsers =
-    users?.data?.filter(
-      (user) =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  console.log(orders);
+  // Filter orders based on the search term
+  const filteredOrders =
+    orders?.data?.filter(
+      (order) =>
+        order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.date.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
 
   if (isLoading) return <div>Loading...</div>;
@@ -38,10 +45,10 @@ const DashboardUser = () => {
   return (
     <Fragment>
       <div className="flex items-center justify-between">
-        <DashboardHeading>Manage Users</DashboardHeading>
+        <DashboardHeading>Manage Orders</DashboardHeading>
         <input
           type="search"
-          placeholder="Search users"
+          placeholder="Search orders"
           className="p-3 bg-transparent focus:border-warning max-w-[300px] w-full border border-darkPrimary border-opacity-75 rounded-md outline-none"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -60,7 +67,7 @@ const DashboardUser = () => {
                     variant="small"
                     color="gray"
                     className={
-                      head === "status" || head === "action"
+                      head === "payment status" || head === "action"
                         ? "text-sm leading-none text-center font-medium capitalize text-dark"
                         : "text-sm leading-none text-left font-medium capitalize text-dark"
                     }
@@ -72,9 +79,9 @@ const DashboardUser = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.length > 0 ? (
-              filteredUsers.map((item, index) => {
-                const isLast = index === filteredUsers.length - 1;
+            {filteredOrders.length > 0 ? (
+              filteredOrders.map((item, index) => {
+                const isLast = index === filteredOrders.length - 1;
                 const classes = isLast
                   ? "p-4"
                   : "p-4 border-b border-gray border-opacity-20";
@@ -98,9 +105,7 @@ const DashboardUser = () => {
                         color="gray"
                         className="text-sm font-normal"
                       >
-                        <span className="font-medium capitalize">
-                          {item?.name}
-                        </span>
+                        <span>{item?.createdAt}</span>
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -109,7 +114,7 @@ const DashboardUser = () => {
                         color="gray"
                         className="text-sm font-normal"
                       >
-                        <span>{item?.email}</span>
+                        <span>{formatPrice(item?.totalPrice)}Đ</span>
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -117,8 +122,8 @@ const DashboardUser = () => {
                         <Chip
                           size="lg"
                           variant="ghost"
-                          value={item?.isAdmin ? "admin" : "user"}
-                          color={item?.isAdmin ? "green" : "blue"}
+                          value={item?.paymentStatus ? "Paid" : "Pending"}
+                          color={item?.paymentStatus ? "green" : "red"}
                         />
                       </div>
                     </td>
@@ -141,7 +146,7 @@ const DashboardUser = () => {
             ) : (
               <tr>
                 <td colSpan={TABLE_HEAD.length} className="p-4 text-center">
-                  No users found.
+                  No orders found.
                 </td>
               </tr>
             )}
@@ -152,4 +157,4 @@ const DashboardUser = () => {
   );
 };
 
-export default DashboardUser;
+export default DashboardOrder;

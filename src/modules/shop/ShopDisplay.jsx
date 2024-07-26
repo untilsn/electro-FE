@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import CardShop from "../../components/card/CardShop";
-import { Input, Select } from "@material-tailwind/react";
+import CardGrid from "../../components/card/CardGrid";
+import { Input, Select, Option, Button } from "@material-tailwind/react";
 import { getAllProduct } from "../../service/productService";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
-import CardGrid from "../../components/card/CardGrid";
 
 export const ICONLIST = [
   {
@@ -52,57 +52,13 @@ export const ICONLIST = [
 ];
 
 const ShopDisplay = () => {
-  //todo firebase product
   const [search, setSearch] = useState("");
   const [valueSearch] = useDebounce(search, 1000);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentSort, setCurrentSort] = useState("");
   const [isActive, setIsActive] = useState("grid-1");
-  const [paginate, setPaginate] = useState({
-    page: 0,
-    limit: 4,
-    total: 1,
-  });
+  const [limit, setLimit] = useState(10); // Number of items per page
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };
-  const handleSortChange = (newSort) => {
-    setCurrentSort(newSort);
-  };
-
-  // //todo
-  // const [products, setProducts] = useState([]);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [totalPages, setTotalPages] = useState(0);
-  // const limit = 4;
-
-  // useEffect(() => {
-  //   const getProducts = async () => {
-  //     const data = await fetchAllProduct(limit, currentPage - 1);
-  //     setProducts(data.data);
-  //     setTotalPages(data.totalPage);
-  //   };
-
-  //   getProducts();c
-  // }, [currentPage]);
-
-  // const handlePageChange = (page) => {
-  //   setCurrentPage(page);
-  // };
-  // const { categoryProducts } = useSelector((state) => state.store);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [itemPerPage, setItemPerPage] = useState(8);
-  // const lastPostIndex = currentPage * itemPerPage;
-  // const firstPostIndex = lastPostIndex - itemPerPage;
-  // search method
-  // filter method
-  // const filterProducts = categoryProducts?.filter((product) =>
-  //   product.title.toLowerCase().includes(search)
-  // );
-  //* display grid
-  //todo server product
-  const [limit, setLimit] = useState(10);
   const fetchAllProduct = async (context) => {
     const limit = context?.queryKey[1];
     const search = context?.queryKey[2];
@@ -111,6 +67,7 @@ const ShopDisplay = () => {
     const res = await getAllProduct(search, limit, page, sort);
     return res;
   };
+
   const { data: products, isLoading } = useQuery({
     queryKey: ["products", limit, valueSearch, currentPage, currentSort],
     queryFn: fetchAllProduct,
@@ -118,37 +75,52 @@ const ShopDisplay = () => {
     retryDelay: 1000,
     keepPreviousData: true,
   });
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleSortChange = (event) => {
+    setCurrentSort(event.target.value);
+  };
+
+  if (isLoading) return <div>Loading...</div>;
+
   return (
     <div>
       <div className="flex items-center justify-between py-10">
-        <h1 className="text-sm">Showing 1–8 of 15 Products</h1>
+        <h1 className="text-sm">
+          Showing {(currentPage - 1) * limit + 1}–
+          {Math.min(currentPage * limit, products?.total || 0)} of{" "}
+          {products?.total || 0} Products
+        </h1>
         <div className="flex items-center gap-5">
-          {/* sort */}
+          {/* Sort */}
           <div className="flex items-center gap-3">
-            {/* <span className="text-sm ">sort by: </span> */}
             <Select
               variant="outlined"
-              label="Select Version"
+              label="Sort by"
               className="font-light rounded-none"
+              onChange={handleSortChange}
             >
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
-              <Option>Material Tailwind Vue</Option>
-              <Option>Material Tailwind Angular</Option>
-              <Option>Material Tailwind Svelte</Option>
+              <Option value="price-asc">Price: Low to High</Option>
+              <Option value="price-desc">Price: High to Low</Option>
+              <Option value="rating">Rating</Option>
             </Select>
           </div>
-          {/* search */}
+          {/* Search */}
           <div>
             <Input
               variant="static"
               placeholder="Search products..."
               color="black"
-              className=" placeholder:text-gray"
+              className="placeholder:text-gray"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          {/* grid item */}
-          <div className="flex items-end gap-3 ">
+          {/* Grid item */}
+          <div className="flex items-end gap-3">
             {ICONLIST.map((item) => (
               <div
                 key={item?.id}
@@ -165,12 +137,11 @@ const ShopDisplay = () => {
           </div>
         </div>
       </div>
-      {8 > 0 ? (
+      {products?.data?.length > 0 ? (
         <div>
           {isActive === "grid-1" ? (
-            <div className="grid grid-cols-1 ">
+            <div className="grid grid-cols-1 gap-6">
               {products?.data?.map((item, index) => (
-                // <ProductCardRow item={item} key={index}></ProductCardRow>
                 <CardGrid item={item} key={index}></CardGrid>
               ))}
             </div>
@@ -186,9 +157,7 @@ const ShopDisplay = () => {
                 <CardShop item={item} size="small" key={index}></CardShop>
               ))}
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
         </div>
       ) : (
         <div className="text-base font-light text-gray">
@@ -196,18 +165,26 @@ const ShopDisplay = () => {
         </div>
       )}
       <div className="flex justify-center w-full mt-10">
-        {/* <Button
-      disabled={products?.totalProduct === products?.data?.length}
-      onClick={() => setLimit((prev) => prev + 4)}
-      variant="outlined"
-    >
-      loadm more
-    </Button> */}
-        {/* <Pagination
-      currentPage={products?.currentPage}
-      totalPage={products?.totalPage || 1}
-      onPageChange={handlePageChange}
-    ></Pagination> */}
+        {/* Pagination */}
+        <div className="flex items-center gap-4">
+          <Button
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+            variant="outlined"
+          >
+            Previous
+          </Button>
+          <span className="text-sm">
+            Page {currentPage} of {Math.ceil(products?.total / limit)}
+          </span>
+          <Button
+            disabled={currentPage === Math.ceil(products?.total / limit)}
+            onClick={() => handlePageChange(currentPage + 1)}
+            variant="outlined"
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );

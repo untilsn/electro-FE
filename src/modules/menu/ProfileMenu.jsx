@@ -1,12 +1,8 @@
 import React from "react";
 import { FaAngleRight } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../redux/slice/authSlice";
 import { toast } from "react-toastify";
-import { auth } from "../../config/firebaseConfigure";
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import { displayCart, displayWishlist } from "../../redux/slice/storeSlice";
-import { signOut } from "firebase/auth";
+import { Link, useNavigate } from "react-router-dom";
 import { logoutUser } from "../../service/useService";
 import { resetUser } from "../../redux/slice/userSlice";
 
@@ -30,7 +26,7 @@ const ProfileMenu = () => {
       <div className="flex flex-col w-full gap-3">
         {users?.isAdmin === true ? (
           <Link
-            to="/manage"
+            to="/manage/dashboard"
             className="flex items-center justify-between w-full text-sm hover:text-yellowColor text-gray text-opacity-90"
           >
             <span>manage</span>

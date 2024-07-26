@@ -66,10 +66,11 @@ const CardGrid = ({ item }) => {
             {" , "}
             <span>{item?.category}</span>
           </div>
-
-          <h1 className="text-base text-dark overflow-hidden overflow-ellipsis h-[22px]">
-            {item?.name}
-          </h1>
+          <NavLink to={`/product?id=${item._id}`}>
+            <h1 className="text-base text-dark overflow-hidden overflow-ellipsis h-[22px] hover:text-yellowColor transition duration-300">
+              {item?.name}
+            </h1>
+          </NavLink>
         </div>
         <div className="leading-6 text-sm text-gray overflow-hidden overflow-ellipsis font-light h-[78px]">
           {parse(item?.description)}

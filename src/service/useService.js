@@ -47,6 +47,13 @@ export const updateUser = async (id, access_token, data) => {
   return res.data.updatedUser;
 };
 
+export const getAllUser = async () => {
+  const res = await axios.get(
+    `${import.meta.env.VITE_API_URL_BACKEND}/user/getAll`
+  );
+  return res.data;
+};
+
 // export const refreshToken = async () => {
 //   try {
 //     const res = await axios.post(

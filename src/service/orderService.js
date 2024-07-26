@@ -33,3 +33,10 @@ export const cancelOrder = async (id, token, orderItems) => {
   );
   return res.data;
 };
+
+export const getAllOrder = async () => {
+  const res = await axios.get(
+    `${import.meta.env.VITE_API_URL_BACKEND}/order/getAll`
+  );
+  return res.data;
+};
