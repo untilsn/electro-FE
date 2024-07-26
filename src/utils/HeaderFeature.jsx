@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 
 const HeaderFeature = ({ children, icon, item }) => {
   const orderItem = useSelector((state) => state?.order);
+  const wishlistItem = useSelector((state) => state.wishlist);
+  console.log(wishlistItem);
   return (
     <Link
       to={`${item.url}`}
@@ -13,7 +15,7 @@ const HeaderFeature = ({ children, icon, item }) => {
         {icon}
         {children === "compare" ? null : children === "wishlist" ? (
           <div className="absolute top-0 flex items-center justify-center w-4 h-4 text-xs text-black rounded-full -right-2 bg-yellowColor">
-            {orderItem?.orderItem?.length || 0}
+            {wishlistItem?.wishlistItem?.length || 0}
           </div>
         ) : (
           <div className="absolute top-0 flex items-center justify-center w-4 h-4 text-xs text-black rounded-full -right-2 bg-yellowColor">

@@ -1,7 +1,7 @@
-import { useMutation } from "react-query";
-import wishlistService from "../services/wishlistService";
+import wishlistService from "../service/wishlistService";
+import { useMutationHook } from "./useMutation";
 
-// Hàm để thêm sản phẩm vào wishlist
+// Hàm gọi dịch vụ để tạo một mục wishlist mới
 const addToWishlist = async ({ userId, productId }) => {
   return await wishlistService.createWishlistItem(userId, productId);
 };
@@ -9,8 +9,8 @@ const addToWishlist = async ({ userId, productId }) => {
 // Custom hook để thêm sản phẩm vào wishlist
 const useAddToWishlist = () => {
   // Sử dụng useMutation để thực hiện thao tác thêm vào wishlist
-  const mutation = useMutation({
-    mutationFn: addToWishlist,
+  const mutation = useMutationHook({
+    mutationFn: addToWishlist(),
     onSuccess: (data) => {
       console.log("Product added to wishlist:", data);
     },
@@ -19,10 +19,7 @@ const useAddToWishlist = () => {
     },
   });
 
-  return {
-    ...mutation,
-    addToWishlist: mutation.mutate, // Trả về hàm mutate để thực hiện thêm vào wishlist
-  };
+  return mutation;
 };
 
 export default useAddToWishlist;

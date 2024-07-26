@@ -8,9 +8,10 @@ import { Rating } from "@material-tailwind/react";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import LikeButton from "../../components/button/LikeButton";
 import { formatPrice, initFacebookSDK } from "../../utils/utils";
-import useAddToWishlist from "../../hooks/useActionWishList";
-import { useSelector } from "react-redux";
-import { use } from "../../../../server/src/routes/WishlistRouter";
+import { useDispatch, useSelector } from "react-redux";
+import { useMutationHook } from "../../hooks/useMutation";
+import { createWishlistItem } from "../../service/wishlistService";
+import { setWishlist } from "../../redux/slice/wishlistSlice";
 
 const ProductDetail = ({
   item,
@@ -20,11 +21,10 @@ const ProductDetail = ({
   if (!item) return;
   const [quantity, setQuantity] = useState(1);
   const users = useSelector((state) => state.user);
-  console.log(users, item);
   useEffect(() => {
     setQuantity(1);
   }, [item]);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     onQuantityChange(quantity);
   }, [quantity, onQuantityChange]);
@@ -45,15 +45,28 @@ const ProductDetail = ({
     initFacebookSDK();
   }, [item]);
 
-  const {
-    mutate: addToWishlist,
-    isLoading,
-    isError,
-    isSuccess,
-  } = useAddToWishlist();
-
-  const handleAddToWishlist = () => {
-    // addToWishlist({ users?., productId });
+  const mutation = useMutationHook((data) => {
+    const result = createWishlistItem(data);
+    return result;
+  });
+  const { data: wishlists, isSuccess } = mutation;
+  console.log(wishlists);
+  const handleAddToWishlist = async () => {
+    try {
+      mutation.mutate(
+        {
+          userId: users?.id,
+          productId: item?._id,
+        },
+        {
+          onSuccess: (data) => {
+            dispatch(setWishlist(data));
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="grid grid-cols-2 mt-10 mb-20 gap-7">
@@ -158,22 +171,21 @@ const ProductDetail = ({
             <span>add to carts</span>
           </div>
 
-          <div
-            onClick={() => handleAddItem(item, "wishlists")}
+          <button
+            onClick={handleAddToWishlist}
             className="flex items-center gap-5 text-sm"
           >
             <span className="text-yellowColor">
               {isFavorite ? <FaHeart /> : <FaRegHeart />}
             </span>
             <span
-              onClick={handleAddToWishlist}
               className={`${
                 isFavorite ? "text-yellowColor underline" : "text-black"
               }`}
             >
               Add to Wishlist
             </span>
-          </div>
+          </button>
         </div>
         {/* category */}
         <div className="py-5 text-sm font-light capitalize border-t text-gray border-gray border-opacity-2">

@@ -124,9 +124,7 @@ const CardShop = ({ item, classes, size = "normal" }) => {
           </div>
           <span
             className={`capitalize text-gray text-opacity-60 text-sm truncate`}
-          >
-            {/* 2 {parse(`${item?.description}` || "reviews")} */}
-          </span>
+          ></span>
         </div>
       </div>
     </div>

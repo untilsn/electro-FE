@@ -13,39 +13,42 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { db } from "../../config/firebaseConfigure";
 import { displayWishlist } from "../../redux/slice/storeSlice";
+import { removeFromWishlist } from "../../redux/slice/wishlistSlice";
+import { toast } from "react-toastify";
+import { useMutationHook } from "../../hooks/useMutation";
+import { removeItemFromWishlist } from "../../service/wishlistService";
 
 const TABLE_HEAD = ["Product", "Price", "Stock Status", ""];
 
 const TableWishlist = ({ Wishlists }) => {
-  const { user } = useSelector((state) => state.auth);
+  const users = useSelector((state) => state.user);
+  console.log(Wishlists);
   const dispatch = useDispatch();
-  const handleDeleteWishlist = async (productId) => {
-    try {
-      const wishlistRef = collection(db, "wishlists");
-      const queryWishlists = query(
-        wishlistRef,
-        where("productId", "==", productId),
-        where("userId", "==", user.id)
-      );
-      const querySnapshot = await getDocs(queryWishlists);
-      if (!querySnapshot.empty) {
-        const doc = querySnapshot.docs[0];
-        await deleteDoc(doc.ref);
-        const updatedWishlists = [...Wishlists].filter(
-          (item) => item.productId !== productId
-        );
 
-        // Cập nhật state của Redux sau khi xóa
-        dispatch(displayWishlist(updatedWishlists));
-      } else {
-        console.log("No matching documents found.");
-      }
+  const mutation = useMutationHook((data) => {
+    const { userId, productId } = data;
+    const result = removeItemFromWishlist(userId, productId);
+    return result;
+  });
+
+  const handleRemoveFromWishlist = (productId) => {
+    try {
+      dispatch(removeFromWishlist(productId));
+      mutation.mutate(
+        {
+          userId: users?.id,
+          productId: productId,
+        },
+        {
+          onSuccess: () => {
+            toast.success("remove wishlists success");
+          },
+        }
+      );
     } catch (error) {
-      console.error("Error removing document: ", error);
+      console.log(error);
     }
   };
-
-  const handleAddCartWishlist = (item) => {};
 
   return (
     <div>
@@ -76,16 +79,16 @@ const TableWishlist = ({ Wishlists }) => {
                 ? "p-4 text-base"
                 : "p-4 border-b border-gray border-opacity-10 text-base";
               return (
-                <tr key={item?.productId}>
+                <tr key={item?.productId?._id}>
                   <td className={`${classes} max-w-[580px] `}>
                     <div className="flex items-center gap-5">
                       <Link
-                        to={`/product?id=${item?.productId}`}
+                        to={`/product?id=${item?.productId?._id}`}
                         className="max-w-[100px] w-[100px] h-[100px]"
                       >
                         <img
                           className="object-cover w-full h-full"
-                          src={item?.images[0]}
+                          src={item?.productId?.image[0]}
                           alt=""
                         />
                       </Link>
@@ -94,8 +97,8 @@ const TableWishlist = ({ Wishlists }) => {
                         color="gray"
                         className="flex-1 text-base font-medium hover:text-yellowColor"
                       >
-                        <Link to={`/product?id=${item?.productId}`}>
-                          {item?.title}
+                        <Link to={`/product?id=${item?.productId?._id}`}>
+                          {item?.productId?.name}
                         </Link>
                       </Typography>
                     </div>
@@ -106,7 +109,7 @@ const TableWishlist = ({ Wishlists }) => {
                       color="gray"
                       className="text-lg text-left font-base text-yellowColor"
                     >
-                      ${item?.price}
+                      ${item?.productId?.price}
                     </Typography>
                   </td>
                   <td className={classes}>
@@ -115,7 +118,9 @@ const TableWishlist = ({ Wishlists }) => {
                       color="gray"
                       className="text-lg text-left font-base text-yellowColor"
                     >
-                      {item?.stock?.length !== 0 ? "In stock" : "Out stock"}
+                      {item?.productId?.countInStock !== 0
+                        ? "In stock"
+                        : "Out stock"}
                     </Typography>
                   </td>
                   <td className={`${classes} max-w-[270px]`}>
@@ -129,11 +134,13 @@ const TableWishlist = ({ Wishlists }) => {
                         </span>
                         <span>Add to Cart</span>
                       </span>
-                      <span
-                        onClick={() => handleDeleteWishlist(item?.productId)}
+                      <button
+                        onClick={() =>
+                          handleRemoveFromWishlist(item?.productId?._id)
+                        }
                       >
                         <IoCloseOutline className="text-3xl text-gray text-opacity-65 hover:text-opacity-100" />
-                      </span>
+                      </button>
                     </div>
                   </td>
                 </tr>

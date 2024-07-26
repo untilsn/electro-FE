@@ -2,6 +2,8 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authSlice from "./slice/authSlice";
 import storeSlice from "./slice/storeSlice";
 import userSlice from "./slice/userSlice";
+import productSlice from "./slice/productSlice";
+import wishlist from "./slice/wishlistSlice";
 import orderSlice from "./slice/orderSlice";
 import storage from "redux-persist/lib/storage";
 import {
@@ -14,7 +16,6 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import productSlice from "./slice/productSlice";
 
 const rootReducer = combineReducers({
   auth: authSlice,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   user: userSlice,
   order: orderSlice,
   product: productSlice,
+  wishlist: wishlist,
 });
 
 const persistConfig = {

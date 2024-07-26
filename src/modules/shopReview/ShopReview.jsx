@@ -9,6 +9,7 @@ import "swiper/css/navigation";
 import "swiper/css/scrollbar";
 import { useSelector } from "react-redux";
 import CardHomePage from "../../components/card/CardHomePage";
+import CardShop from "../../components/card/CardShop";
 
 const ShopReview = (getProduct) => {
   // const { products } = useSelector((state) => state.store);
@@ -27,7 +28,7 @@ const ShopReview = (getProduct) => {
         >
           {products?.map((item) => (
             <SwiperSlide key={v4()}>
-              <CardHomePage item={item}></CardHomePage>
+              <CardShop item={item}></CardShop>
             </SwiperSlide>
           ))}
         </Swiper>
