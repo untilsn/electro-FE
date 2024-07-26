@@ -23,26 +23,29 @@ const OrderUserPage = () => {
   const location = useLocation();
   const { state } = location;
   const users = useSelector((state) => state.user);
-  const fetchMyOrder = async () => {
-    if (!state?.id || !state?.token) {
+  const fetchMyOrder = async (context) => {
+    const userId = context?.queryKey[1];
+    const access_token = context?.queryKey[2];
+    console.log(userId, access_token);
+    if (!access_token || !userId) {
       throw new Error("Missing user ID or token");
     }
     try {
-      const res = await getDetailsOrders(state.id, state.token);
+      const res = await getDetailsOrders(userId, access_token);
       return res;
     } catch (error) {
-      console.error("Lỗi khi lấy đơn hàng:", error);
+      console.error("Error fetching orders:", error);
       throw error;
     }
   };
 
   const queryOrder = useQuery({
-    queryKey: ["orders"],
+    queryKey: ["orders", users.id, users.access_token],
     queryFn: fetchMyOrder,
-    enabled: !!state?.id && !!state?.token,
+    enabled: !!users.id && !!users.access_token,
   });
+
   const { isLoading, data: orderItem, isError } = queryOrder;
-  console.log(orderItem);
   const mutation = useMutationHook(async (data) => {
     const { id, token, orderItems } = data;
     const res = await cancelOrder(id, token, orderItems);
@@ -82,23 +85,24 @@ const OrderUserPage = () => {
     });
   };
 
-  if (isLoading) return <div>Đang tải...</div>;
-  if (isError) return <div>Lỗi: {isError?.message}</div>;
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {isError?.message}</div>;
+
   return (
-    <div>
-      <ShopBanner title="user" subtitle="order" />
-      <Breadcrumb children="checkout" />
+    <>
+      <ShopBanner title="User" subtitle="Order" />
+      <Breadcrumb children="Checkout" />
       <div className="container">
         {orderItem?.data?.map((order) => (
           <div key={order._id} className="my-10">
             <Card className="w-full h-full p-0 overflow-scroll">
               <div className="flex items-center justify-between p-5 mb-10 text-lg font-medium capitalize text-dark bg-blue-gray-50">
                 <span>
-                  order date:{" "}
+                  Order date:{" "}
                   <span className="text-gray">{order?.createdAt}</span>
                 </span>
                 <span>
-                  total cost:{" "}
+                  Total cost:{" "}
                   <span className="text-redColor">${order?.totalPrice}</span>
                 </span>
               </div>
@@ -123,7 +127,7 @@ const OrderUserPage = () => {
                 </thead>
                 <tbody>
                   {order?.orderItems?.map((item, index) => {
-                    const isLast = index === item?.length - 1;
+                    const isLast = index === order.orderItems.length - 1;
                     const classes = isLast
                       ? "p-4"
                       : "p-4 border-b border-blue-gray-50";
@@ -131,17 +135,11 @@ const OrderUserPage = () => {
                     return (
                       <tr key={item?._id}>
                         <td className={classes}>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal h-[100px] max-w-[100px] w-full rounded-lg"
-                          >
-                            <img
-                              src={item?.image[0]}
-                              className="object-contain w-full h-full"
-                              alt=""
-                            />
-                          </Typography>
+                          <img
+                            src={item?.image[0]}
+                            alt={item?.name}
+                            className="object-contain w-full h-[100px] max-w-[100px] rounded-lg"
+                          />
                         </td>
                         <td className={classes}>
                           <Typography
@@ -180,21 +178,21 @@ const OrderUserPage = () => {
               <div className="flex items-center justify-between p-5 bg-blue-gray-50">
                 <div className="flex flex-col gap-3">
                   <div>
-                    {order?.isPaid === true ? (
+                    {order?.isPaid ? (
                       <div>
-                        <span className="text-green-400">order status</span>: is
-                        paid
+                        <span className="text-green-400">Order status:</span>{" "}
+                        Paid
                       </div>
                     ) : (
                       <div>
-                        <span className="text-red-400">order status</span>: not
-                        paid
+                        <span className="text-red-400">Order status:</span> Not
+                        Paid
                       </div>
                     )}
                   </div>
                   <div>
                     <div>
-                      <span className="text-green-400">Payment methob</span>{" "}
+                      <span className="text-green-400">Payment method:</span>{" "}
                       {order?.paymentMethod}
                     </div>
                   </div>
@@ -202,9 +200,9 @@ const OrderUserPage = () => {
                 <div>
                   <ButtonGroup variant="outlined">
                     <Button onClick={() => handleCancelOrder(order)}>
-                      cancel order
+                      Cancel Order
                     </Button>
-                    <Button>details</Button>
+                    <Button>Details</Button>
                   </ButtonGroup>
                 </div>
               </div>
@@ -212,7 +210,7 @@ const OrderUserPage = () => {
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

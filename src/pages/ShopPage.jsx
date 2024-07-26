@@ -10,8 +10,6 @@ const ShopPage = () => {
   const location = useLocation();
   const urlParts = location.pathname.split("/");
   const shopName = urlParts[urlParts.length - 1];
-  const filter = useSelector((state) => state.product);
-  console.log(filter);
 
   return (
     <div>

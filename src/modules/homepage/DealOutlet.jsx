@@ -5,19 +5,18 @@ import ButtonItem from "../../components/button/ButtonItem";
 import TitlePath from "../../components/title/TitlePath";
 import DisplayTime from "./DisplayTime";
 import { useSelector } from "react-redux";
+import CardShop from "../../components/card/CardShop";
 
-const DealOutlet = () => {
-  const { products } = useSelector((state) => state.store);
-
+const DealOutlet = ({ item }) => {
   return (
     <div className="container">
       <div className="text-center">
-        <TitlePath>Deals & Outlet</TitlePath>
+        <TitlePath>Ưu Đãi & Outlet</TitlePath>
         <div className="mt-2 text-sm text-grayDark text-opacity-70">
-          today’s deal and more
+          Ưu đãi hôm nay và nhiều hơn nữa
         </div>
       </div>
-      {/* content */}
+      {/* nội dung */}
       <div className="grid grid-cols-4 gap-8 my-16 ">
         <div
           className="w-full h-full col-span-2 "
@@ -30,15 +29,18 @@ const DealOutlet = () => {
           <div className="flex flex-col gap-20 p-10">
             <div>
               <div className="text-2xl font-semibold text-redColor text-opacity-60">
-                Deal of the Day.
+                Ưu Đãi Của Ngày.
               </div>
-              <div className="text-sm text-gray">Limited quantities.</div>
+              <div className="text-sm text-gray">Số lượng có hạn.</div>
             </div>
             <div>
-              <div className="text-sm ">Brown faux fur longline coat</div>
+              <div className="text-sm ">Áo khoác lông giả màu nâu dáng dài</div>
               <div className="text-2xl text-redColor text-opacity-60">
                 $310.00{" "}
-                <span className="text-gray text-opacity-60"> Was $190.00</span>
+                <span className="text-gray text-opacity-60">
+                  {" "}
+                  Giá cũ $190.00
+                </span>
               </div>
             </div>
             <div>
@@ -46,14 +48,14 @@ const DealOutlet = () => {
             </div>
           </div>
         </div>
-        {products.slice(0, 2).map((item) => (
+        {item?.data?.slice(0, 2).map((item) => (
           <div key={item.id}>
-            <CardItem key={item.id} item={item}></CardItem>
+            <CardShop key={item.id} item={item}></CardShop>
           </div>
         ))}
       </div>
       <div className="flex items-center justify-center w-full mx-auto">
-        <ButtonItem kind="secondary">Shop more Outlet deals</ButtonItem>
+        <ButtonItem kind="secondary">Mua thêm ưu đãi Outlet</ButtonItem>
       </div>
     </div>
   );

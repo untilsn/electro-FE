@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 const HeaderFeature = ({ children, icon, item }) => {
   const orderItem = useSelector((state) => state?.order);
   const wishlistItem = useSelector((state) => state.wishlist);
-  console.log(wishlistItem);
   return (
     <Link
       to={`${item.url}`}

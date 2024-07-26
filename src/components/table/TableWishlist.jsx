@@ -17,6 +17,7 @@ import { removeFromWishlist } from "../../redux/slice/wishlistSlice";
 import { toast } from "react-toastify";
 import { useMutationHook } from "../../hooks/useMutation";
 import { removeItemFromWishlist } from "../../service/wishlistService";
+import { formatPrice } from "../../utils/utils";
 
 const TABLE_HEAD = ["Product", "Price", "Stock Status", ""];
 
@@ -109,7 +110,7 @@ const TableWishlist = ({ Wishlists }) => {
                       color="gray"
                       className="text-lg text-left font-base text-yellowColor"
                     >
-                      ${item?.productId?.price}
+                      {formatPrice(item?.productId?.price)}Đ
                     </Typography>
                   </td>
                   <td className={classes}>

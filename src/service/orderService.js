@@ -15,13 +15,8 @@ export const createOrder = async (access_token, data) => {
 };
 
 export const getDetailsOrders = async (userId, access_token) => {
-  const res = await axiosJWT.get(
-    `${import.meta.env.VITE_API_URL_BACKEND}/order/get-order-details/${userId}`,
-    {
-      headers: {
-        token: `Bearer ${access_token}`,
-      },
-    }
+  const res = await axios.get(
+    `${import.meta.env.VITE_API_URL_BACKEND}/order/get-order-details/${userId}`
   );
   return res.data;
 };

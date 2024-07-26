@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CardShop from "../../components/card/CardShop";
 import CardGrid from "../../components/card/CardGrid";
-import { Input, Select, Option, Button } from "@material-tailwind/react";
+import { Input, Button } from "@material-tailwind/react";
 import { getAllProduct } from "../../service/productService";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
+import { useSelector } from "react-redux";
 
 export const ICONLIST = [
   {
@@ -57,19 +58,56 @@ const ShopDisplay = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentSort, setCurrentSort] = useState("");
   const [isActive, setIsActive] = useState("grid-1");
-  const [limit, setLimit] = useState(10); // Number of items per page
+  const [limit, setLimit] = useState(8); // Default limit
+  const filter = useSelector((state) => state.product);
+  console.log(filter);
+  useEffect(() => {
+    switch (isActive) {
+      case "grid-1":
+        setLimit(8);
+        break;
+      case "grid-3":
+        setLimit(9);
+        break;
+      case "grid-4":
+        setLimit(8);
+        break;
+      default:
+        setLimit(8);
+    }
+  }, [isActive]);
 
   const fetchAllProduct = async (context) => {
     const limit = context?.queryKey[1];
     const search = context?.queryKey[2];
     const page = context?.queryKey[3];
     const sort = context?.queryKey[4];
-    const res = await getAllProduct(search, limit, page, sort);
+    const brand = context?.queryKey[5];
+    const ram = context?.queryKey[6];
+    const price = context?.queryKey[7];
+    const res = await getAllProduct(
+      search,
+      limit,
+      page,
+      sort,
+      brand,
+      ram,
+      price
+    );
     return res;
   };
 
   const { data: products, isLoading } = useQuery({
-    queryKey: ["products", limit, valueSearch, currentPage, currentSort],
+    queryKey: [
+      "products",
+      limit,
+      valueSearch,
+      currentPage,
+      currentSort,
+      filter.brand,
+      filter.ram,
+      filter.price,
+    ],
     queryFn: fetchAllProduct,
     retry: 3,
     retryDelay: 1000,
@@ -85,7 +123,7 @@ const ShopDisplay = () => {
   };
 
   if (isLoading) return <div>Loading...</div>;
-
+  console.log(products);
   return (
     <div>
       <div className="flex items-center justify-between py-10">
@@ -95,19 +133,6 @@ const ShopDisplay = () => {
           {products?.total || 0} Products
         </h1>
         <div className="flex items-center gap-5">
-          {/* Sort */}
-          <div className="flex items-center gap-3">
-            <Select
-              variant="outlined"
-              label="Sort by"
-              className="font-light rounded-none"
-              onChange={handleSortChange}
-            >
-              <Option value="price-asc">Price: Low to High</Option>
-              <Option value="price-desc">Price: High to Low</Option>
-              <Option value="rating">Rating</Option>
-            </Select>
-          </div>
           {/* Search */}
           <div>
             <Input
@@ -175,10 +200,10 @@ const ShopDisplay = () => {
             Previous
           </Button>
           <span className="text-sm">
-            Page {currentPage} of {Math.ceil(products?.total / limit)}
+            Page {currentPage} of {Math.ceil(products?.totalProduct / limit)}
           </span>
           <Button
-            disabled={currentPage === Math.ceil(products?.total / limit)}
+            disabled={currentPage === Math.ceil(products?.totalProduct / limit)}
             onClick={() => handlePageChange(currentPage + 1)}
             variant="outlined"
           >

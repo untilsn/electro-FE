@@ -6,6 +6,12 @@ import ButtonForm from "../button/ButtonForm";
 import { useDispatch } from "react-redux";
 import { addCheckoutProduct } from "../../redux/slice/orderSlice";
 
+// Format price to VND
+export function formatPrice(number) {
+  if (typeof number !== "number") return number;
+  return number.toLocaleString("vi-VN"); // Format according to Vietnamese style
+}
+
 const CardTotal = ({ subTotal, onClick = () => {} }) => {
   const navigate = useNavigate();
   const [shipping, setShipping] = useState(0);
@@ -40,7 +46,7 @@ const CardTotal = ({ subTotal, onClick = () => {} }) => {
       </TitlePath>
       <div className="flex items-center justify-between py-5 border-b_primary">
         <TitlePath classname="text-base !font-normal">Subtotal:</TitlePath>
-        <span className="text-base ">${subTotal || 0}</span>
+        <span className="text-base ">{formatPrice(subTotal) || "0"}</span>
       </div>
       <div className="py-5">
         <TitlePath classname="text-base !font-normal">Shipping:</TitlePath>
@@ -76,7 +82,7 @@ const CardTotal = ({ subTotal, onClick = () => {} }) => {
           Total:
         </TitlePath>
         <TitlePath classname="text-lg !font-normal text-yellowColor hover:underline">
-          ${totalCheckout.toFixed(2)}
+          {formatPrice(totalCheckout.toFixed(2))}Đ
         </TitlePath>
       </div>
       <ButtonForm onClick={handleCheckout} classname="border-[2px]">

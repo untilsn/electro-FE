@@ -23,9 +23,9 @@ export const NAVBARLIST = [
     ],
   },
   {
-    name: "sản phẩm",
+    name: "đặt hàng",
     title: "product",
-    url: "/product",
+    url: "/user-order",
     hover: false,
     menu: <ProductMenu></ProductMenu>,
     subItems: [

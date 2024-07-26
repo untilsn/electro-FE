@@ -9,6 +9,7 @@ import {
   incrementAmount,
   removeOrderProduct,
 } from "../../redux/slice/orderSlice";
+import { formatPrice } from "../../utils/utils";
 
 const TABLE_HEAD = ["product", "price", "quantity", "total"];
 
@@ -89,7 +90,7 @@ const Table = ({ item }) => {
                     color="gray"
                     className="text-lg font-normal text-center"
                   >
-                    ${doc?.price}
+                    {formatPrice(doc?.price)}Đ
                   </Typography>
                 </td>
                 <td className="p-4 mx-auto">
@@ -119,7 +120,7 @@ const Table = ({ item }) => {
                     color="gray"
                     className="flex items-center justify-center gap-3 text-lg max-w-[120px] w-full font-medium text-center text-yellowColor"
                   >
-                    ${doc?.price * doc?.amount}
+                    {formatPrice(doc?.price * doc?.amount)}Đ
                     <span
                       onClick={() =>
                         dispatch(removeOrderProduct(doc.productId))

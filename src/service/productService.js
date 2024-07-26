@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 export const axiosJWTproduct = axios.create();
 
@@ -18,24 +19,48 @@ export const getAllProductTest = async (search, limit) => {
   return res.data;
 };
 
-export const getAllProduct = async (search, limit, page, sort) => {
-  let res = {};
+export const getAllProduct = async (
+  search,
+  limit,
+  page,
+  sort,
+  brand,
+  ram,
+  price
+) => {
+  // Get filter values from the Redux store
+  // const { brand, ram, price } = useSelector((state) => state.product);
+  // Convert price to a numeric range
+  let minPrice = 0;
+  let maxPrice = Infinity;
+  if (price === "Dưới 2 triệu") {
+    maxPrice = 2000000;
+  } else if (price === "2 - 5 triệu") {
+    minPrice = 2000000;
+    maxPrice = 5000000;
+  } else if (price === "5 - 10 triệu") {
+    minPrice = 5000000;
+    maxPrice = 10000000;
+  } else if (price === "10 - 15 triệu") {
+    minPrice = 10000000;
+    maxPrice = 15000000;
+  } else if (price === "Trên 15 triệu") {
+    minPrice = 15000000;
+  }
+
   const params = {
     limit,
+    search,
     page: page - 1, // Convert page number to 0-based index
+    sort,
+    brand,
+    ram,
+    minPrice,
+    maxPrice,
   };
-
-  if (search?.length > 0) {
-    params.filter = `name,${search}`;
-  }
-
-  if (sort?.length > 0) {
-    params.sort = sort;
-  }
-
-  res = await axios.get(
+  const res = await axios.get(
     `${import.meta.env.VITE_API_URL_BACKEND}/product/getAll`,
-    { params }
+    params
   );
   return res.data;
 };

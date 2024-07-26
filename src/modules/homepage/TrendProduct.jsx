@@ -14,7 +14,7 @@ const TrendProduct = () => {
   const { products } = useSelector((state) => state.store);
   return (
     <div>
-      <TitlePath>Trending Products</TitlePath>
+      <TitlePath>Sản phẩm thịnh hành</TitlePath>
       <div className="flex items-center gap-2 mt-10">
         <CardReview></CardReview>
         <Swiper

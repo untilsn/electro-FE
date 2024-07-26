@@ -4,9 +4,9 @@ import TitlePath from "../../components/title/TitlePath";
 const ShopNavigation = () => {
   return (
     <div className="flex items-center justify-center gap-10 text-3xl font-semibold capitalize text-dark">
-      <TitlePath>featured</TitlePath>
-      <TitlePath>on sales</TitlePath>
-      <TitlePath>top sale</TitlePath>
+      <TitlePath>sản phẩm mới</TitlePath>
+      <TitlePath>ưu đãi</TitlePath>
+      <TitlePath>bán chạy</TitlePath>
     </div>
   );
 };

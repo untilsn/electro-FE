@@ -3,19 +3,19 @@ import { IoCartOutline } from "react-icons/io5";
 import { IoMdHeartEmpty } from "react-icons/io";
 
 export const iconHeaderList = [
-  {
-    icon: <MdCompareArrows className="text-3xl" />,
-    title: "compare",
-    url: "",
-  },
+  // {
+  //   icon: <MdCompareArrows className="text-3xl" />,
+  //   title: "compare",
+  //   url: "",
+  // },
   {
     icon: <IoMdHeartEmpty className="text-3xl" />,
-    title: "wishlist",
+    title: "yêu thích",
     url: "/wishlist",
   },
   {
     icon: <IoCartOutline className="text-3xl" />,
-    title: "cart",
+    title: "giỏ hàng",
     url: "/cart",
   },
 ];

@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CiGlass } from "react-icons/ci";
 import { FaPen } from "react-icons/fa";
 import { IoAdd } from "react-icons/io5";
@@ -23,6 +23,7 @@ import { getAllProduct } from "../../service/productService";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 import { formatPrice } from "../../utils/utils";
+import { FaMagnifyingGlass } from "react-icons/fa6";
 
 const DashboardProduct = () => {
   const [search, setSearch] = useState("");
@@ -61,20 +62,19 @@ const DashboardProduct = () => {
           <div className="flex items-center justify-between gap-8 mb-8"></div>
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="flex flex-col gap-2 shrink-0 sm:flex-row">
-              <Button variant="outlined" size="sm">
-                Export Excel
-              </Button>
-              <Button
-                className="flex items-center gap-3 text-darkPrimary"
-                size="sm"
-              >
-                <IoAdd className="w-4 h-4" /> Add product
-              </Button>
+              <Link to={`/manage/add-product`}>
+                <Button
+                  className="flex items-center gap-3 text-darkPrimary"
+                  size="sm"
+                >
+                  <IoAdd className="w-4 h-4" /> Add product
+                </Button>
+              </Link>
             </div>
             <div className="w-full md:w-72">
               <Input
                 label="Search"
-                icon={<CiGlass className="w-5 h-5" />}
+                icon={<FaMagnifyingGlass className="w-5 h-5" />}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />

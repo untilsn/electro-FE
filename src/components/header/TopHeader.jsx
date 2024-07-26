@@ -35,7 +35,9 @@ const TopHeader = () => {
       {/* signin */}
       {users?.access_token ? (
         <div>
-          welcomback <span className="text-gray">{users.name}</span>
+          <span className="text-gray">
+            welcomback <span className="text-white">{users.name}</span>
+          </span>
         </div>
       ) : (
         <button

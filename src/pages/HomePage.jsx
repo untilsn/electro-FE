@@ -34,11 +34,11 @@ const HomePage = () => {
         <PromoBanner></PromoBanner>
       </div>
       <div className="w-full py-16 bg-bgColor">
-        <DealOutlet></DealOutlet>
+        <DealOutlet item={data}></DealOutlet>
       </div>
       <div className="container">
         <BrandBanner></BrandBanner>
-        <TrendProduct></TrendProduct>
+        {/* <TrendProduct></TrendProduct> */}
         <SupportServicesBanner></SupportServicesBanner>
         <FooterBanner></FooterBanner>
       </div>
