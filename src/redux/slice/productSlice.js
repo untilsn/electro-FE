@@ -1,26 +1,45 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
+const initialState = {
+  brand: [],
+  ram: [],
+  price: { min: 0, max: Infinity },
+}
+
+
 const productSlice = createSlice({
-  name: "filters",
-  initialState: {
-    brand: null,
-    ram: null,
-    price: null,
-  },
+  name: "product",
+  initialState,
   reducers: {
     setBrand(state, action) {
-      state.brand = action.payload;
+      const brandName = action.payload;
+      if (state.brand.includes(brandName)) {
+        state.brand = state.brand.filter((b) => b !== brandName);
+      } else {
+        state.brand = [...state.brand, brandName];
+      }
     },
     setRam(state, action) {
-      state.ram = action.payload;
+      const ram = action.payload;
+      if (state.ram.includes(ram)) {
+        state.ram = state.ram.filter((b) => b !== ram);
+      } else {
+        state.ram = [...state.ram, ram];
+      }
     },
     setPrice(state, action) {
-      state.price = action.payload;
+      const { min, max } = action.payload;
+      if (state.price) {
+        state.price = null;
+      } else {
+        state.price = { min, max };
+      }
     },
     clearFilters(state) {
-      state.brand = null;
-      state.ram = null;
-      state.price = null;
+      state.brand = [];
+      state.ram = [];
+      state.price = { min: 0, max: Infinity };
     },
   },
 });

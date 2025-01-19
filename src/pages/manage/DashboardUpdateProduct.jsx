@@ -5,7 +5,7 @@ import { Option, Radio, Select } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import Button from "../../components/button/Button";
 import ImageUpload from "../../components/ImageUpload";
-import DashboardHeading from "../../modules/dashboard/DashboardHeading";
+import DashboardTitle from "../../modules/dashboard/DashboardTitle";
 import { FiMinus } from "react-icons/fi";
 import { v4 } from "uuid";
 import { useSelector } from "react-redux";
@@ -128,7 +128,7 @@ const DashboardUpdateProduct = () => {
 
   return (
     <Fragment>
-      <DashboardHeading>Products (Update)</DashboardHeading>
+      <DashboardTitle>Products (Update)</DashboardTitle>
       <form className="mt-10" onSubmit={handleSubmit(handleUpdatedProduct)}>
         <div className="grid grid-cols-2 mb-10 gap-x-10 gap-y-16">
           <InputContaint>

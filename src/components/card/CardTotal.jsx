@@ -5,20 +5,18 @@ import { Link, useNavigate } from "react-router-dom";
 import ButtonForm from "../button/ButtonForm";
 import { useDispatch } from "react-redux";
 import { addCheckoutProduct } from "../../redux/slice/orderSlice";
+import { formatPrice } from "../../utils/utils";
 
-// Format price to VND
-export function formatPrice(number) {
-  if (typeof number !== "number") return number;
-  return number.toLocaleString("vi-VN"); // Format according to Vietnamese style
-}
 
-const CardTotal = ({ subTotal, onClick = () => {} }) => {
+
+const CardTotal = ({ subTotal, onClick = () => { } }) => {
   const navigate = useNavigate();
   const [shipping, setShipping] = useState(0);
   const dispatch = useDispatch();
+
   useEffect(() => {
     setShipping(0); // Reset shipping khi subTotal thay đổi
-  }, [subTotal]);
+  }, []);
 
   const handleCheckShipping = (shippingCost) => {
     setShipping(shippingCost);
@@ -41,52 +39,43 @@ const CardTotal = ({ subTotal, onClick = () => {} }) => {
 
   return (
     <div className="flex flex-col pt-5 pb-10 border border-dashed rounded px-7 border-opacity-20 border-dark bg-gray bg-opacity-5">
-      <TitlePath classname="text-lg !font-normal border-b border-gray border-opacity-20 pb-5">
-        Cart Total
-      </TitlePath>
+      <div className="text-lg py-5 font-semibold border-b border-gray border-opacity-20 ">
+        Tổng số giỏ hàng
+      </div>
       <div className="flex items-center justify-between py-5 border-b_primary">
-        <TitlePath classname="text-base !font-normal">Subtotal:</TitlePath>
-        <span className="text-base ">{formatPrice(subTotal) || "0"}</span>
+        <span className="text-base font-medium">Tổng phụ:</span>
+        <span className="text-base font-semibold">{formatPrice(subTotal) || "0"}</span>
       </div>
       <div className="py-5">
-        <TitlePath classname="text-base !font-normal">Shipping:</TitlePath>
-        <div className="flex flex-col py-10">
+      <h1 className="text-base font-medium">phí giao hàng</h1>
+        <div className="flex flex-col py-5">
           <CheckboxCart
             onChange={() => handleCheckShipping(0)}
             price="0.00"
-            labelItem="Free Shipping"
+            labelItem="Miễn phí vận chuyển:"
           ></CheckboxCart>
           <CheckboxCart
-            onChange={() => handleCheckShipping(10)}
-            price="10.00"
-            labelItem="Standard:"
+            onChange={() => handleCheckShipping(10000)}
+            price="10.000"
+            labelItem="Tiêu chuẩn:"
           ></CheckboxCart>
           <CheckboxCart
-            onChange={() => handleCheckShipping(20)}
-            price="20.00"
-            labelItem="Express:"
+            onChange={() => handleCheckShipping(20000)}
+            price="20.000"
+            labelItem="Nhanh:"
           ></CheckboxCart>
         </div>
       </div>
-      <TitlePath classname="text-base !font-normal">
-        Estimate for Your Country
-      </TitlePath>
-      <Link
-        to="/dashboard"
-        className="py-3 text-base border-b_primary text-dark text-opacity-80 max-w-[200px] w-full"
-      >
-        Change address
-      </Link>
-      <div className="flex items-center justify-between py-5 border-t border-gray border-opacity-20">
-        <TitlePath classname="text-lg !font-normal text-yellowColor">
-          Total:
-        </TitlePath>
-        <TitlePath classname="text-lg !font-normal text-yellowColor hover:underline">
-          {formatPrice(totalCheckout.toFixed(2))}Đ
-        </TitlePath>
+      <div className="flex items-center font-semibold text-lg justify-between py-5 border-t border-gray border-opacity-20">
+        <h1 className=" text-dark">
+          Tổng:
+        </h1>
+        <h1 className=" text-yellowColor hover:underline">
+          {formatPrice(totalCheckout.toFixed(2))}
+        </h1>
       </div>
       <ButtonForm onClick={handleCheckout} classname="border-[2px]">
-        proceed to checkout
+      tiến hành thanh toán
       </ButtonForm>
     </div>
   );

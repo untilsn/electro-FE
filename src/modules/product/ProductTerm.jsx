@@ -2,8 +2,8 @@ import React from "react";
 
 const ProductTerm = () => {
   return (
-    <div>
-      <h3 className="text-xl font-normal ">Vận chuyển & Trả lại</h3>
+    <div className="p-5">
+      <h3 className="text-xl font-normal mb-5">Vận chuyển & Trả lại</h3>
       Vận chuyển & Trả hàng Chúng tôi giao hàng đến hơn 100 quốc gia trên toàn
       thế giới. Để biết thông tin chi tiết về các tùy chọn giao hàng mà chúng
       tôi cung cấp, vui lòng xem Thông tin giao hàng của chúng tôi Chúng tôi hy

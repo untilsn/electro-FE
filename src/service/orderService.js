@@ -1,9 +1,9 @@
 import axios from "axios";
-import { axiosJWT } from "./useService";
 
-export const createOrder = async (access_token, data) => {
-  const res = axiosJWT.post(
-    `${import.meta.env.VITE_API_URL_BACKEND}/order/create`,
+export const createOrder = async (userId, access_token, data) => {
+  console.log(data)
+  const res = axios.post(
+    `${import.meta.env.VITE_API_URL_BACKEND}/order/create/${userId}`,
     data,
     {
       headers: {
@@ -14,9 +14,9 @@ export const createOrder = async (access_token, data) => {
   return res.data;
 };
 
-export const getDetailsOrders = async (userId, access_token) => {
+export const getUserOrder = async (userId) => {
   const res = await axios.get(
-    `${import.meta.env.VITE_API_URL_BACKEND}/order/get-order-details/${userId}`
+    `${import.meta.env.VITE_API_URL_BACKEND}/order/get-user-order/${userId}`
   );
   return res.data;
 };

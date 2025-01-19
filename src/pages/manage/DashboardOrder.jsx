@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import DashboardHeading from "../../modules/dashboard/DashboardHeading";
+import DashboardTitle from "../../modules/dashboard/DashboardTitle";
 import { Card, Chip, Typography } from "@material-tailwind/react";
 import ActionView from "../../components/action/ActionView";
 import ActionEdit from "../../components/action/ActionEdit";
@@ -31,7 +31,6 @@ const DashboardOrder = () => {
     retryDelay: 1000,
     keepPreviousData: true,
   });
-  console.log(orders);
   // Filter orders based on the search term
   const filteredOrders =
     orders?.data?.filter(
@@ -45,7 +44,7 @@ const DashboardOrder = () => {
   return (
     <Fragment>
       <div className="flex items-center justify-between">
-        <DashboardHeading>Manage Orders</DashboardHeading>
+        <DashboardTitle>Manage Orders</DashboardTitle>
         <input
           type="search"
           placeholder="Search orders"

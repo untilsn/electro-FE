@@ -85,10 +85,9 @@ const ProductComment = ({ item }) => {
     retryDelay: 1000,
     enabled: !!productId,
   });
-  console.log(comments);
   return (
     <div>
-      <div className="mt-6 rounded-sm">
+      <div className="p-5">
         <div>
           <h3 className="text-xl font-normal">Reviews ({comments?.length})</h3>
         </div>

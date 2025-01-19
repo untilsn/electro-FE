@@ -4,7 +4,7 @@ import InputForm from "../../components/input/InputForm";
 import { Controller, useForm } from "react-hook-form";
 import Button from "../../components/button/Button";
 import ImageUpload from "../../components/ImageUpload";
-import DashboardHeading from "../../modules/dashboard/DashboardHeading";
+import DashboardTitle from "../../modules/dashboard/DashboardTitle";
 import { FiMinus } from "react-icons/fi";
 import { v4 } from "uuid";
 import { useSelector } from "react-redux";
@@ -152,7 +152,7 @@ const AddProducts = () => {
 
   return (
     <Fragment>
-      <DashboardHeading>Create Products</DashboardHeading>
+      <DashboardTitle>Create Products</DashboardTitle>
       <form className="mt-10" onSubmit={handleSubmit(handleAddProducts)}>
         <div className="grid grid-cols-2 mb-10 gap-x-10 gap-y-16">
           <InputContaint>

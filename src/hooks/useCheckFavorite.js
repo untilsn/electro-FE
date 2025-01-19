@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
 
-export function useCheckFavorite(item) {
-  const { wishlistArray } = useSelector((state) => state.store);
-  const isFavorite = wishlistArray.some(
-    (items, index) => items.productId == item.productId
+export function useCheckFavorite(wishlistId) {
+  const { wishlist } = useSelector((state) => state.wishlist);
+  const isFavorite = wishlist.some(
+    (items) => items == wishlistId
   );
   return isFavorite;
 }

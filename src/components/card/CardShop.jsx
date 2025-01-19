@@ -1,138 +1,87 @@
 import React, { useState } from "react";
 import { v4 } from "uuid";
 import { FaCartPlus, FaHeart, FaRegHeart } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import IconReview from "../icon/IconReview";
+import { formatPrice } from "../../utils/utils";
 
-export const ReviewIcon = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className="w-[14px] h-[14px] text-yellowColor"
-    >
-      <path
-        fillRule="evenodd"
-        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-        clipRule="evenodd"
-      />
-    </svg>
-  );
-};
 
-const CardShop = ({ item, classes, size = "normal" }) => {
-  console.log(item);
+const ProductCard = ({ item, classes, size = "normal" }) => {
   const [isHover, setIsHover] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isCart, setIsCart] = useState(false);
 
-  const cardSizes = {
-    normal: "max-w-[275px] h-[420px]",
-    small: "max-w-[200px] h-[340px]",
+  const cardStyles = {
+    normal: "max-w-[275px]",
+    small: "max-w-[200px] ",
   };
 
-  const imageSizes = {
+  const imageStyles = {
     normal: "h-[275px]",
     small: "h-[200px]",
   };
 
-  const textSizes = {
+  const textStyles = {
     normal: "text-base",
     small: "text-sm",
   };
 
-  const handleHoverImage = () => {
-    setIsHover(true);
-  };
-
-  const handleNotHoverImage = () => {
-    setIsHover(false);
-  };
+  const handleHoverImage = () => setIsHover(true);
+  const handleNotHoverImage = () => setIsHover(false);
 
   return (
-    <div
-      className={`group hover:shadow-itemShadow transition duration-500 relative w-full border border-gray border-opacity-15 bg-white ${classes} ${cardSizes[size]}`}
-    >
-      <div
-        onMouseEnter={handleHoverImage}
-        onMouseLeave={handleNotHoverImage}
-        className="relative w-full overflow-hidden"
-      >
-        {/* image */}
-        <NavLink to={`/product?id=${item._id}`}>
-          <div
-            className={`relative w-full overflow-hidden p-2 ${imageSizes[size]}`}
-          >
+    <div className={`group hover:shadow-itemShadow transition duration-500 relative w-full border border-gray border-opacity-15 bg-white ${classes} ${cardStyles[size]}`}>
+      <div onMouseEnter={handleHoverImage} onMouseLeave={handleNotHoverImage} className="relative w-full overflow-hidden">
+        {/* Image */}
+        <NavLink to={`/product?id=${item?._id}`}>
+          <div className={`relative w-full overflow-hidden p-2 ${imageStyles[size]}`}>
             <img
-              className={`absolute top-0 right-0 left-0 w-full h-full object-contain p-2 transition duration-500 
-              ${isHover ? "opacity-0 scale-105" : "opacity-100 scale-100"} ${
-                item?.type === "unknown" ? "blur-xl" : ""
-              }`}
-              src={item?.image[0]}
-              alt="img"
+              className={`absolute top-0 right-0 left-0 w-full h-full object-contain p-2 transition duration-500 ${isHover ? "opacity-0 scale-105" : "opacity-100 scale-100"} ${item?.type === "unknown" ? "blur-xl" : ""}`}
+              src={item.image[0]}
+              alt="product"
             />
             <img
-              className={`absolute top-0 right-0 left-0 w-full h-full object-contain p-2 transition duration-500 transform 
-              ${isHover ? "opacity-100 scale-105" : "opacity-0 scale-100"}`}
-              src={item?.image[2]}
-              alt=""
+              className={`absolute top-0 right-0 left-0 w-full h-full object-contain p-2 transition duration-500 ${isHover ? "opacity-100 scale-105" : "opacity-0 scale-100"}`}
+              src={item.image[1]}
+              alt="product alternative"
             />
           </div>
         </NavLink>
-        {/* favorite */}
+        {/* Favorite */}
         <div
-          className="absolute w-7 h-7 flex items-center justify-center rounded-full right-4 top-4 bg-darkPrimary transition duration-300 
-        opacity-0 group-hover:opacity-100 -translate-x-[50%] group-hover:translate-x-[5%] text-light text-sm "
-        >
+        
+        className="absolute w-7 h-7 flex items-center justify-center rounded-full right-4 top-4 bg-darkPrimary transition duration-300 opacity-0 group-hover:opacity-100 -translate-x-[50%] group-hover:translate-x-[5%] text-light text-sm">
           {isFavorite ? <FaHeart /> : <FaRegHeart />}
         </div>
-        {/* add cart */}
-        <button
-          className="absolute bottom-0 left-0 right-0  flex items-center opacity-20 hover:bg-yellowColor
-           justify-center gap-3 h-[40px] bg-darkPrimary text-light text-sm translate-y-[100%] group-hover:opacity-100
-           group-hover:visible group-hover:translate-y-0 transition duration-300"
-        >
-          <div>
-            <FaCartPlus
-              className={`${
-                isCart === true ? "text-yellowColor" : "text-white"
-              } hover:text-yellowColor text-sm`}
-            />
-          </div>
-          add to carts
+        {/* Add to Cart */}
+        <button  className="absolute bottom-0 left-0 right-0 flex items-center opacity-20 hover:bg-yellowColor justify-center gap-3 h-[40px] bg-darkPrimary text-light text-sm translate-y-[100%] group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition duration-300">
+          <FaCartPlus className={`${isCart ? "text-yellowColor" : "text-white"} hover:text-yellowColor text-sm`} />
+          Add to Cart
         </button>
-        {/* content */}
       </div>
-      <div className="flex flex-col gap-1 px-3 py-2 bg-white ">
-        <div
-          className={`capitalize text-gray text-opacity-80 font-light text-sm truncate`}
-        >
-          {item?.category}
+
+      {/* Content */}
+      <div className="flex flex-col gap-2 px-3 py-4 bg-white">
+        <div className="capitalize text-dark text-opacity-80 font-normal text-[13px] truncate h-[15px]">{item.brand} / {item.category}</div>
+        <div>
+          <Link 
+          // to={`/product?id=${item?._id}`}
+            className="overflow-hidden text-darkPrimary text-center text-sm font-medium overflow-ellipsis h-[20px] line-clamp-2 mb-1">
+            {item?.name}
+          </Link>
+          <h2 className={`text-darkPrimary text-center ${textStyles[size]}`}>{formatPrice(item?.price)}</h2>
         </div>
-        <NavLink
-          to={`/product?id=${item._id}`}
-          className={`overflow-hidden text-darkPrimary  text-base overflow-ellipsis h-[50px] line-clamp-2`}
-        >
-          {item?.name}
-        </NavLink>
-        <h2 className={`text-yellowColor ${textSizes[size]}`}>
-          {(item?.price).toLocaleString("vi-VN")}đ
-        </h2>
-        <div className="flex items-center gap-3 text-nowrap overflow-ellipsis">
+        <div className="flex items-center justify-center gap-3 text-nowrap overflow-ellipsis">
           <div className="flex items-center gap-1">
-            {Array(item?.rating)
-              .fill(0)
-              .map(() => (
-                <ReviewIcon className="text-xs" key={v4()} />
-              ))}
+            {Array(item?.rating || 5).fill(0).map(() => <IconReview className="text-xs" key={v4()} />)}
           </div>
-          <span
-            className={`capitalize text-gray text-opacity-60 text-sm truncate`}
-          ></span>
+          <div className="text-xs text-grayColor">
+            0 (review)
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default CardShop;
+export default ProductCard;

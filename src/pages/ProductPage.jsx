@@ -9,14 +9,15 @@ import { getDetailsProduct } from "../service/productService";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { addOrderProduct } from "../redux/slice/orderSlice";
+import MainBreadcrumbs from "../components/breadcrumb/MainBreadcrumb";
 
 const ProductPage = () => {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const productId = searchParams.get("id");
   const users = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const productId = searchParams.get("id");
 
   const handleQuantityChange = (newQuantity) => {
     setQuantity(newQuantity);
@@ -26,10 +27,13 @@ const ProductPage = () => {
     const result = await getDetailsProduct(id);
     return result;
   });
-  const { data: detailProduct } = mutation;
+  
+  const { data: detailProduct, isLoading, isError } = mutation;
   useEffect(() => {
     mutation.mutate(productId);
   }, [productId]);
+
+
   const handleOrderProduct = () => {
     if (!users.access_token) {
       toast.error("you must be login to add cart!");
@@ -49,9 +53,10 @@ const ProductPage = () => {
       );
     }
   };
+
   return (
     <div>
-      <Breadcrumb children="product"></Breadcrumb>
+      <MainBreadcrumbs></MainBreadcrumbs>
       <div className="container">
         <ProductDetail
           onClick={handleOrderProduct}

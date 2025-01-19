@@ -10,14 +10,16 @@ import "swiper/css/scrollbar";
 import { useSelector } from "react-redux";
 import CardHomePage from "../../components/card/CardHomePage";
 import CardShop from "../../components/card/CardShop";
+import TitlePath from "../../components/title/TitlePath";
 
 const ShopReview = (getProduct) => {
   // const { products } = useSelector((state) => state.store);
   const products = getProduct?.getProduct?.data;
 
   return (
-    <div>
-      <ShopNavigation></ShopNavigation>
+    <div className="mb-20">
+      {/* <ShopNavigation></ShopNavigation> */}
+      <TitlePath title="Sản Phẩm Đặt Trưng" subTitle="những sản phẩm nổi bật"></TitlePath>
       <div className="mt-10">
         <Swiper
           modules={[Navigation, Scrollbar, A11y]}

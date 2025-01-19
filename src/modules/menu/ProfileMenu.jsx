@@ -15,16 +15,15 @@ const ProfileMenu = () => {
       await logoutUser();
       dispatch(resetUser());
       toast.success("logout success");
-      // localStorage.clear();
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div className=" h-[500xp] bg-white shadow-md absolute top-[100%] p-10 left-0 w-[300px]">
+    <div className=" h-[500xp] bg-white shadow-md absolute top-[100%] p-10 left-0">
       <div className="flex flex-col w-full gap-3">
-        {users?.isAdmin === true ? (
+      
           <Link
             to="/manage/dashboard"
             className="flex items-center justify-between w-full text-sm hover:text-yellowColor text-gray text-opacity-90"
@@ -34,9 +33,7 @@ const ProfileMenu = () => {
               <FaAngleRight className="text-sm" />
             </span>
           </Link>
-        ) : (
-          ""
-        )}
+       
         {users.access_token !== "" ? (
           <Link
             to="/profile"

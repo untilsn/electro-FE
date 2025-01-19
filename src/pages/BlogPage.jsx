@@ -6,6 +6,7 @@ import TitlePath from "../components/title/TitlePath";
 import { v4 } from "uuid";
 import { Input } from "@material-tailwind/react";
 import { CiSearch } from "react-icons/ci";
+import MainBreadcrumbs from "../components/breadcrumb/MainBreadcrumb";
 
 export const CategoryList = [
   "Lifestyle",
@@ -19,7 +20,7 @@ export const imgBanner = "/public/blogs/subbanner.jpg";
 const BlogPage = () => {
   return (
     <Fragment>
-      <Breadcrumb children="blogs"></Breadcrumb>
+      <MainBreadcrumbs></MainBreadcrumbs>
       <div className="container">
         <div className="grid grid-cols-[72%_28%] gap-5 py-10">
           <div className="flex flex-col gap-20">

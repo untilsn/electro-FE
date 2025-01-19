@@ -6,20 +6,10 @@ import { getAllProduct } from "../../service/productService";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 import { useSelector } from "react-redux";
+import Pagination from "../../components/pagination/Pagination";
 
 export const ICONLIST = [
-  {
-    id: 1,
-    type: "grid-1",
-    svg: (
-      <svg width="16" height="10">
-        <rect x="0" y="0" width="4" height="4"></rect>
-        <rect x="6" y="0" width="10" height="4"></rect>
-        <rect x="0" y="6" width="4" height="4"></rect>
-        <rect x="6" y="6" width="10" height="4"></rect>
-      </svg>
-    ),
-  },
+
   {
     id: 2,
     type: "grid-3",
@@ -56,16 +46,15 @@ const ShopDisplay = () => {
   const [search, setSearch] = useState("");
   const [valueSearch] = useDebounce(search, 1000);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentSort, setCurrentSort] = useState("");
-  const [isActive, setIsActive] = useState("grid-1");
-  const [limit, setLimit] = useState(8); // Default limit
+  const [sortOption, setSortOption] = useState("");
+  const [isActive, setIsActive] = useState("grid-3");
+  const [limit, setLimit] = useState(8);
   const filter = useSelector((state) => state.product);
-  console.log(filter);
+
+
+
   useEffect(() => {
     switch (isActive) {
-      case "grid-1":
-        setLimit(8);
-        break;
       case "grid-3":
         setLimit(9);
         break;
@@ -77,6 +66,7 @@ const ShopDisplay = () => {
     }
   }, [isActive]);
 
+  // fetch product
   const fetchAllProduct = async (context) => {
     const limit = context?.queryKey[1];
     const search = context?.queryKey[2];
@@ -96,14 +86,13 @@ const ShopDisplay = () => {
     );
     return res;
   };
-
   const { data: products, isLoading } = useQuery({
     queryKey: [
       "products",
       limit,
       valueSearch,
       currentPage,
-      currentSort,
+      sortOption,
       filter.brand,
       filter.ram,
       filter.price,
@@ -114,30 +103,59 @@ const ShopDisplay = () => {
     keepPreviousData: true,
   });
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
-  const handleSortChange = (event) => {
-    setCurrentSort(event.target.value);
+
+
+  const handleSortChange = (e) => {
+    const selectedSortOption = e.target.value;
+    setSortOption(selectedSortOption);
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  console.log(products);
+
+  // if (isLoading) return <div>Loading...</div>;
   return (
     <div>
       <div className="flex items-center justify-between py-10">
         <h1 className="text-sm">
-          Showing {(currentPage - 1) * limit + 1}–
-          {Math.min(currentPage * limit, products?.total || 0)} of{" "}
-          {products?.total || 0} Products
+          Hiển thỉ {" "}
+          <span className="font-semibold">
+            {Math.min(currentPage * limit, products?.total || 0)}
+          </span>
+          {" "} trên {" "}
+          <span className="font-semibold">
+          {products?.total || 0}
+          </span>
+          {" "}
+           sản phẩm
         </h1>
         <div className="flex items-center gap-5">
+          {/* sort */}
+          <div className="mb-4">
+            <label htmlFor="sort" className="text-sm font-medium text-darkPrimary mr-5">
+              Lọc bởi:
+            </label>
+            <select
+              id="sort"
+              value={sortOption || ""}
+              onChange={handleSortChange}
+              className="mt-2 px-4 py-2 border border-gray-300"
+            >
+              <option value="">sản phẩm</option> {/* Default value (no selection) */}
+              <option value="newest">Mới nhất</option>
+              <option value="oldest">Cũ nhất</option>
+              <option value="rating">Đánh giá</option>
+            </select>
+          </div>
           {/* Search */}
           <div>
             <Input
               variant="static"
-              placeholder="Search products..."
+              placeholder="Tìm sản phẩm..."
               color="black"
               className="placeholder:text-gray"
               value={search}
@@ -150,11 +168,10 @@ const ShopDisplay = () => {
               <div
                 key={item?.id}
                 onClick={() => setIsActive(item.type)}
-                className={`${
-                  isActive === item?.type
-                    ? "opacity-100"
-                    : "opacity-20 hover:opacity-100"
-                } transition-all text-2xl`}
+                className={`${isActive === item?.type
+                  ? "opacity-100"
+                  : "opacity-20 hover:opacity-100"
+                  } transition-all text-2xl`}
               >
                 {item?.svg}
               </div>
@@ -164,13 +181,7 @@ const ShopDisplay = () => {
       </div>
       {products?.data?.length > 0 ? (
         <div>
-          {isActive === "grid-1" ? (
-            <div className="grid grid-cols-1 gap-6">
-              {products?.data?.map((item, index) => (
-                <CardGrid item={item} key={index}></CardGrid>
-              ))}
-            </div>
-          ) : isActive === "grid-3" ? (
+          {isActive === "grid-3" ? (
             <div className="grid grid-cols-3 gap-6">
               {products?.data?.map((item, index) => (
                 <CardShop item={item} size="normal" key={index}></CardShop>
@@ -190,26 +201,13 @@ const ShopDisplay = () => {
         </div>
       )}
       <div className="flex justify-center w-full mt-10">
-        {/* Pagination */}
-        <div className="flex items-center gap-4">
-          <Button
-            disabled={currentPage === 1}
-            onClick={() => handlePageChange(currentPage - 1)}
-            variant="outlined"
-          >
-            Previous
-          </Button>
-          <span className="text-sm">
-            Page {currentPage} of {Math.ceil(products?.totalProduct / limit)}
-          </span>
-          <Button
-            disabled={currentPage === Math.ceil(products?.totalProduct / limit)}
-            onClick={() => handlePageChange(currentPage + 1)}
-            variant="outlined"
-          >
-            Next
-          </Button>
-        </div>
+
+        <Pagination
+          currentPage={currentPage}
+          total={products?.total || 0}
+          limit={limit}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

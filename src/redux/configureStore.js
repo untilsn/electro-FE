@@ -1,5 +1,4 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import authSlice from "./slice/authSlice";
 import storeSlice from "./slice/storeSlice";
 import userSlice from "./slice/userSlice";
 import productSlice from "./slice/productSlice";
@@ -18,7 +17,6 @@ import {
 } from "redux-persist";
 
 const rootReducer = combineReducers({
-  auth: authSlice,
   store: storeSlice,
   user: userSlice,
   order: orderSlice,

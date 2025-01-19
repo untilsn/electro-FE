@@ -1,19 +1,20 @@
 import React from "react";
-import mainBanner from "/public/main-banner1.jpg";
-import secondBanner from "/public/main-banner2.jpg";
 import { BannerImage } from "../../utils/bannerItem";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Scrollbar, A11y } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/scrollbar";
-import MainBanner from "./MainBanner";
+import mainBanner from "../../assets/image/banner/banner1.jpg";
+import secondBanner from "../../assets/image/banner/banner2.jpg";
 import SubBanner from "./SubBanner";
+import MainBanner from "./MainBanner";
 const Banner = () => {
   return (
-    <div className="grid grid-cols-3 gap-6 mb-16">
+    <div className="grid grid-cols-1 gap-6 mb-16">
       <div className="col-span-2">
         <Swiper
+          loop={true}
           modules={[Navigation, Scrollbar, A11y]}
           slidesPerView={1}
           navigation
@@ -22,11 +23,11 @@ const Banner = () => {
           <SwiperSlide>
             <MainBanner
               img={mainBanner}
-              heading="Daily Deals"
+              heading="Ưu đãi hàng ngày"
               title="AirPods"
               subTitle="Earphones"
-              price="$247"
-              secondPrice="Today:"
+              // price="$247"
+              // secondPrice="Today:"
             ></MainBanner>
           </SwiperSlide>
           <SwiperSlide>
@@ -34,18 +35,18 @@ const Banner = () => {
               img={secondBanner}
               title="Echo Dot"
               subTitle="3rd Gen"
-              price="$29"
-              heading="Deals and Promotions"
-              secondPrice="$49,99"
+              // price="$29"
+              heading="Ưu đãi và khuyến mãi"
+              // secondPrice="$49,99"
             ></MainBanner>
           </SwiperSlide>
         </Swiper>
       </div>
-      <div className="grid grid-rows-3 gap-5">
+      {/* <div className="grid grid-rows-3 gap-5">
         {BannerImage.map((item) => (
           <SubBanner key={item.id} img={item.img} content={item}></SubBanner>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

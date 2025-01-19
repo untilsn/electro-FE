@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Typography,
-  Button,
-} from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
 import ShopBanner from "../../modules/shop/ShopBanner";
-import Breadcrumb from "../../components/breadcrumb/Breadcrumb";
-import InputForm from "../../components/input/InputForm";
 import { useForm } from "react-hook-form";
 import { updateUser } from "../../service/useService";
 import { useMutationHook } from "../../hooks/useMutation";
+import MainBreadcrumbs from "../../components/breadcrumb/MainBreadcrumb";
+import InputField from "../../components/input/InputField";
+import { MdEmail } from 'react-icons/md';
+import { FaCamera } from "react-icons/fa";
+import { FaAddressBook, FaPhone, FaUser } from 'react-icons/fa6';
+import { IoMdCamera } from "react-icons/io";
+
 
 const ProfilePage = () => {
   const users = useSelector((state) => state.user);
@@ -53,6 +50,7 @@ const ProfilePage = () => {
     const result = updateUser(id, access_token, rest);
     return result;
   });
+
   const handleUpdateUser = async (data) => {
     await mutation.mutateAsync({
       id: users.id,
@@ -71,59 +69,60 @@ const ProfilePage = () => {
   return (
     <div>
       <ShopBanner title="Profile" subtitle="user"></ShopBanner>
-      <Breadcrumb children="profile"></Breadcrumb>
+      <MainBreadcrumbs></MainBreadcrumbs>
       <div className="container py-20">
-        <Card className="w-full mt-6">
-          <div className="flex items-start justify-between h-[600px] gap-10">
-            <CardHeader color="blue-gray" className="relative flex-1 h-80">
-              <img
-                src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80"
-                alt="card-image"
-              />
-            </CardHeader>
-            <form onSubmit={handleSubmit(handleUpdateUser)} className="flex-1">
-              <CardBody className="py-0">
-                <Typography
-                  variant="h5"
-                  color="blue-gray"
-                  className="mb-2 capitalize"
-                >
-                  user infomation
-                </Typography>
-                <div className="flex flex-col gap-10 mt-5 mb-10">
-                  <InputForm
-                    name="name"
-                    control={control}
-                    placeholder="enter your name"
-                  ></InputForm>
-                  <InputForm
-                    name="email"
-                    control={control}
-                    placeholder="enter your email"
-                  ></InputForm>
-                  <InputForm
-                    name="phone"
-                    control={control}
-                    placeholder="enter your phone"
-                  ></InputForm>
-                  <InputForm
-                    name="address"
-                    control={control}
-                    placeholder="enter your address"
-                  ></InputForm>
+        <h1 className="capitalize font-semibold text-xl text-dark mb-10">thông tin người dùng</h1>
+        <div className="py-20 bg-white p-5 rounded-2xl shadow-md  px-20">
+          <div className="flex items-center gap-20">
+            {/* avatar */}
+            <div>
+              <div className="relative text-4xl max-w-[250px]">
+                <img
+                  className="w-full h-full object-cover rounded-full shadow-lg"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_hAt5yLa0ySiNfk7UKtkNKKxj_0JNk3UIdA&s" alt="" />
+                <div className='absolute bottom-3 right-3 flex items-center justify-center text-white rounded-full bg-blue h-10 w-10 border-4 border-white bg-blueColor'>
+                  <IoMdCamera className="text-sm" />
                 </div>
-              </CardBody>
-              <CardFooter className="pt-0">
-                <Button
-                  type="submit"
-                  className="capitalize bg-black w-[100px] text-base"
-                >
-                  update
-                </Button>
-              </CardFooter>
+              </div>
+              <h1 className="text-sm mt-5 capitalize text-center font-semibold">{users.name}</h1>
+            </div>
+            {/* info */}
+            <form onSubmit={handleSubmit(handleUpdateUser)} className="grid grid-cols-2 gap-10 w-full  ">
+              <InputField
+                name="email"
+                control={control}
+                type="email"
+                icon={<MdEmail />}
+                placeholder="Email Address"
+              ></InputField>
+              <InputField
+                name="name"
+                control={control}
+                type="text"
+                icon={<FaUser />}
+                placeholder="Username"
+              ></InputField>
+              <InputField
+                name="address"
+                control={control}
+                type="text"
+                icon={<FaAddressBook />}
+                placeholder="Address"
+              ></InputField>
+              <InputField
+                name="phone"
+                control={control}
+                type="number"
+                icon={<FaPhone />}
+                placeholder="Phone number"
+              ></InputField>
+              <div>
+                <button className="py-5 px-10 font-semibold bg-dark text-white rounded-xl capitalize" type="submit">cập nhập</button>
+              </div>
             </form>
           </div>
-        </Card>
+
+        </div>
       </div>
     </div>
   );

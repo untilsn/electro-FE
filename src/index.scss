@@ -2,11 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply font-body text-sm leading-6 mx-auto  bg-[#F8F9FA] text-darkPrimary;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@layer base {
+
+  body {
+    @apply font-openSans text-sm leading-6 mx-auto  bg-[#F8F9FA] text-darkPrimary;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
 
 /* Đặt transition cho toàn bộ trang web */

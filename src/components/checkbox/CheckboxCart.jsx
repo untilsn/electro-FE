@@ -1,7 +1,7 @@
 import React from "react";
 import { Checkbox, Radio } from "@material-tailwind/react";
 
-const CheckboxCart = ({ price = 0.0, labelItem, onChange = () => {} }) => {
+const CheckboxCart = ({ price = 0.00, labelItem, onChange = () => {} }) => {
   return (
     <div className="flex items-center justify-between">
       <Radio
@@ -10,9 +10,9 @@ const CheckboxCart = ({ price = 0.0, labelItem, onChange = () => {} }) => {
         label={labelItem}
         color="gray"
         onChange={onChange}
-        defaultChecked={labelItem === "Free Shipping"}
+        defaultChecked={labelItem === "Miễn phí vận chuyển:"}
       />
-      <div className="text-sm text-dark text-opacity-80">${price}</div>
+      <div className="text-sm font-semibold text-dark text-opacity-80">{price}đ</div>
     </div>
   );
 };

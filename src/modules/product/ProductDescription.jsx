@@ -17,9 +17,9 @@ const ProductDescription = ({ item }) => {
   };
 
   return (
-    <div className="mt-6 rounded-sm">
+    <div className="p-5">
       <div>
-        <h3 className="text-xl font-normal">Descriptions</h3>
+        <h3 className="text-xl font-normal mb-5">Mô tả sản phẩm</h3>
         <p>{parse(getDisplayDescription())}</p>
         {description.length > maxLength && (
           <button

@@ -5,7 +5,7 @@ module.exports = withMT({
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     fontFamily: {
-      body: ["Poppins", "sans-serif"],
+      openSans: ["Open Sans", 'serif'],
     },
     colors: {
       bgColor: "#F4F7FF",
@@ -20,7 +20,6 @@ module.exports = withMT({
       teal: "#20c997",
       cyan: "#17a2b8",
       gray: "#6c757d",
-
       textColor: "#CCCCCC",
       grayDark: "#343a40",
       primary: "#007bff",
@@ -30,7 +29,7 @@ module.exports = withMT({
       warning: "#ffc107",
       danger: "#dc3545",
       light: "#f8f9fa",
-      dark: "#343a40",
+      dark: "#212529",
       darkPrimary: "#333333",
     },
     extend: {

@@ -14,15 +14,12 @@ export const initFacebookSDK = () => {
   let locale = "en";
   window.fbAsyncInit = function () {
     window.FB.init({
-      appId: import.meta.env.VITE_REACT_APP_FB_ID, // You App ID
-      cookie: true, // enable cookies to allow the server to access
-      // the session
-      xfbml: true, // parse social plugins on this page
-      version: "v8.6", // use version 2.1
+      appId: import.meta.env.VITE_REACT_APP_FB_ID, 
+      cookie: true, 
+      xfbml: true,
+      version: "v8.6",
     });
   };
-
-  // Load the SDK asynchronously
   (function (d, s, id) {
     var js,
       fjs = d.getElementsByTagName(s)[0];
@@ -34,9 +31,27 @@ export const initFacebookSDK = () => {
   })(document, "script", "facebook-jssdk");
 };
 
-//conver to vnd
-export function formatPrice(number) {
-  if (typeof number !== "number") return number;
 
-  return number.toLocaleString("vi-VN"); // Định dạng theo kiểu của Việt Nam
+
+export const formatPrice = (amount) => {
+  return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(amount);
+};
+
+
+
+
+export const formatDate = (dateString) => {
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: true, // Hiển thị định dạng giờ AM/PM
+  };
+
+  const date = new Date(dateString);
+  
+  return date.toLocaleString('vi-VN', options); // Định dạng ngày theo tiếng Việt
 }

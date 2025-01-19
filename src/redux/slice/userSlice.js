@@ -1,16 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  isModalOpen: false,
+  isAdmin: false,
   name: "",
   email: "",
   phone: "",
   address: "",
-  isAdmin: false,
   id: "",
   access_token: "",
   refresh_token: "",
 };
-
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -40,9 +40,15 @@ const userSlice = createSlice({
         access_token: "",
       };
     },
+    openModal: (state) => {
+      state.isModalOpen = true
+    },
+    closeModal: (state) => {
+      state.isModalOpen = false
+    },
   },
 });
 
-export const { updateUser, resetUser } = userSlice.actions;
+export const { updateUser, resetUser, closeModal, openModal } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import ShopPage from "./pages/ShopPage";
 import ProductPage from "./pages/ProductPage";
-import AuthenModal from "./modules/authen/AuthenModal";
 import CartPage from "./pages/CartPage";
 import WishlistPage from "./pages/WishlistPage";
 import ScrollTopButton from "./components/button/ScrollTopButton";
@@ -30,6 +29,10 @@ import CheckoutPage from "./pages/CheckoutPage";
 import OrderUserPage from "./pages/OrderUserPage";
 import DashboardOrder from "./pages/manage/DashboardOrder";
 import DashboardManage from "./pages/manage/DashboardManage";
+import AuthModal from "./modules/authen/AuthModal";
+import NotFoundPage from "./pages/NotFoundPage";
+
+
 
 function App() {
   const dispatch = useDispatch();
@@ -137,7 +140,7 @@ function App() {
             element={<WishlistPage></WishlistPage>}
           ></Route>
           <Route path="/product" element={<ProductPage></ProductPage>}></Route>
-          <Route path="/blogs" element={<BlogPage></BlogPage>}></Route>
+          <Route path="/blog" element={<BlogPage></BlogPage>}></Route>
           <Route path="/cart" element={<CartPage></CartPage>}></Route>
           <Route path="/profile" element={<ProfilePage></ProfilePage>}></Route>
           <Route
@@ -148,13 +151,11 @@ function App() {
             path="/user-order"
             element={<OrderUserPage></OrderUserPage>}
           ></Route>
+        <Route path="*" element={<NotFoundPage></NotFoundPage>}></Route>
+
         </Route>
         {/* dashboard */}
         <Route path="" element={<DashboardPage></DashboardPage>}>
-          <Route
-            path="/manage/dashboard"
-            element={<DashboardManage></DashboardManage>}
-          ></Route>
           <Route
             path="/manage/product"
             element={<DashboardProduct></DashboardProduct>}
@@ -171,10 +172,10 @@ function App() {
             path="/manage/categories"
             element={<DashboardCategory></DashboardCategory>}
           ></Route>
-          <Route
+          {/* <Route
             path="/manage/add-categories"
             element={<AddCategories></AddCategories>}
-          ></Route>
+          ></Route> */}
           <Route
             path="/manage/order"
             element={<DashboardOrder></DashboardOrder>}
@@ -186,7 +187,7 @@ function App() {
         </Route>
       </Routes>
       {/* funtion */}
-      <AuthenModal></AuthenModal>
+      <AuthModal></AuthModal>
       <ScrollTopButton></ScrollTopButton>
     </>
   );

@@ -6,3 +6,6 @@ export const getAllBrand = async () => {
   );
   return res.data;
 };
+
+
+

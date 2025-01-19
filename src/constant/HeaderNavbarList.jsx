@@ -1,74 +1,45 @@
-import MenuCart from "../modules/menu/MenuCart";
-import MenuShop from "../modules/menu/MenuShop";
-import ProductMenu from "../modules/menu/ProductMenu";
+import { FaCaretDown } from "react-icons/fa";
 import ProfileMenu from "../modules/menu/ProfileMenu";
+import UserMenu from "../modules/menu/UserMenu";
+import { FaAngleDown } from "react-icons/fa6";
 
-export const NAVBARLIST = [
+export const HEADERNAVBAR = [
   {
-    name: "trang chủ",
-    title: "home",
-    hover: false,
+    id: 1,
+    name: "home",
+    title: "trang chủ",
     url: "/",
   },
   {
-    name: "cửa hàng",
-    title: "shop",
+    id: 2,
+    name: "shop",
+    title: "cửa hàng",
     url: "/shop",
-    hover: false,
-    menu: <MenuShop></MenuShop>,
-    subItems: [
-      { title: "SHOP WITH SIDEBAR" },
-      { title: "SHOP VARIATIONS" },
-      { title: "SHOP PAGES" },
-    ],
   },
+  // {
+  //   id: 3,
+  //   name: "products",
+  //   title: "đặt hàng",
+  //   url: "/user-order",
+  // },
+  // {
+  //   id: 4,
+  //   name: "about",
+  //   title: "giới thiệu",
+  //   url: "/about",
+  // },
   {
-    name: "đặt hàng",
-    title: "product",
-    url: "/user-order",
-    hover: false,
-    menu: <ProductMenu></ProductMenu>,
-    subItems: [
-      { title: "Default" },
-      { title: "Centered" },
-      { title: "Extended InfoNEW" },
-      { title: "Gallery" },
-      { title: " Sticky Info" },
-      { title: "Boxed With Sidebar" },
-      { title: " Full Width" },
-    ],
-  },
-  {
-    name: "giỏ hàng",
-    title: "cart",
-    url: "/cart",
-    hover: false,
-    menu: <MenuCart></MenuCart>,
-    subItems: [
-      { title: "About" },
-      { title: "Contact 01" },
-      { title: "About" },
-      { title: "Login" },
-      { title: "Error 404" },
-    ],
-  },
-  {
-    name: "blogs",
+    id: 5,
+    name: "blog",
     title: "blogs",
-    url: "/blogs",
-    hover: false,
-    // menu: <BlogPage></BlogPage>,
+    url: "/blog",
   },
   {
-    name: "hồ sơ",
-    title: "profile",
-    hover: false,
-    menu: <ProfileMenu></ProfileMenu>,
-    subItems: [
-      { title: "Manage" },
-      { title: "Profile" },
-      { title: "My Order" },
-      { title: "Logout" },
-    ],
+    id: 6,
+    name: "info",
+    title: "hồ sơ",
+    url: "/user-info",
+    icon: <FaAngleDown size={10} />,
+    menu: <UserMenu></UserMenu>
   },
 ];

@@ -22,7 +22,7 @@ const ProductDesc = ({ item }) => {
 
   const data = [
     {
-      label: "Description",
+      label: "Mô tả sản phẩm",
       value: "Description",
       desc: <ProductDescription item={item}></ProductDescription>,
     },
@@ -32,7 +32,7 @@ const ProductDesc = ({ item }) => {
       desc: <ProductComment item={item}></ProductComment>,
     },
     {
-      label: "Shipping & Returns",
+      label: "Vận chuyển & Trả hàng",
       value: "Shipping & Returns",
       desc: <ProductTerm></ProductTerm>,
     },
@@ -50,7 +50,6 @@ const ProductDesc = ({ item }) => {
     retryDelay: 1000,
     enabled: !!item?.brand,
   });
-  console.log(productsBrand);
   return (
     <div className="container mb-20">
       <Tabs value={activeTab}>
@@ -78,7 +77,7 @@ const ProductDesc = ({ item }) => {
             ))}
           </TabsHeader>
         </div>
-        <TabsBody className="w-full p-10 border mt-14 border-gray border-opacity-20">
+        <TabsBody className="w-full border border-gray border-opacity-20">
           {data.map(({ value, desc }) => (
             <TabPanel key={value} value={value}>
               {desc}

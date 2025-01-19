@@ -3,7 +3,7 @@ import { FaCartPlus, FaHeart, FaRegHeart } from "react-icons/fa6";
 import { FooterIconContact } from "../../components/icon/IconContact";
 import { v4 } from "uuid";
 import parse from "html-react-parser";
-import { useCheckFavorite } from "../../hooks/useCheckFavorite";
+
 import { Rating } from "@material-tailwind/react";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import LikeButton from "../../components/button/LikeButton";
@@ -12,45 +12,49 @@ import { useDispatch, useSelector } from "react-redux";
 import { useMutationHook } from "../../hooks/useMutation";
 import { createWishlistItem } from "../../service/wishlistService";
 import { setWishlist } from "../../redux/slice/wishlistSlice";
+import { useCheckFavorite } from "../../hooks/useCheckFavorite";
+import { toast } from "react-toastify";
 
 const ProductDetail = ({
   item,
-  onClick = () => {},
-  onQuantityChange = () => {},
+  onClick = () => { },
+  onQuantityChange = () => { },
 }) => {
   if (!item) return;
   const [quantity, setQuantity] = useState(1);
   const users = useSelector((state) => state.user);
+  const [image, setImage] = useState(item?.image?.[0]);
+  const dispatch = useDispatch();
+  console.log(item)
   useEffect(() => {
     setQuantity(1);
+    setImage(item.image?.[0]);
+    initFacebookSDK();
+
   }, [item]);
-  const dispatch = useDispatch();
+
   useEffect(() => {
     onQuantityChange(quantity);
   }, [quantity, onQuantityChange]);
-  if (!item) return null;
-  const [image, setImage] = useState(item?.image?.[0]);
-  useEffect(() => {
-    setImage(item.image?.[0]);
-  }, [item]);
+
+
   useLayoutEffect(() => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   }, [item]);
-  const isFavorite = useCheckFavorite(item);
 
-  useEffect(() => {
-    initFacebookSDK();
-  }, [item]);
+  const  isFavorite  = useCheckFavorite(item._id)
+
 
   const mutation = useMutationHook((data) => {
     const result = createWishlistItem(data);
     return result;
   });
   const { data: wishlists, isSuccess } = mutation;
-  console.log(wishlists);
+
+
   const handleAddToWishlist = async () => {
     try {
       mutation.mutate(
@@ -59,15 +63,19 @@ const ProductDetail = ({
           productId: item?._id,
         },
         {
-          onSuccess: (data) => {
-            dispatch(setWishlist(data));
-          },
+          onSuccess: () => {
+            dispatch(setWishlist(item._id))
+          }
         }
       );
     } catch (error) {
       console.log(error);
     }
   };
+
+
+
+
   return (
     <div className="grid grid-cols-2 mt-10 mb-20 gap-7">
       {/* show image */}
@@ -77,9 +85,8 @@ const ProductDetail = ({
             <div
               onClick={() => setImage(img)}
               key={v4()}
-              className={`${
-                image === img ? "border border-yellowColor" : ""
-              } max-w-[100px] w-full h-[100px] `}
+              className={`${image === img ? "border border-yellowColor" : ""
+                } max-w-[100px] w-full h-[100px] `}
             >
               <img className="object-cover w-full h-full " src={img} alt="" />
             </div>
@@ -105,7 +112,7 @@ const ProductDetail = ({
 
         <LikeButton href={window.location.href}></LikeButton>
         <h2 className="text-3xl font-normal text-yellowColor">
-          {formatPrice(item?.price)}Đ
+          {formatPrice(item?.price)}
         </h2>
         {/* <div className="flex items-center gap-3 capitalize">
           <span>ram: </span>
@@ -126,16 +133,7 @@ const ProductDetail = ({
         <div className="text-sm font-light text-gray text-opacity-80 h-[200px] overflow-hidden">
           {parse(item?.description)}
         </div>
-        <div className="flex items-center gap-5 text-sm text-dark text-opacity-90">
-          size
-          <select
-            name=""
-            className="px-5 py-3 border border-gray max-w-[200px] w-full border-opacity-30"
-            id=""
-          >
-            <option value="">small</option>
-          </select>
-        </div>
+
         {/* quantity */}
         <div className="flex items-center gap-5 text-sm text-dark text-opacity-90">
           qty:
@@ -179,9 +177,8 @@ const ProductDetail = ({
               {isFavorite ? <FaHeart /> : <FaRegHeart />}
             </span>
             <span
-              className={`${
-                isFavorite ? "text-yellowColor underline" : "text-black"
-              }`}
+              className={`${isFavorite ? "text-yellowColor underline" : "text-black"
+                }`}
             >
               Add to Wishlist
             </span>

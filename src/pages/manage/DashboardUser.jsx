@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import DashboardHeading from "../../modules/dashboard/DashboardHeading";
+import DashboardTitle from "../../modules/dashboard/DashboardTitle";
 import { Card, Chip, Typography } from "@material-tailwind/react";
 import ActionView from "../../components/action/ActionView";
 import ActionEdit from "../../components/action/ActionEdit";
@@ -38,7 +38,7 @@ const DashboardUser = () => {
   return (
     <Fragment>
       <div className="flex items-center justify-between">
-        <DashboardHeading>Manage Users</DashboardHeading>
+        <DashboardTitle>Manage Users</DashboardTitle>
         <input
           type="search"
           placeholder="Search users"

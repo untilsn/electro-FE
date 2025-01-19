@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import DashboardHeading from "../../modules/dashboard/DashboardHeading";
+import DashboardTitle from "../../modules/dashboard/DashboardTitle";
 import InputForm from "../../components/input/InputForm";
 import InputContaint from "../../components/input/InputContaint";
 import { useForm } from "react-hook-form";
@@ -38,7 +38,7 @@ const AddCategories = () => {
   return (
     <Fragment>
       <form onSubmit={handleSubmit(handleAddCategory)}>
-        <DashboardHeading>Create Category</DashboardHeading>
+        <DashboardTitle>Create Category</DashboardTitle>
         <div className="grid grid-cols-2 gap-5 mt-20">
           <InputContaint>
             <InputForm

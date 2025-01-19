@@ -1,20 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
+
+const initialState = {
+  orderItems: [],
+  shippingAddress: {},
+  paymentMethod: "",
+  itemsPrice: 0,
+  shippingPrice: 0,
+  totalPrice: 0,
+  user: "",
+  isPaid: false,
+  paidAt: "",
+  isDelivered: false,
+  deliveredAt: "",
+}
+
 const orderSlice = createSlice({
   name: "order",
-  initialState: {
-    orderItems: [],
-    shippingAddress: {},
-    paymentMethod: "",
-    itemsPrice: 0,
-    shippingPrice: 0,
-    totalPrice: 0,
-    user: "",
-    isPaid: false,
-    paidAt: "",
-    isDelivered: false,
-    deliveredAt: "",
-  },
+  initialState,
   reducers: {
     addOrderProduct: (state, action) => {
       const { orderItem } = action?.payload || {};

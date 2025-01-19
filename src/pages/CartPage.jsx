@@ -1,13 +1,15 @@
 import React, { useMemo } from "react";
 import ShopBanner from "../modules/shop/ShopBanner";
 import Breadcrumb from "../components/breadcrumb/Breadcrumb";
-import Table from "../components/table/Table";
+import MainTable from "../components/table/MainTable";
 import CardTotal from "../components/card/CardTotal";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { GrUpdate } from "react-icons/gr";
 import BoxNoItem from "../components/BoxNoItem";
 import { Link } from "react-router-dom";
+import MainBreadcrumbs from "../components/breadcrumb/MainBreadcrumb";
+import { FaCartPlus } from "react-icons/fa";
 
 const CartPage = () => {
   const { cartArray } = useSelector((state) => state.store);
@@ -25,15 +27,15 @@ const CartPage = () => {
 
   return (
     <div>
-      <ShopBanner title="Shopping Cart"> </ShopBanner>
-      <Breadcrumb children="Shopping Cart"></Breadcrumb>
+      <ShopBanner title="shop" subtitle="giỏ hàng"> </ShopBanner>
+      <MainBreadcrumbs></MainBreadcrumbs>
       <div className="container">
         {orderItems?.length === 0 || orderItems?.length === null ? (
-          <BoxNoItem type="carts"></BoxNoItem>
+          <BoxNoItem text="Hiện bạn chưa có sản phẩm trong giỏ hàng" icon={<FaCartPlus/>}></BoxNoItem>
         ) : (
           <div className="grid grid-cols-[72%_28%] gap-5 mt-10 mb-40">
             <div className="">
-              <Table item={orderItems}></Table>
+              <MainTable item={orderItems}></MainTable>
               <div className="flex items-center justify-between">
                 <div className="flex items-center max-w-[350px] w-full gap-5">
                   <input
@@ -61,7 +63,7 @@ const CartPage = () => {
                 className="flex items-center justify-center w-full gap-4 px-4 py-3 mt-10 border text-dark border-gray border-opacity-30 hover:text-yellowColor"
               >
                 <span className="uppercase text-opacity-60">
-                  continue shopping
+                  tiếp tục mua sắm
                 </span>
                 <GrUpdate />
               </Link>

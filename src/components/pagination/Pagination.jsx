@@ -1,23 +1,42 @@
 import React from "react";
 
-const Pagination = ({ currentPage, totalPage, onPageChange }) => {
+const Pagination = ({ currentPage, total, limit, onPageChange }) => {
+  const totalPages = Math.ceil(total / limit);
+
+  const handlePageClick = (page) => {
+    if (page !== currentPage && page > 0 && page <= totalPages) {
+      onPageChange(page);
+    }
+  };
+
+
   return (
-    <div className="flex justify-center mt-4">
-      {[...Array(totalPage)].map((_, index) => (
+    <div className="flex items-center gap-2">
+      <button
+        onClick={() => handlePageClick(currentPage - 1)}
+        disabled={currentPage === 1}
+        className={`px-3 py-2 ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
+      >
+        Prev
+      </button>
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
         <button
-          key={index + 1}
-          onClick={() => onPageChange(index + 1)}
-          disabled={currentPage === index + 1}
-          className={`px-3 py-1 mx-1 rounded-md focus:outline-none ${
-            currentPage === index + 1
-              ? "border border-red-500 text-yellowColor"
-              : "bg-transparent hover:border hover:border-gray hover:text-yellowColor"
-          } border border-transparent`}
+          key={page}
+          onClick={() => handlePageClick(page)}
+          className={`px-3 py-2 font-semibold rounded ${page === currentPage ? "bg-dark text-yellowColor" : "bg-gray-200 text-black hover:bg-gray-300"}`}
         >
-          {index + 1}
+          {page}
         </button>
       ))}
+      <button
+        onClick={() => handlePageClick(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className={`px-3 py-2 ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""}`}
+      >
+        Next
+      </button>
     </div>
+
   );
 };
 

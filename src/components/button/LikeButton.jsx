@@ -4,7 +4,7 @@ const LikeButton = (props) => {
   const { href } = props;
   return (
     <div
-      class="fb-like"
+      className="fb-like"
       data-href={href}
       data-width=""
       data-layout=""

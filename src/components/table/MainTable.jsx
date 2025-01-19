@@ -11,9 +11,9 @@ import {
 } from "../../redux/slice/orderSlice";
 import { formatPrice } from "../../utils/utils";
 
-const TABLE_HEAD = ["product", "price", "quantity", "total"];
+const TABLE_HEAD = ["sản phẩm", "giá", "số lượng", "tổng cộng", ""];
 
-const Table = ({ item }) => {
+const MainTable = ({ item }) => {
   const dispatch = useDispatch();
 
   const handleDecrement = (productId, amount) => {
@@ -29,8 +29,8 @@ const Table = ({ item }) => {
   };
 
   return (
-    <Card shadow={false} className="w-full mb-10">
-      <table className="w-full text-left min-w-max">
+    <Card shadow={false} className="w-full mb-10 bg-transparent">
+      <table className="w-full text-left min-w-max ">
         <thead className="">
           <tr>
             {TABLE_HEAD.map((head) => (
@@ -57,7 +57,7 @@ const Table = ({ item }) => {
           {item?.map((doc) => {
             // const total = totalPrices[doc.productId] || 0;
             return (
-              <tr key={doc.productId}>
+              <tr key={doc.productId} className="border-b border-gray border-opacity-20">
                 <td className="p-4 max-w-[440px]">
                   <Typography
                     variant="small"
@@ -90,7 +90,7 @@ const Table = ({ item }) => {
                     color="gray"
                     className="text-lg font-normal text-center"
                   >
-                    {formatPrice(doc?.price)}Đ
+                    {formatPrice(doc?.price)}
                   </Typography>
                 </td>
                 <td className="p-4 mx-auto">
@@ -118,18 +118,21 @@ const Table = ({ item }) => {
                   <Typography
                     variant="small"
                     color="gray"
-                    className="flex items-center justify-center gap-3 text-lg max-w-[120px] w-full font-medium text-center text-yellowColor"
+                    className="text-lg max-w-[120px] w-full font-medium text-center text-yellowColor"
                   >
-                    {formatPrice(doc?.price * doc?.amount)}Đ
-                    <span
-                      onClick={() =>
-                        dispatch(removeOrderProduct(doc.productId))
-                      }
-                      className="text-dark"
-                    >
-                      <IoCloseOutline></IoCloseOutline>
-                    </span>
+                    {formatPrice(doc?.price * doc?.amount)}
+
                   </Typography>
+                </td>
+                <td>
+                  <span
+                    onClick={() =>
+                      dispatch(removeOrderProduct(doc.productId))
+                    }
+                    className="text-dark"
+                  >
+                    <IoCloseOutline></IoCloseOutline>
+                  </span>
                 </td>
               </tr>
             );
@@ -140,4 +143,4 @@ const Table = ({ item }) => {
   );
 };
 
-export default Table;
+export default MainTable;

@@ -1,20 +1,15 @@
 import React from "react";
-import dealBanner from "/public/dealoutletbanner.jpg";
-import CardItem from "../../components/card/CardItem";
+import dealBanner from "../../assets/image/banner/dealoutletbanner.jpg";
 import ButtonItem from "../../components/button/ButtonItem";
 import TitlePath from "../../components/title/TitlePath";
 import DisplayTime from "./DisplayTime";
-import { useSelector } from "react-redux";
 import CardShop from "../../components/card/CardShop";
 
 const DealOutlet = ({ item }) => {
   return (
     <div className="container">
       <div className="text-center">
-        <TitlePath>Ưu Đãi & Outlet</TitlePath>
-        <div className="mt-2 text-sm text-grayDark text-opacity-70">
-          Ưu đãi hôm nay và nhiều hơn nữa
-        </div>
+        <TitlePath title="Ưu Đãi & Outlet" subTitle="Ưu đãi hôm nay và nhiều hơn nữa">Ưu Đãi & Outlet</TitlePath>
       </div>
       {/* nội dung */}
       <div className="grid grid-cols-4 gap-8 my-16 ">
@@ -48,9 +43,9 @@ const DealOutlet = ({ item }) => {
             </div>
           </div>
         </div>
-        {item?.data?.slice(0, 2).map((item) => (
-          <div key={item.id}>
-            <CardShop key={item.id} item={item}></CardShop>
+        {item?.data?.slice(0, 2).map((item, index) => (
+          <div key={index}>
+            <CardShop key={index} item={item}></CardShop>
           </div>
         ))}
       </div>

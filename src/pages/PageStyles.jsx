@@ -1,15 +1,14 @@
 import React from "react";
 import Header from "../components/header/Header";
-import DashboardFeature from "../modules/headerFeature/DashboardFeature";
 import { Outlet } from "react-router-dom";
 import FooterContact from "../modules/homepage/footer/FooterContact";
+import Footer from "../modules/homepage/footer/Footer";
 const PageStyles = () => {
   return (
     <>
       <Header></Header>
-      <DashboardFeature></DashboardFeature>
       <Outlet></Outlet>
-      <FooterContact></FooterContact>
+      <Footer></Footer>
     </>
   );
 };

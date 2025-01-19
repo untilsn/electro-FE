@@ -6,6 +6,8 @@ import { FaProductHunt } from "react-icons/fa";
 import { FaUsersLine } from "react-icons/fa6";
 import { AiFillProduct } from "react-icons/ai";
 import DashboardChartBrand from "../../modules/chart/DashboardChartBrand";
+import MainBreadcrumbs from "../../components/breadcrumb/MainBreadcrumb";
+import DashboardTitle from "../../modules/dashboard/DashboardTitle";
 
 const chartList = [
   {
@@ -41,7 +43,9 @@ const chartList = [
 const DashboardManage = () => {
   return (
     <div>
-      <div className="grid w-full grid-cols-4 gap-5">
+      <DashboardTitle>thông tin quản lý</DashboardTitle>
+      <MainBreadcrumbs></MainBreadcrumbs>
+      <div className="grid w-full grid-cols-4 gap-5 mt-5">
         {chartList.map((item) => (
           <ChartBox key={item.id} item={item}></ChartBox>
         ))}

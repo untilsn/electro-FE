@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import DashboardHeading from "../../modules/dashboard/DashboardHeading";
+import DashboardTitle from "../../modules/dashboard/DashboardTitle";
 import ActionView from "../../components/action/ActionView";
 import ActionEdit from "../../components/action/ActionEdit";
 import ActionDelete from "../../components/action/ActionDelete";
@@ -21,7 +21,7 @@ const DashboardCategory = () => {
   return (
     <Fragment>
       <div className="flex items-center justify-between">
-        <DashboardHeading>Manage Product</DashboardHeading>
+        <DashboardTitle>Manage Product</DashboardTitle>
         <input
           type="search"
           placeholder="seach products"
