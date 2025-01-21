@@ -24,14 +24,19 @@ const ProductPage = () => {
   };
 
   const mutation = useMutationHook(async (id) => {
+    if (!id) return null;
     const result = await getDetailsProduct(id);
     return result;
   });
-  
+
   const { data: detailProduct, isLoading, isError } = mutation;
+
   useEffect(() => {
-    mutation.mutate(productId);
+    if (productId) {
+      mutation.mutate(productId);
+    }
   }, [productId]);
+  
 
 
   const handleOrderProduct = () => {

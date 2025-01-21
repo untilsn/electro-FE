@@ -24,12 +24,11 @@ const ProductDetail = ({
   const users = useSelector((state) => state.user);
   const [image, setImage] = useState(item?.image?.[0]);
   const dispatch = useDispatch();
-  console.log(item)
+  
   useEffect(() => {
     setQuantity(1);
     setImage(item.image?.[0]);
     initFacebookSDK();
-
   }, [item]);
 
   useEffect(() => {
