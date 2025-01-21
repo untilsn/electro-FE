@@ -7,9 +7,7 @@ import { useMutationHook } from "../../hooks/useMutation";
 import MainBreadcrumbs from "../../components/breadcrumb/MainBreadcrumb";
 import InputField from "../../components/input/InputField";
 import { MdEmail } from 'react-icons/md';
-import { FaCamera } from "react-icons/fa";
 import { FaAddressBook, FaPhone, FaUser } from 'react-icons/fa6';
-import { IoMdCamera } from "react-icons/io";
 
 
 const ProfilePage = () => {

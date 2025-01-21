@@ -1,6 +1,5 @@
 import React from "react";
 import ShopBanner from "../modules/shop/ShopBanner";
-import Breadcrumb from "../components/breadcrumb/Breadcrumb";
 import {
   Button,
   Card,

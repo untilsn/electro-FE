@@ -3,14 +3,11 @@ import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import InputContaint from "../../components/input/InputContaint";
 import ButtonForm from "../../components/button/ButtonForm";
-import { auth, db, provider } from "../../config/firebaseConfigure";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { signInWithPopup, signInWithRedirect } from "firebase/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useMutationHook } from "../../hooks/useMutation";
 import { getDetailsUser, loginUser } from "../../service/useService";
 import { jwtDecode } from "jwt-decode";
@@ -18,7 +15,6 @@ import { closeModal, updateUser } from "../../redux/slice/userSlice";
 import InputField from "../../components/input/InputField";
 import { MdEmail } from "react-icons/md";
 import InputError from "../../components/input/InputError";
-import logoGoogle from "../../assets/image/google.png"
 
 
 const Login = () => {

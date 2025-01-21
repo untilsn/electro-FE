@@ -5,10 +5,8 @@ const ProductDescription = ({ item }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const description = item?.description || "Normal description";
 
-  // Giới hạn số ký tự hiển thị trước khi nhấn "Xem thêm"
   const maxLength = 600;
 
-  // Hàm để hiển thị mô tả rút gọn hoặc đầy đủ
   const getDisplayDescription = () => {
     if (description.length > maxLength && !isExpanded) {
       return description.slice(0, maxLength) + "...";

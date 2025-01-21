@@ -1,9 +1,5 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import DashboardTitle from "../../modules/dashboard/DashboardTitle";
-import { Card, Chip, Typography } from "@material-tailwind/react";
-import ActionView from "../../components/action/ActionView";
-import ActionEdit from "../../components/action/ActionEdit";
-import ActionDelete from "../../components/action/ActionDelete";
 import { getAllUser } from "../../service/useService";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegEdit } from "react-icons/fa";

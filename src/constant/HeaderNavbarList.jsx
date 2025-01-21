@@ -16,18 +16,6 @@ export const HEADERNAVBAR = [
     title: "cửa hàng",
     url: "/shop",
   },
-  // {
-  //   id: 3,
-  //   name: "products",
-  //   title: "đặt hàng",
-  //   url: "/user-order",
-  // },
-  // {
-  //   id: 4,
-  //   name: "about",
-  //   title: "giới thiệu",
-  //   url: "/about",
-  // },
   {
     id: 5,
     name: "blog",

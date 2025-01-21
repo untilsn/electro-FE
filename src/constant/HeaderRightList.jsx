@@ -8,11 +8,6 @@ const {orderItem} = useSelector(state => state.order)
 
 
 export const HEADERRIGHTsss = [
-    // {
-    //   id: 1,
-    //   name: "messages",          
-    //   icon: <RiMessengerLine />,       
-    // },
     {
       id: 2,
       name: "yêu thích",

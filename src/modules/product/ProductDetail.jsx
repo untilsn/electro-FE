@@ -13,7 +13,6 @@ import { useMutationHook } from "../../hooks/useMutation";
 import { createWishlistItem } from "../../service/wishlistService";
 import { setWishlist } from "../../redux/slice/wishlistSlice";
 import { useCheckFavorite } from "../../hooks/useCheckFavorite";
-import { toast } from "react-toastify";
 
 const ProductDetail = ({
   item,

@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import InputForm from "../../components/input/InputForm";
 import InputContaint from "../../components/input/InputContaint";
-import Label from "../../components/label/Label";
 import { MdEmail } from "react-icons/md";
 import { FaEye, FaEyeSlash, FaUser } from "react-icons/fa6";
-import { FaArrowRight } from "react-icons/fa6";
 import ButtonForm from "../../components/button/ButtonForm";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { signInWithPopup } from "firebase/auth";
-import { auth, provider } from "../../config/firebaseConfigure";
 import { useNavigate } from "react-router-dom";
 import { useMutationHook } from "../../hooks/useMutation";
 import { signupUser } from "../../service/useService";
@@ -22,7 +17,6 @@ import { closeModal } from "../../redux/slice/userSlice";
 
 const Register = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showComfirmPassword, setShowComfirmPassword] = useState(false);
 
