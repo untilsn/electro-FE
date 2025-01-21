@@ -3,7 +3,6 @@ import ShopBanner from "../modules/shop/ShopBanner";
 import Breadcrumb from "../components/breadcrumb/Breadcrumb";
 import {
   Button,
-  ButtonGroup,
   Card,
   Typography,
 } from "@material-tailwind/react";
@@ -27,7 +26,12 @@ const TABLE_HEAD = ["Ảnh", "Sản phẩm", "Số lượng", "Giá"];
 const OrderUserPage = () => {
   const location = useLocation();
   const { state } = location;
+  const { id: idFromLocation, token: tokenFromLocation } = state || {};
   const users = useSelector((state) => state.user);
+
+  // Dùng id và token từ location.state nếu có, nếu không dùng từ redux
+  const userId = idFromLocation || users.id;
+  const accessToken = tokenFromLocation || users.access_token;
 
   const fetchMyOrder = async (context) => {
     const userId = context?.queryKey[1];
@@ -44,13 +48,12 @@ const OrderUserPage = () => {
     }
   };
 
-  const queryOrder = useQuery({
-    queryKey: ["orders", users.id, users.access_token],
+  const { data: orderItem, isLoading, isError, refetch } = useQuery({
+    queryKey: ["orders", userId, accessToken],
     queryFn: fetchMyOrder,
-    enabled: !!users.id && !!users.access_token,
+    enabled: !!userId && !!accessToken,  // Chỉ fetch khi có id và token
   });
 
-  const { isLoading, data: orderItem, isError } = queryOrder;
   const mutation = useMutationHook(async (data) => {
     const { id, token, orderItems } = data;
     const res = await cancelOrder(id, token, orderItems);
@@ -72,7 +75,7 @@ const OrderUserPage = () => {
         mutation.mutate(
           {
             id: order?._id,
-            token: users?.access_token,
+            token: accessToken,
             orderItems: order?.orderItems,
           },
           {
@@ -82,7 +85,7 @@ const OrderUserPage = () => {
                 "Đơn hàng của bạn đã được hủy.",
                 "success"
               );
-              queryOrder.refetch();
+              refetch();
             },
           }
         );
@@ -96,19 +99,19 @@ const OrderUserPage = () => {
       <MainBreadcrumbs />
       <div className="container py-6">
         {
-          orderItem?.data?.length > 0 ?
+          orderItem?.data?.length > 0 ? (
             <div>
               {orderItem?.data?.map((order) => (
                 <div key={order._id} className="my-10">
                   <Card className="w-full h-full shadow-lg rounded-none mb-20">
-                    <div className="flex items-center justify-between p-5  text-lg font-medium text-dark bg-secondary bg-opacity-10 ">
+                    <div className="flex items-center justify-between p-5 text-base font-medium text-dark bg-secondary bg-opacity-10 ">
                       <span>
                         Ngày đặt:{" "}
-                        <span className="text-gray-500">{formatDate(order?.createdAt)}</span>
+                        <span className="text-gray font-semibold">{formatDate(order?.createdAt)}</span>
                       </span>
                       <span>
                         Tổng cộng:{" "}
-                        <span className="text-red-500">{formatPrice(order?.totalPrice)}</span>
+                        <span className="text-red-500 font-semibold">{formatPrice(order?.totalPrice)}</span>
                       </span>
                     </div>
                     <table className="w-full text-left table-auto min-w-max">
@@ -122,7 +125,7 @@ const OrderUserPage = () => {
                               <Typography
                                 variant="small"
                                 color="blue-gray"
-                                className="text-lg font-medium leading-none text-black opacity-70"
+                                className="text-sm font-medium leading-none text-black opacity-70"
                               >
                                 {head}
                               </Typography>
@@ -130,7 +133,7 @@ const OrderUserPage = () => {
                           ))}
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="border-b mb-5 border-gray border-opacity-20">
                         {order?.orderItems?.map((item, index) => {
                           const isLast = index === order.orderItems.length - 1;
                           const classes = isLast
@@ -180,7 +183,7 @@ const OrderUserPage = () => {
                         })}
                       </tbody>
                     </table>
-                    <div className="flex items-center justify-between p-5 bg-blue-gray-50">
+                    <div className="flex items-center justify-between p-5 bg-white">
                       <div className="flex flex-col gap-3">
                         <div>
                           {order?.isPaid ? (
@@ -207,8 +210,9 @@ const OrderUserPage = () => {
                 </div>
               ))}
             </div>
-            :
+          ) : (
             <BoxNoItem text="Không có đơn hàng nào" icon={<IoBagCheckOutline />} />
+          )
         }
       </div>
     </>

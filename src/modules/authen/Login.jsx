@@ -6,7 +6,7 @@ import ButtonForm from "../../components/button/ButtonForm";
 import { auth, db, provider } from "../../config/firebaseConfigure";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, signInWithRedirect } from "firebase/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +18,8 @@ import { closeModal, updateUser } from "../../redux/slice/userSlice";
 import InputField from "../../components/input/InputField";
 import { MdEmail } from "react-icons/md";
 import InputError from "../../components/input/InputError";
+import logoGoogle from "../../assets/image/google.png"
+
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -40,44 +42,13 @@ const Login = () => {
         formState: { errors },
     } = useForm({
         defaultValues: {
-            loginEmail: "",
-            loginPassword: "",
+            loginEmail: "admin123456@gmail.com",
+            loginPassword: "admin123456",
         },
         mode: "onSubmit",
         resolver: yupResolver(schema),
     });
 
-    // const handleLogin = async (values) => {
-    //   if (!values) return;
-    //   dispatch(loginStart());
-    //   try {
-    //     await signInWithEmailAndPassword(auth, values?.email, values?.password);
-    //     toast.success("Login success");
-    //     navigate("/");
-    //     dispatch(openModalAuth(false));
-    //   } catch (error) {
-    //     dispatch(loginFailure(error.message));
-    //     console.log(error);
-    //   }
-    // };
-    const handleLoginGoogle = async () => {
-        try {
-            const user = await signInWithPopup(auth, provider);
-
-            const userRef = collection(db, "users");
-            await addDoc(userRef, {
-                displayName: user.user.displayName,
-                email: user.user.email,
-                role: "user",
-                createAt: serverTimestamp(),
-            });
-            // window.location.href = "/";
-            dispatch(openModalAuth(false));
-            toast.success("login with google success!");
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
     const mutation = useMutationHook((data) => loginUser(data));
     const handleLogin = (values) => {
@@ -151,23 +122,6 @@ const Login = () => {
                 <span className="text-sm capitalize hover:text-yellowColor">
                     forget password
                 </span>
-            </div>
-            <div className="w-full h-[1px] bg-slate-300"></div>
-            <div className="p-4 text-sm text-center">or sign in with</div>
-            <div className="flex items-center justify-center gap-20">
-                <button
-                    onClick={() => handleLoginGoogle()}
-                    className="flex items-center justify-center mt-5 max-w-[300px] w-full rounded-3xl hover:border-opacity-30 gap-3 p-3 border hover:bg-gray hover:bg-opacity-5 border-gray border-opacity-20"
-                >
-                    <span>
-                        <img
-                            src="./google.png"
-                            className="object-cover w-6 h-6"
-                            alt="google"
-                        />
-                    </span>
-                    <span>Login with Google</span>
-                </button>
             </div>
         </form>
     );

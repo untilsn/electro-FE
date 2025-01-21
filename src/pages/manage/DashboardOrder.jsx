@@ -1,23 +1,65 @@
-import React, { Fragment, useState } from "react";
-import DashboardTitle from "../../modules/dashboard/DashboardTitle";
-import { Card, Chip, Typography } from "@material-tailwind/react";
-import ActionView from "../../components/action/ActionView";
-import ActionEdit from "../../components/action/ActionEdit";
-import ActionDelete from "../../components/action/ActionDelete";
+import React, { Fragment } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllOrder } from "../../service/orderService";
 import { formatPrice } from "../../utils/utils";
+import TableComponent from "../../components/table/TableComponent";
+import { FaRegEdit } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
 
-const TABLE_HEAD = [
-  "id",
-  "order date",
-  "total amount",
-  "payment status",
-  "action",
+export const orderColumns = [
+  {
+    accessorKey: "_id",
+    header: "Mã đơn",
+    cell: (info) => <div className="capitalize text-left">{info.getValue()}</div>,
+    enableSorting: true,
+  },
+  {
+    accessorKey: "shippingAddress.fullName",
+    header: "Người nhận",
+    cell: (info) => <div className="capitalize text-left">{info.getValue()}</div>,
+  },
+  {
+    accessorKey: "shippingAddress.phone",
+    header: "SĐT",
+    cell: (info) => <div className="capitalize">{info.getValue()}</div>,
+  },
+  {
+    accessorKey: "shippingAddress.address",
+    header: "Địa chỉ",
+    cell: (info) => <div className="text-left">{info.getValue()}</div>,
+  },
+  {
+    accessorKey: "isPaid",
+    header: "Thanh toán",
+    cell: (info) => (
+      <div className={`font-bold ${info.getValue() ? "text-green-600" : "text-red-600"}`}>
+        {info.getValue() ? "✅ Đã thanh toán" : "❌ Chưa thanh toán"}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "isDelivered",
+    header: "Giao hàng",
+    cell: (info) => (
+      <div className={`font-bold ${info.getValue() ? "text-green-600" : "text-blue-600"}`}>
+        {info.getValue() ? "✅ Đã giao" : "🚚 Đang giao"}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "totalPrice",
+    header: "Tổng tiền",
+    cell: (info) => <div className="font-bold">{formatPrice(info.getValue())}</div>,
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Ngày đặt",
+    cell: (info) => <div>{new Date(info.getValue()).toLocaleDateString("vi-VN")}</div>,
+  },
 ];
 
+
 const DashboardOrder = () => {
-  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchAllOrders = async () => {
     const res = await getAllOrder(); // Fetch orders instead of users
@@ -31,127 +73,12 @@ const DashboardOrder = () => {
     retryDelay: 1000,
     keepPreviousData: true,
   });
-  // Filter orders based on the search term
-  const filteredOrders =
-    orders?.data?.filter(
-      (order) =>
-        order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.date.toLowerCase().includes(searchTerm.toLowerCase())
-    ) || [];
-
+  console.log(orders)
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <Fragment>
-      <div className="flex items-center justify-between">
-        <DashboardTitle>Manage Orders</DashboardTitle>
-        <input
-          type="search"
-          placeholder="Search orders"
-          className="p-3 bg-transparent focus:border-warning max-w-[300px] w-full border border-darkPrimary border-opacity-75 rounded-md outline-none"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-      <Card shadow={false} className="w-full mt-10">
-        <table className="w-full text-left min-w-max">
-          <thead>
-            <tr>
-              {TABLE_HEAD.map((head) => (
-                <th
-                  key={head}
-                  className="p-4 border-b border-gray border-opacity-20"
-                >
-                  <Typography
-                    variant="small"
-                    color="gray"
-                    className={
-                      head === "payment status" || head === "action"
-                        ? "text-sm leading-none text-center font-medium capitalize text-dark"
-                        : "text-sm leading-none text-left font-medium capitalize text-dark"
-                    }
-                  >
-                    {head}
-                  </Typography>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filteredOrders.length > 0 ? (
-              filteredOrders.map((item, index) => {
-                const isLast = index === filteredOrders.length - 1;
-                const classes = isLast
-                  ? "p-4"
-                  : "p-4 border-b border-gray border-opacity-20";
-                return (
-                  <tr
-                    key={item?._id}
-                    className="border-none hover:bg-bgColor hover:bg-opacity-60"
-                  >
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="gray"
-                        className="text-sm font-normal"
-                      >
-                        {item?._id}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="gray"
-                        className="text-sm font-normal"
-                      >
-                        <span>{item?.createdAt}</span>
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="gray"
-                        className="text-sm font-normal"
-                      >
-                        <span>{formatPrice(item?.totalPrice)}Đ</span>
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <div className="flex items-center justify-center">
-                        <Chip
-                          size="lg"
-                          variant="ghost"
-                          value={item?.paymentStatus ? "Paid" : "Pending"}
-                          color={item?.paymentStatus ? "green" : "red"}
-                        />
-                      </div>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="gray"
-                        className="text-sm font-normal"
-                      >
-                        <span className="flex items-center justify-center gap-3">
-                          <ActionView />
-                          <ActionEdit />
-                          <ActionDelete />
-                        </span>
-                      </Typography>
-                    </td>
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td colSpan={TABLE_HEAD.length} className="p-4 text-center">
-                  No orders found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </Card>
+      <TableComponent column={orderColumns} data={orders?.data}></TableComponent>
     </Fragment>
   );
 };

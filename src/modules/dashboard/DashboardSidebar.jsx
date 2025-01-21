@@ -48,7 +48,7 @@ const DashboardSidebar = () => {
               <div key={link.title}>
                 <Accordion open={isOpen}>
                   <AccordionHeader
-                    className={`pl-7 text-sm py-2 border-none w-full transition duration-300 hover:bg-darkPrimary hover:bg-opacity-5`}
+                    className={`pl-7 text-sm py-2 capitalize border-none w-full transition duration-300 hover:bg-darkPrimary hover:bg-opacity-5`}
                     onClick={() => handleOpenAccordion(index)}
                   >
                     <NavLink

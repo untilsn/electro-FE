@@ -7,7 +7,6 @@ import { IoCartOutline } from "react-icons/io5";
 const HeaderRight = () => {
     const { wishlist } = useSelector(state => state.wishlist)
     const  {orderItems}  = useSelector(state => state.order)
-    console.log(wishlist)
     const HEADERRIGHT = [
         {
             id: 2,

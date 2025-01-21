@@ -39,7 +39,6 @@ export const formatPrice = (amount) => {
 
 
 
-
 export const formatDate = (dateString) => {
   const options = {
     year: 'numeric',
@@ -48,10 +47,12 @@ export const formatDate = (dateString) => {
     hour: 'numeric',
     minute: 'numeric',
     second: 'numeric',
-    hour12: true, // Hiển thị định dạng giờ AM/PM
+    hour12: true, 
   };
 
   const date = new Date(dateString);
+
+  const formattedDate = date.toLocaleString('vi-VN', options); 
   
-  return date.toLocaleString('vi-VN', options); // Định dạng ngày theo tiếng Việt
-}
+  return formattedDate; 
+};

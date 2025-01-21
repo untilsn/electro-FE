@@ -19,7 +19,6 @@ const PromoBanner = () => {
             Nhận <span className="text-darkPrimary">MIỄN PHÍ VẬN CHUYỂN* & 5%</span> phần thưởng trên mỗi đơn hàng với chương trình phần thưởng của Molla Theme
           </p>
         </div>
-        {/* Chỉnh sửa phần tử chứa button để căn giữa */}
         <div className="flex-1 flex justify-center items-center">
         <ButtonItem>Thêm vào giỏ hàng </ButtonItem>
         </div>

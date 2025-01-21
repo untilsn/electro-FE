@@ -1,62 +1,41 @@
+import React, { Suspense, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import ShopPage from "./pages/ShopPage";
-import ProductPage from "./pages/ProductPage";
-import CartPage from "./pages/CartPage";
-import WishlistPage from "./pages/WishlistPage";
-import ScrollTopButton from "./components/button/ScrollTopButton";
-import DashboardPage from "./pages/DashboardPage";
-import PageStyles from "./pages/PageStyles";
-import DashboardProduct from "./pages/manage/DashboardProduct";
-import DashboardCategory from "./pages/manage/DashboardCategory";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
-import AddCategories from "./pages/manage/AddCategories";
-import AddProducts from "./pages/manage/AddProducts";
-import BlogPage from "./pages/BlogPage";
-import DashboardUser from "./pages/manage/DashboardUser";
-import DashboardUpdateProduct from "./pages/manage/DashboardUpdateProduct";
-import { useEffect } from "react";
+import { axiosJWT, getDetailsUser, refreshTokenUser } from "./service/useService";
+import { updateUser, resetUser } from "./redux/slice/userSlice";
 import { isJsonString } from "./utils/utils";
-import {
-  axiosJWT,
-  getDetailsUser,
-  refreshTokenUser,
-} from "./service/useService";
-import { updateUser } from "./redux/slice/userSlice";
-import ProfilePage from "./pages/profileuser/ProfilePage";
-import CheckoutPage from "./pages/CheckoutPage";
-import OrderUserPage from "./pages/OrderUserPage";
-import DashboardOrder from "./pages/manage/DashboardOrder";
-import DashboardManage from "./pages/manage/DashboardManage";
-import AuthModal from "./modules/authen/AuthModal";
-import NotFoundPage from "./pages/NotFoundPage";
 
+// Lazy load components
+const HomePage = React.lazy(() => import("./pages/HomePage"));
+const ShopPage = React.lazy(() => import("./pages/ShopPage"));
+const ProductPage = React.lazy(() => import("./pages/ProductPage"));
+const CartPage = React.lazy(() => import("./pages/CartPage"));
+const WishlistPage = React.lazy(() => import("./pages/WishlistPage"));
+const BlogPage = React.lazy(() => import("./pages/BlogPage"));
+const CheckoutPage = React.lazy(() => import("./pages/CheckoutPage"));
+const OrderUserPage = React.lazy(() => import("./pages/OrderUserPage"));
+const ProfilePage = React.lazy(() => import("./pages/profileuser/ProfilePage"));
+const NotFoundPage = React.lazy(() => import("./pages/NotFoundPage"));
 
+// Dashboard components
+const DashboardPage = React.lazy(() => import("./pages/DashboardPage"));
+const DashboardProduct = React.lazy(() => import("./pages/manage/DashboardProduct"));
+const AddProducts = React.lazy(() => import("./pages/manage/AddProducts"));
+const DashboardUpdateProduct = React.lazy(() => import("./pages/manage/DashboardUpdateProduct"));
+const DashboardOrder = React.lazy(() => import("./pages/manage/DashboardOrder"));
+const DashboardUser = React.lazy(() => import("./pages/manage/DashboardUser"));
+
+// Layout and Other Components
+const PageStyles = React.lazy(() => import("./pages/PageStyles"));
+const AuthModal = React.lazy(() => import("./modules/authen/AuthModal"));
+const ScrollTopButton = React.lazy(() => import("./components/button/ScrollTopButton"));
 
 function App() {
   const dispatch = useDispatch();
-  // const { user } = useSelector((state) => state.auth);
-  // useDataUser(user);
-  // useDataFetcher();
-  // useFetchingWishlists(user);
-  // useFetchingProducts(user);
-  // useEffect(() => {
-  //   fetchApi();
-  // }, []);
-
-  // const fetchApi = async () => {
-  //   const res = await axios.get(
-  //     `${import.meta.env.VITE_API_URL_BACKEND}/product/getAll`
-  //   );
-  //   return res.data;
-  // };
-
-  // const query = useQuery({ queryKey: ["todos"], queryFn: fetchApi });
 
   useEffect(() => {
     const { storageData, decoded } = handleDecoded();
-
     if (decoded?.id) {
       handleGetDetailsUser(decoded?.id, storageData);
     }
@@ -66,30 +45,11 @@ function App() {
     let storageData = localStorage.getItem("access_token");
     let decoded = {};
     if (storageData && isJsonString(storageData)) {
-      storageData = JSON.parse(storageData); //* lấy access_token
-      decoded = jwtDecode(storageData); //* decore access_token để lấy thông tin user
+      storageData = JSON.parse(storageData); 
+      decoded = jwtDecode(storageData); 
     }
     return { decoded, storageData };
   };
-
-  // axiosJWT.interceptors.request.use(
-  //   async (config) => {
-  //     const currentTime = new Date();
-  //     const { decoded } = handleDecoded();
-  //     if (decoded.exp < currentTime.getTime() / 1000) {
-  //       const data = await refreshToken();
-  //       localStorage.setItem(
-  //         "access_token",
-  //         JSON.stringify(data?.access_token)
-  //       );
-  //       config.headers["token"] = `Bearer ${data?.access_token}`;
-  //     }
-  //     return config;
-  //   },
-  //   (err) => {
-  //     return Promise.reject(err);
-  //   }
-  // );
 
   axiosJWT.interceptors.request.use(
     async (config) => {
@@ -103,7 +63,6 @@ function App() {
           const data = await refreshTokenUser(refreshToken);
           config.headers["token"] = `Bearer ${data?.access_token}`;
         } else {
-          console.log("rererere?.exp");
           dispatch(resetUser());
         }
       }
@@ -123,72 +82,42 @@ function App() {
         ...res?.data,
         access_token: access_token,
         refresh_token: refreshToken,
-      })
+      })  
     );
   };
 
   return (
     <>
-      <Routes>
-        {/* main page */}
-        <Route element={<PageStyles></PageStyles>}>
-          <Route path="/" element={<HomePage></HomePage>}></Route>
-          <Route path="/shop" element={<ShopPage></ShopPage>}></Route>
-          <Route path="/cart" element={<CartPage></CartPage>}></Route>
-          <Route
-            path="/wishlist"
-            element={<WishlistPage></WishlistPage>}
-          ></Route>
-          <Route path="/product" element={<ProductPage></ProductPage>}></Route>
-          <Route path="/blog" element={<BlogPage></BlogPage>}></Route>
-          <Route path="/cart" element={<CartPage></CartPage>}></Route>
-          <Route path="/profile" element={<ProfilePage></ProfilePage>}></Route>
-          <Route
-            path="/checkout"
-            element={<CheckoutPage></CheckoutPage>}
-          ></Route>
-          <Route
-            path="/user-order"
-            element={<OrderUserPage></OrderUserPage>}
-          ></Route>
-        <Route path="*" element={<NotFoundPage></NotFoundPage>}></Route>
+      <Suspense >
+        <Routes>
+          {/* main page */}
+          <Route element={<PageStyles />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/shop" element={<ShopPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/wishlist" element={<WishlistPage />} />
+            <Route path="/product" element={<ProductPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/user-order" element={<OrderUserPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
 
-        </Route>
-        {/* dashboard */}
-        <Route path="" element={<DashboardPage></DashboardPage>}>
-          <Route
-            path="/manage/product"
-            element={<DashboardProduct></DashboardProduct>}
-          ></Route>
-          <Route
-            path="/manage/add-product"
-            element={<AddProducts></AddProducts>}
-          ></Route>
-          <Route
-            path="/manage/products/update"
-            element={<DashboardUpdateProduct></DashboardUpdateProduct>}
-          ></Route>
-          <Route
-            path="/manage/categories"
-            element={<DashboardCategory></DashboardCategory>}
-          ></Route>
-          {/* <Route
-            path="/manage/add-categories"
-            element={<AddCategories></AddCategories>}
-          ></Route> */}
-          <Route
-            path="/manage/order"
-            element={<DashboardOrder></DashboardOrder>}
-          ></Route>
-          <Route
-            path="/manage/user"
-            element={<DashboardUser></DashboardUser>}
-          ></Route>
-        </Route>
-      </Routes>
-      {/* funtion */}
-      <AuthModal></AuthModal>
-      <ScrollTopButton></ScrollTopButton>
+          {/* dashboard */}
+          <Route path="" element={<DashboardPage />}>
+            <Route path="/manage/product" element={<DashboardProduct />} />
+            <Route path="/manage/add-product" element={<AddProducts />} />
+            <Route path="/manage/products/update" element={<DashboardUpdateProduct />} />
+            <Route path="/manage/order" element={<DashboardOrder />} />
+            <Route path="/manage/user" element={<DashboardUser />} />
+          </Route>
+        </Routes>
+
+        {/* function components */}
+        <AuthModal />
+        <ScrollTopButton />
+      </Suspense>
     </>
   );
 }

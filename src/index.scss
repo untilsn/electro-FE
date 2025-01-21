@@ -75,13 +75,16 @@ textarea {
   @apply bg-opacity-25 bg-gray rounded-lg;
 }
 // swiper
-
-.swiper-button-prev::after,
-.swiper-button-next::after {
-  padding: 16px;
-  color: #232324;
-  @apply text-2xl bg-transparent;
+.swiper-button-next,
+.swiper-button-prev {
+  @apply bg-transparent hover:bg-white hover:bg-opacity-50 transition-all duration-200 rounded-full  p-6 text-black !important;
 }
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  @apply text-xl right-3 !important ;
+}
+
 
 .quill .ql-editor {
   @apply min-h-[150px];

@@ -6,11 +6,73 @@ import ActionEdit from "../../components/action/ActionEdit";
 import ActionDelete from "../../components/action/ActionDelete";
 import { getAllUser } from "../../service/useService";
 import { useQuery } from "@tanstack/react-query";
+import { FaRegEdit } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
+import TableComponent from "../../components/table/TableComponent";
 
-const TABLE_HEAD = ["id", "displayname", "email", "status", "action"];
+
+export const userColumns = [
+  {
+    accessorKey: "_id",
+    header: "ID",
+    cell: (info) => <div className="text-left">{info.getValue()}</div>,
+    enableSorting: true,
+  },
+  {
+    accessorKey: "name",
+    header: "Tên người dùng",
+    cell: (info) => <div className="capitalize text-left">{info.getValue()}</div>,
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+    cell: (info) => <div className="text-left">{info.getValue()}</div>,
+  },
+  {
+    accessorKey: "phone",
+    header: "SĐT",
+    cell: (info) => <div className="text-left">{info.getValue()}</div>,
+  },
+  {
+    accessorKey: "isAdmin",
+    header: "Vai trò",
+    cell: (info) => (
+      <div className={`font-bold ${info.getValue() ? "text-red-600" : "text-green-600"}`}>
+        {info.getValue() ? "🛠️ Admin" : "👤 User"}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Ngày tạo",
+    cell: (info) => <div>{new Date(info.getValue()).toLocaleDateString("vi-VN")}</div>,
+  },
+  {
+    accessorKey: "updatedAt",
+    header: "Cập nhật lần cuối",
+    cell: (info) => <div>{new Date(info.getValue()).toLocaleDateString("vi-VN")}</div>,
+  },
+  {
+    accessorKey: "action",
+    header: "Thao tác",
+    enableSorting: false,
+    cell: (info) => {
+      const user = info.row.original;
+      return (
+        <div className="flex space-x-2">
+          <button onClick={() => handleEditUser(user)} className="text-blue-500">
+            <FaRegEdit />
+          </button>
+          <button onClick={() => handleDeleteUser(user)} className="text-red-500">
+            <MdDeleteOutline />
+          </button>
+        </div>
+      );
+    },
+  },
+];
 
 const DashboardUser = () => {
-  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchAllUser = async () => {
     const res = await getAllUser();
@@ -25,129 +87,14 @@ const DashboardUser = () => {
     keepPreviousData: true,
   });
 
-  // Filter users based on the search term
-  const filteredUsers =
-    users?.data?.filter(
-      (user) =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase())
-    ) || [];
-
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <Fragment>
       <div className="flex items-center justify-between">
-        <DashboardTitle>Manage Users</DashboardTitle>
-        <input
-          type="search"
-          placeholder="Search users"
-          className="p-3 bg-transparent focus:border-warning max-w-[300px] w-full border border-darkPrimary border-opacity-75 rounded-md outline-none"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <DashboardTitle>quản lý người dùng</DashboardTitle>
       </div>
-      <Card shadow={false} className="w-full mt-10">
-        <table className="w-full text-left min-w-max">
-          <thead>
-            <tr>
-              {TABLE_HEAD.map((head) => (
-                <th
-                  key={head}
-                  className="p-4 border-b border-gray border-opacity-20"
-                >
-                  <Typography
-                    variant="small"
-                    color="gray"
-                    className={
-                      head === "status" || head === "action"
-                        ? "text-sm leading-none text-center font-medium capitalize text-dark"
-                        : "text-sm leading-none text-left font-medium capitalize text-dark"
-                    }
-                  >
-                    {head}
-                  </Typography>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filteredUsers.length > 0 ? (
-              filteredUsers.map((item, index) => {
-                const isLast = index === filteredUsers.length - 1;
-                const classes = isLast
-                  ? "p-4"
-                  : "p-4 border-b border-gray border-opacity-20";
-                return (
-                  <tr
-                    key={item?._id}
-                    className="border-none hover:bg-bgColor hover:bg-opacity-60"
-                  >
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="gray"
-                        className="text-sm font-normal"
-                      >
-                        {item?._id}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="gray"
-                        className="text-sm font-normal"
-                      >
-                        <span className="font-medium capitalize">
-                          {item?.name}
-                        </span>
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="gray"
-                        className="text-sm font-normal"
-                      >
-                        <span>{item?.email}</span>
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <div className="flex items-center justify-center">
-                        <Chip
-                          size="lg"
-                          variant="ghost"
-                          value={item?.isAdmin ? "admin" : "user"}
-                          color={item?.isAdmin ? "green" : "blue"}
-                        />
-                      </div>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="gray"
-                        className="text-sm font-normal"
-                      >
-                        <span className="flex items-center justify-center gap-3">
-                          <ActionView />
-                          <ActionEdit />
-                          <ActionDelete />
-                        </span>
-                      </Typography>
-                    </td>
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td colSpan={TABLE_HEAD.length} className="p-4 text-center">
-                  No users found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </Card>
+      <TableComponent column={userColumns} data={users?.data}></TableComponent>
     </Fragment>
   );
 };

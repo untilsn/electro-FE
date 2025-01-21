@@ -1,14 +1,14 @@
 import React from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { FooterIconContact } from "../../../components/icon/IconContact";
-// import banner from "../../assets/image/banner/footerBanner.jpg"
+import footerBanner from "../../../assets/image/banner/footerbanner.jpg"
 
 const FooterBanner = () => {
   return (
     <div
       className="p-5 mb-20"
       style={{
-        // backgroundImage: `url(${banner})`,
+        backgroundImage: `url(${footerBanner})`,
         backgroundPosition: "center",
         backgroundSize: "cover",
       }}

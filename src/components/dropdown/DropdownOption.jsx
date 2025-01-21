@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Controller } from "react-hook-form";
 import { Select, Option } from "@material-tailwind/react";
 
 const DropdownOption = ({ control, name, itemlist, label }) => {
-  if (!itemlist) return null; // Return null if itemlist is not provided
+  if (!itemlist) return null; 
 
   return (
     <Controller

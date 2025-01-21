@@ -19,13 +19,12 @@ export const getAllProduct = async (
     limit,
     page,
     sort,
-    brand: brand.length > 0 ? brand : undefined, 
+    brand: brand.length > 0 ? brand : undefined,
     ram: ram.length > 0 ? ram : undefined,
-    minPrice: price.min ?? 0, 
-    maxPrice: price.max ?? Number.MAX_SAFE_INTEGER, 
+    minPrice: price.min ?? 0,
+    maxPrice: price.max ?? Number.MAX_SAFE_INTEGER,
   };
 
-  console.log(params);
 
   const res = await axios.get(
     `${import.meta.env.VITE_API_URL_BACKEND}/product/getAll`,
@@ -35,6 +34,17 @@ export const getAllProduct = async (
   return res.data;
 };
 
+
+
+
+export const getAllProductMain = async (limit) => {
+  const params = { limit }
+  const res = await axios.get(
+    `${import.meta.env.VITE_API_URL_BACKEND}/product/getAllProduct`,
+    { params }
+  );
+  return res.data;
+};
 
 
 export const getDetailsProduct = async (id) => {

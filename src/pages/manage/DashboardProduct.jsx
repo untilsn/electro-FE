@@ -1,17 +1,78 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useRef, useState } from "react";
 import { getAllProduct } from "../../service/productService";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
-import TableTest from "../../components/table/TableTest";
+import { DownloadTableExcel } from 'react-export-table-to-excel';
+import { IoMdDownload } from "react-icons/io";
+import { FaRegEdit } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
+import ButtonAction from "../../components/button/ButtonAction";
+import { formatPrice } from "../../utils/utils";
+import TableComponent from "../../components/table/TableComponent";
+
+
+export const productColums = [
+  {
+    accessorKey: "name",
+    header: "Tên sản phẩm",
+    size: 350,
+    cell: (info) => {
+      const product = info.row.original;
+      return (
+        <div className="flex items-center space-x-2">
+          <img src={product.image[0]} alt={product.name} className="w-10 h-10 object-cover rounded-md" />
+          <span className="text-sm">{product.name}</span>
+        </div>
+      );
+    },
+    enableSorting: true,
+  },
+  {
+    accessorKey: "brand",
+    header: "hãng",
+    cell: (info) => <div className='capitalize text-left'>{info.getValue()}</div>,
+  },
+  {
+    accessorKey: "category",
+    header: "loại sản phẩm",
+    cell: (info) => <div className='capitalize'>{info.getValue()}</div>,
+  },
+  {
+    accessorKey: "price",
+    header: "giá",
+    cell: (info) => <div>{formatPrice(info.getValue())}</div>,
+  },
+  {
+    accessorKey: "countInStock",
+    header: "tồn kho",
+    cell: (info) => <div>{info.getValue()}</div>,
+  },
+  {
+    accessorKey: "action",
+    header: "thao tác",
+    enableSorting: false,
+    cell: (info) => {
+      const product = info.row.original
+      return (
+        <div className="flex space-x-2">
+          <ButtonAction onClick={() => handleEditProduct(product)} icon={<FaRegEdit />}></ButtonAction>
+          <ButtonAction onClick={() => handleEditProduct(product)} icon={<MdDeleteOutline />}></ButtonAction>
+        </div>
+      )
+    },
+  },
+];
+
+
 
 const DashboardProduct = () => {
   const [search, setSearch] = useState("");
   const [entries, setEntries] = useState(25);
   const [valueSearch] = useDebounce(search, 1000);
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(4); // Number of items per page
+  const [limit, setLimit] = useState(100); 
   const [currentSort, setCurrentSort] = useState("");
-
+  const tableRef = useRef(null)
 
   const fetchAllProduct = async ({ queryKey }) => {
     const [_, limit, search, page, sort] = queryKey;
@@ -32,47 +93,15 @@ const DashboardProduct = () => {
     setCurrentPage(newPage);
   };
 
+
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <Fragment>
-     <div className="bg-white rounded-xl py-10 px-5 shadow-lg">
-      {/* function */}
-      <div className="flex items-center justify-between mb-10">
-        {/* show entries */}
-        <div className="flex items-center space-x-2">
-          <label className="text-gray-700">Show</label>
-          <select
-            className="border rounded px-2 py-1"
-            value={entries}
-            onChange={(e) => setEntries(Number(e.target.value))}
-          >
-            {[10, 25, 50, 100].map((num) => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
-          <span className="text-gray-700">entries</span>
-        </div>
-        {/* search */}
-        <div className="flex items-center gap-3">
-          <span className="capitalize">search:</span>
-          <input
-            type="text"
-            placeholder="Search..."
-            className="border rounded px-3 py-1"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
+      <div className="bg-white rounded-xl py-10 px-5 shadow-lg">
+        {/* table */}
+        <TableComponent column={productColums} tableRef={tableRef} data={products?.data}></TableComponent>
       </div>
-      {/* table */}
-      <div>
-      <TableTest products={products?.data}></TableTest>
-      </div>
-     </div>
-    
     </Fragment>
   );
 };

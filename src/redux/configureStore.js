@@ -27,14 +27,9 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: ["auth", "store", "user"],
+  blacklist: ["store"],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-// export const store = configureStore({
-//   reducer,
-//   middleware: (gDM) => gDM().concat(logger),
-// });
-// const persistedReducer = persistReducer(persistConfig, reducer);
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
@@ -47,4 +42,4 @@ export const store = configureStore({
 
 export let persistor = persistStore(store);
 
-// export const persistor = persistStore(store);
+

@@ -28,11 +28,11 @@ export const MANAGELIST = [
   //     </svg>
   //   ),
   // },
- 
+
   {
-    title: "Product",
-    accTitle1: "products manage",
-    accTitle2: "products created",
+    title: "sản phẩm",
+    accTitle1: "quản lý sản phẩm",
+    accTitle2: "thêm sản phẩm",
     accuUrl: "/manage/product",
     accuUrl2: "/manage/add-product",
     accIcon1: (
@@ -67,8 +67,8 @@ export const MANAGELIST = [
     ),
   },
   {
-    title: "Category",
-    accTitle1: "categories manage",
+    title: "danh mục",
+    accTitle1: "quản lý danh mục",
     // accTitle2: "categories created",
     accuUrl: "/manage/categories",
     // accuUrl2: "/manage/add-categories",
@@ -100,16 +100,16 @@ export const MANAGELIST = [
     // ),
   },
   {
-    title: "Order",
+    title: "đặt hàng",
     accuUrl: "/manage/order",
-    accTitle1: "Users order",
+    accTitle1: "Người dùng đặt hàng",
     url: "/manage/order",
     accIcon1: <IoBagCheck />,
   },
   {
-    title: "User",
+    title: "người dùng",
     accuUrl: "/manage/user",
-    accTitle1: "Users manage",
+    accTitle1: "quản lí người dùng",
     url: "/manage/user",
     accIcon1: (
       <svg

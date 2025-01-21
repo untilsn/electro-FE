@@ -14,22 +14,6 @@ const HeaderTop = () => {
         </span>
         <span className="text-[13px] font-normal text-textColor">Điện thoại: +0123 456 789</span>
       </div>
-      {/* signin */}
-      {/* {users?.access_token ? (
-      <div>
-        <span className="text-gray">
-          welcomback <span className="text-white">{users.name}</span>
-        </span>
-      </div>
-    ) : (
-      <button
-        onClick={handleOpenModal}
-        href="#"
-        className="text-sm hover:text-yellowColor text-textColor"
-      >
-        Đăng nhập / Đăng kí
-      </button>
-    )} */}
       {userInfo.name !== "" ?
         <div className='text-white text-opacity-70'>welcomback <span className='text-light'> {userInfo.name}</span></div> :
         <button onClick={() => dispatch(openModal())} className='text-textColor text-sm'>Đăng nhập / Đăng kí </button>

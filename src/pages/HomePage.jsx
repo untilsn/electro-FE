@@ -6,7 +6,7 @@ import DealOutlet from "../modules/homepage/DealOutlet";
 import BrandBanner from "../modules/homepage/BrandBanner";
 import SupportServicesBanner from "../modules/homepage/SupportServicesBanner";
 import FooterBanner from "../modules/homepage/footer/FooterBanner";
-import { getAllProduct } from "../service/productService";
+import { getAllProduct, getAllProductMain } from "../service/productService";
 import { useQuery } from "@tanstack/react-query";
 
 const HomePage = () => {
@@ -14,7 +14,7 @@ const HomePage = () => {
 
   const fetchAllProduct = async (context) => {
     const limit = context?.queryKey[1];
-    const res = await getAllProduct(limit);
+    const res = await getAllProductMain(limit);
     return res;
   };
 
@@ -25,7 +25,6 @@ const HomePage = () => {
     // retryDelay: 1000,
   });
 
-  console.log(data)
   return (
     <Fragment>
       <div className="container py-10">

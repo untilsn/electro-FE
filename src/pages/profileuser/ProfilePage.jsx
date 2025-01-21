@@ -68,24 +68,12 @@ const ProfilePage = () => {
 
   return (
     <div>
-      <ShopBanner title="Profile" subtitle="user"></ShopBanner>
+      <ShopBanner title="Hồ sơ" subtitle="user"></ShopBanner>
       <MainBreadcrumbs></MainBreadcrumbs>
       <div className="container py-20">
         <h1 className="capitalize font-semibold text-xl text-dark mb-10">thông tin người dùng</h1>
         <div className="py-20 bg-white p-5 rounded-2xl shadow-md  px-20">
           <div className="flex items-center gap-20">
-            {/* avatar */}
-            <div>
-              <div className="relative text-4xl max-w-[250px]">
-                <img
-                  className="w-full h-full object-cover rounded-full shadow-lg"
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_hAt5yLa0ySiNfk7UKtkNKKxj_0JNk3UIdA&s" alt="" />
-                <div className='absolute bottom-3 right-3 flex items-center justify-center text-white rounded-full bg-blue h-10 w-10 border-4 border-white bg-blueColor'>
-                  <IoMdCamera className="text-sm" />
-                </div>
-              </div>
-              <h1 className="text-sm mt-5 capitalize text-center font-semibold">{users.name}</h1>
-            </div>
             {/* info */}
             <form onSubmit={handleSubmit(handleUpdateUser)} className="grid grid-cols-2 gap-10 w-full  ">
               <InputField

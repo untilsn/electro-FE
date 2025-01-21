@@ -1,5 +1,5 @@
 import React from "react";
-import shopBanner from "/public/shopbanner.jpg";
+import shopBanner from "../../assets/image/banner/shopbanner.jpg";
 const ShopBanner = ({ title = "list", subtitle = "shop" }) => {
   return (
     <div

@@ -60,44 +60,7 @@ const Register = () => {
     resolver: yupResolver(schema),
   });
 
-  // const handleRegister = async (values, e) => {
-  //   if (!values) return;
-  //   try {
-  //     dispatch(registerStart());
-  //     const userCredential = await createUserWithEmailAndPassword(
-  //       auth,
-  //       values?.email,
-  //       values?.password
-  //     );
-  //     await updateProfile(auth.currentUser, {
-  //       displayName: values.username,
-  //     });
-  //     await setDoc(doc(db, "users", userCredential.user.uid), {
-  //       displayName: values?.username,
-  //       email: values?.email,
-  //       role: "user",
-  //       createAt: serverTimestamp(),
-  //     });
 
-  //     dispatch(openModalAuth(false));
-  //     toast.success("Create account success");
-  //   } catch (error) {
-  //     toast.error("Create account error");
-  //     console.log(error);
-  //   }
-  // };
-
-
-  const handleRegisterGoogle = async () => {
-    try {
-      await signInWithPopup(auth, provider);
-      window.location.href = "/";
-       dispatch(closeModal())
-      toast.success("login with google success!");
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const mutation = useMutationHook((data) => signupUser(data));
   const { isSuccess, isError, data } = mutation;
@@ -112,6 +75,8 @@ const Register = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      toast.success("create user success");
+
       dispatch(closeModal())
     } else if (isError) {
       toast.error("none");

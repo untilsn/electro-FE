@@ -53,22 +53,6 @@ export const getAllUser = async () => {
   return res.data;
 };
 
-// export const refreshToken = async () => {
-//   try {
-//     const res = await axios.post(
-//       `${import.meta.env.VITE_API_URL_BACKEND}/user/refresh-token`,
-//       {},
-//       {
-//         withCredentials: true, // Tùy chọn cấu hình
-//       }
-//     );
-//     return res.data;
-//   } catch (error) {
-//     console.error("Error refreshing token:", error);
-//     throw error;
-//   }
-// };
-
 export const refreshTokenUser = async (refreshToken) => {
   try {
     const res = await axios.post(

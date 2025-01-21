@@ -18,8 +18,7 @@ import { formatPrice } from "../utils/utils";
 const CheckoutPage = () => {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.user);
-  console.log(users)
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState();
   const [address, setAddress] = useState(users?.address || "");
   const [phoneUser, setPhoneUser] = useState(users?.phone || "");
   const orderItems = useSelector((state) => state.order);
@@ -45,9 +44,9 @@ const CheckoutPage = () => {
         {
           token: users?.access_token,
           orderItems: orderItems?.orderItems,
-          fullName: users?.name,
-          address: users?.address || "",
-          phone: users.phone || Number(phoneUser),
+          fullName: userName,
+          address: address,
+          phone: phoneUser,
           paymentMethod: payment,
           itemsPrice: orderItems?.itemsPrice,
           shippingPrice: orderItems?.shippingPrice,
@@ -60,6 +59,7 @@ const CheckoutPage = () => {
             toast.success("order success");
             dispatch(clearOrderProducts());
             localStorage.removeItem("orderItems");
+            
             navigate("/user-order", {
               state: {
                 id: users?.id,

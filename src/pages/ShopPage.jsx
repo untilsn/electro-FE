@@ -10,7 +10,7 @@ import MainBreadcrumbs from "../components/breadcrumb/MainBreadcrumb";
 const ShopPage = () => {
   return (
     <div>
-      <ShopBanner></ShopBanner>
+      <ShopBanner title="shop" subtitle="cửa hàng"></ShopBanner>
       <MainBreadcrumbs></MainBreadcrumbs>
       <div className="pt-10 border-t border-gray border-opacity-10">
         <div className="container">

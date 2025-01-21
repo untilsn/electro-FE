@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const createOrder = async (userId, access_token, data) => {
-  console.log(data)
   const res = axios.post(
     `${import.meta.env.VITE_API_URL_BACKEND}/order/create/${userId}`,
     data,

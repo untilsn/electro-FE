@@ -15,12 +15,13 @@ import { removeFromWishlist, setWishlist } from "../redux/slice/wishlistSlice";
 import { FooterIconContact } from "../components/icon/IconContact";
 import { formatPrice } from "../utils/utils";
 import { GrFavorite } from "react-icons/gr";
+import { addOrderProduct } from "../redux/slice/orderSlice";
 
 const TABLE_HEAD = ["Product", "Price", "Stock", "Actions"];
 
 const WishlistPage = () => {
   const dispatch = useDispatch();
-  const userId = useSelector((state) => state.user?.id);
+  const users = useSelector((state) => state.user); // Get users object from state
 
   const fetchAllWishlist = async ({ queryKey }) => {
     const userId = queryKey[1];
@@ -29,9 +30,9 @@ const WishlistPage = () => {
   };
 
   const { data: wishlists = [], isLoading, refetch } = useQuery({
-    queryKey: ["wishlist", userId],
+    queryKey: ["wishlist", users.id], // Use users.id here
     queryFn: fetchAllWishlist,
-    enabled: !!userId,
+    enabled: !!users.id,
   });
 
   const mutation = useMutationHook(async ({ userId, productId }) => {
@@ -39,9 +40,9 @@ const WishlistPage = () => {
   });
 
   const handleRemoveFromWishlist = (productId) => {
-    if (!userId || !productId) return;
+    if (!users.id || !productId) return;
     mutation.mutate(
-      { userId, productId },
+      { userId: users.id, productId }, // Use users.id here
       {
         onSuccess: () => {
           refetch();
@@ -53,6 +54,30 @@ const WishlistPage = () => {
       }
     );
   };
+
+
+    const handleOrderProduct = (item) => {
+      if (!users.access_token) {
+        toast.error("you must be login to add cart!");
+      } else {
+        dispatch(
+          addOrderProduct({
+            orderItem: {
+              name: item.productId.name,
+              amount: 1,
+              brand: item.productId.brand,
+              image: item.productId.image,
+              price: item.productId.price,
+              productId: item.productId._id,
+              countInStock: item.productId.countInStock,
+            },
+          })
+        );
+        handleRemoveFromWishlist(item.productId._id)
+      }
+    };
+  
+  
 
   return (
     <div>
@@ -106,7 +131,9 @@ const WishlistPage = () => {
                       </td>
                       <td className={`${rowClass} max-w-[270px]`}>
                         <div className="flex items-center gap-8 text-sm font-medium text-center text-yellowColor w-[270px]">
-                          <span className="flex items-center justify-center gap-5 p-4 uppercase bg-white border border-gray border-opacity-20 text-yellowColor max-w-[250px] w-full hover:bg-yellowColor hover:text-white">
+                          <span
+                            onClick={() => handleOrderProduct(item)}
+                          className="flex items-center justify-center gap-5 p-4 uppercase bg-white border border-gray border-opacity-20 text-yellowColor max-w-[250px] w-full hover:bg-yellowColor hover:text-white">
                             <FaCartPlus />
                             <span>Add to Cart</span>
                           </span>

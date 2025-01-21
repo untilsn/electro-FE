@@ -1,7 +1,15 @@
+import blogImage1 from "/src/assets/image/blog/blog2.jpg"
+import blogImage2 from "/src/assets/image/blog/blog3.jpg"
+import blogImage3 from "/src/assets/image/blog/blog4.jpg"
+import blogImage4 from "/src/assets/image/blog/blog5.jpg"
+
+
+
+
 export const blogInfo = [
   {
     id: 1,
-    img: "/public/blogs/blog.jpg",
+    img: blogImage1,
     by1: "John Doe",
     by2: "Sep 22, 2020",
     by3: "0 Comments",
@@ -13,7 +21,7 @@ export const blogInfo = [
   },
   {
     id: 2,
-    img: "/public/blogs/blog2.jpg",
+    img: blogImage2,
     by1: "John Doe",
     by2: "Sep 22, 2020",
     by3: "0 Comments",
@@ -25,7 +33,7 @@ export const blogInfo = [
   },
   {
     id: 3,
-    img: "/public/blogs/blog3.jpg",
+    img: blogImage3,
     by1: "John Doe",
     by2: "Sep 22, 2020",
     by3: "0 Comments",
@@ -37,7 +45,7 @@ export const blogInfo = [
   },
   {
     id: 4,
-    img: "/public/blogs/blog4.jpg",
+    img: blogImage4,
     by1: "John Doe",
     by2: "Sep 22, 2020",
     by3: "0 Comments",
